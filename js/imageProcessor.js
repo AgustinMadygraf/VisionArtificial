@@ -1,4 +1,6 @@
 // js/imageProcessor.js
+import { drawVerticalLine, drawHorizontalLine } from './canvasUtils.js';
+
 export default class ImageProcessor {
     constructor(secs, halfEvalHeight, halfEvalWidth) {
         this.secs = secs;
@@ -53,7 +55,7 @@ export default class ImageProcessor {
 
     putLineInCanvas(canvas) {
         const pos = this.maxVerticalJumpPixelPos(canvas);
-        this.LineInCanvas(canvas, pos.pos);
+        this.vertLineInCanvas(canvas, pos.pos);
     }
 
     maxVerticalJumpPixelPos(canvas) {
@@ -87,37 +89,19 @@ export default class ImageProcessor {
         return maxDiff;
     }
 
-    LineInCanvas(canvas, pos) {
+    vertLineInCanvas(canvas, pos) {
         console.log("Drawing line in position", pos);
         const context = canvas.getContext('2d');
-    
+
         // Dibujar la línea vertical amarilla
-        context.strokeStyle = 'yellow'; // Color de la línea
-        context.lineWidth = 2; // Ancho de la línea
-    
-        context.beginPath();
-        context.moveTo(pos, 0);
-        context.lineTo(pos, canvas.height);
-        context.stroke();
-    
+        drawVerticalLine(context, pos, 'yellow');
+
         // Dibujar la línea vertical roja en el centro del canvas
-        const centerX = canvas.width / 2; // Calcula el centro del canvas en el eje X
-        context.strokeStyle = 'red'; // Color de la línea
-        context.lineWidth = 2; // Ancho de la línea
-    
-        context.beginPath();
-        context.moveTo(centerX, 0);
-        context.lineTo(centerX, canvas.height);
-        context.stroke();
-    
+        const centerX = canvas.width / 2;
+        drawVerticalLine(context, centerX, 'red');
+
         // Dibujar la línea horizontal verde en el centro del canvas
-        const centerY = canvas.height / 2; // Calcula el centro del canvas en el eje Y
-        context.strokeStyle = 'green'; // Color de la línea
-        context.lineWidth = 2; // Ancho de la línea
-    
-        context.beginPath();
-        context.moveTo(0, centerY);
-        context.lineTo(canvas.width, centerY);
-        context.stroke();
+        const centerY = canvas.height / 2;
+        drawHorizontalLine(context, centerY, 'green');
     }
 }
