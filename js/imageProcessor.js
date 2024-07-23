@@ -7,7 +7,7 @@ export default class ImageProcessor {
     }
 
     pickImage(video) {
-        this.getVideoImage(video, this.secs, this.printImageDetails);
+        this.getVideoImage(video, this.secs, this.printImageDetails.bind(this));
         const vid = this.videoToImg(video);
         console.log("image to convert dimensions:", vid.image);
         console.log("image data", vid.data);
@@ -18,7 +18,7 @@ export default class ImageProcessor {
         const canvas = document.createElement('canvas');
         canvas.height = video.videoHeight;
         canvas.width = video.videoWidth;
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         this.putLineInCanvas(canvas);
         const img = new Image();
@@ -27,23 +27,23 @@ export default class ImageProcessor {
     }
 
     getVideoImage(video, secs, callback) {
-        video.onloadedmetadata = function () {
+        video.onloadedmetadata = () => {
             if (typeof secs === 'function') {
                 secs = secs(this.duration);
             }
-            this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
-            console.log("currentTime", this.currentTime);
-            const vid = videoToImg(video);
+            video.currentTime = Math.min(Math.max(0, (secs < 0 ? video.duration : 0) + secs), video.duration);
+            console.log("currentTime", video.currentTime);
+            const vid = this.videoToImg(video);
             const img = vid.image;
-            callback.call(this, vid, this.currentTime, undefined);
+            callback(vid, video.currentTime, undefined);
         };
 
-        video.onseeked = function (e) {
-            callback.call(this, undefined, this.currentTime, e);
+        video.onseeked = (e) => {
+            callback(undefined, video.currentTime, e);
         };
 
-        video.onerror = function (e) {
-            callback.call(this, undefined, undefined, e);
+        video.onerror = (e) => {
+            callback(undefined, undefined, e);
         };
     }
 
@@ -53,11 +53,11 @@ export default class ImageProcessor {
 
     putLineInCanvas(canvas) {
         const pos = this.maxVerticalJumpPixelPos(canvas);
-        this.vertLineInCanvas(canvas, pos.pos);
+        this.LineInCanvas(canvas, pos.pos);
     }
 
     maxVerticalJumpPixelPos(canvas) {
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
         const heightMid = Math.floor(canvas.height / 2);
         const heightCotas = { lo: heightMid - this.halfEvalHeight, hi: heightMid + this.halfEvalHeight };
@@ -87,28 +87,37 @@ export default class ImageProcessor {
         return maxDiff;
     }
 
-    vertLineInCanvas(canvas, pos) {
+    LineInCanvas(canvas, pos) {
         console.log("Drawing line in position", pos);
         const context = canvas.getContext('2d');
-        context.strokeStyle = 'yellow'; // Color of the line
-        context.lineWidth = 2; // Width of the line
-
-        // Draw the vertical line
+    
+        // Dibujar la línea vertical amarilla
+        context.strokeStyle = 'yellow'; // Color de la línea
+        context.lineWidth = 2; // Ancho de la línea
+    
         context.beginPath();
         context.moveTo(pos, 0);
         context.lineTo(pos, canvas.height);
         context.stroke();
-
-        const ctx = canvas.getContext('2d'); // Obtiene el contexto 2D del canvas
+    
+        // Dibujar la línea vertical roja en el centro del canvas
         const centerX = canvas.width / 2; // Calcula el centro del canvas en el eje X
-
-        ctx.strokeStyle = 'red'; // Establece el color de la línea a rojo
-        ctx.lineWidth = 2; // Establece el ancho de la línea a 2 píxeles
-
-        // Dibuja la línea vertical
-        ctx.beginPath(); // Comienza un nuevo camino
-        ctx.moveTo(centerX, 0); // Mueve el cursor al inicio de la línea (centro superior del canvas)
-        ctx.lineTo(centerX, canvas.height); // Dibuja una línea hasta el centro inferior del canvas
-        ctx.stroke(); // Aplica el trazo al camino, dibujando la línea
+        context.strokeStyle = 'red'; // Color de la línea
+        context.lineWidth = 2; // Ancho de la línea
+    
+        context.beginPath();
+        context.moveTo(centerX, 0);
+        context.lineTo(centerX, canvas.height);
+        context.stroke();
+    
+        // Dibujar la línea horizontal verde en el centro del canvas
+        const centerY = canvas.height / 2; // Calcula el centro del canvas en el eje Y
+        context.strokeStyle = 'green'; // Color de la línea
+        context.lineWidth = 2; // Ancho de la línea
+    
+        context.beginPath();
+        context.moveTo(0, centerY);
+        context.lineTo(canvas.width, centerY);
+        context.stroke();
     }
 }

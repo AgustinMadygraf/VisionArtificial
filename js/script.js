@@ -17,5 +17,5 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img);
-    }, 100);
+    }, 3000);
 });
