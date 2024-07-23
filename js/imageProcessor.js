@@ -1,5 +1,5 @@
 // js/imageProcessor.js
-import { drawVerticalLine, drawHorizontalLine } from './canvasUtils.js';
+import { drawVerticalLine, drawHorizontalLine, drawCenterRuler } from './canvasUtils.js';
 
 export default class ImageProcessor {
     constructor(secs, halfEvalHeight, halfEvalWidth) {
@@ -11,8 +11,8 @@ export default class ImageProcessor {
     pickImage(video) {
         this.getVideoImage(video, this.secs, this.printImageDetails.bind(this));
         const vid = this.videoToImg(video);
-        console.log("image to convert dimensions:", vid.image);
-        console.log("image data", vid.data);
+        //console.log("image to convert dimensions:", vid.image);
+        //console.log("image data", vid.data);
         return vid.image;
     }
 
@@ -50,7 +50,7 @@ export default class ImageProcessor {
     }
 
     printImageDetails(vid, currentTime, e) {
-        console.log("printing:", this, vid.image.width, vid.image.height, currentTime, e);
+        //console.log("printing:", this, vid.image.width, vid.image.height, currentTime, e);
     }
 
     putLineInCanvas(canvas) {
@@ -90,7 +90,7 @@ export default class ImageProcessor {
     }
 
     vertLineInCanvas(canvas, pos) {
-        console.log("Drawing line in position", pos);
+        console.log(`Drawing line in position ${pos}`); // Actualizar para mostrar la posición
         const context = canvas.getContext('2d');
 
         // Dibujar la línea vertical amarilla
@@ -103,5 +103,22 @@ export default class ImageProcessor {
         // Dibujar la línea horizontal verde en el centro del canvas
         const centerY = canvas.height / 2;
         drawHorizontalLine(context, centerY, 'green');
+
+        // Dibujar la regla horizontal en el centro del canvas
+        drawCenterRuler(context, 'blue', 10, 10);
+
+        // Calcular y mostrar el desvío
+        const deviation = Math.abs(centerX - pos);
+        context.fillStyle = 'white'; // Color del texto
+        context.font = '20px Arial'; // Fuente del texto
+        context.fillText(`Desvío: ${deviation}px`, 10, 30); // Mostrar el desvío en la esquina superior izquierda
+
+        // Dibujar línea que conecta las dos posiciones
+        context.strokeStyle = 'white'; // Color de la línea de desvío
+        context.lineWidth = 1; // Ancho de la línea de desvío
+        context.beginPath();
+        context.moveTo(centerX, centerY);
+        context.lineTo(pos, centerY);
+        context.stroke();
     }
 }

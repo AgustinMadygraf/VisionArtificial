@@ -19,14 +19,15 @@ export function drawHorizontalLine(context, pos, color = 'green') {
     context.stroke();
 }
 
-export function drawVerticalLine2(context, pos, color = 'yellow') {
-        // Dibujar la línea vertical roja en el centro del canvas
-        const centerX = canvas.width / 2; // Calcula el centro del canvas en el eje X
-        context.strokeStyle = 'red'; // Color de la línea
-        context.lineWidth = 2; // Ancho de la línea
-    
+export function drawCenterRuler(context, color = 'blue', lineLength = 10, spacing = 10) {
+    const centerY = context.canvas.height / 2; // Centro vertical del canvas
+    context.strokeStyle = color; // Color de las líneas
+    context.lineWidth = 2; // Ancho de las líneas
+
+    for (let x = 0; x < context.canvas.width; x += spacing) {
         context.beginPath();
-        context.moveTo(centerX, 0);
-        context.lineTo(centerX, canvas.height);
+        context.moveTo(x, centerY - lineLength / 2);
+        context.lineTo(x, centerY + lineLength / 2);
         context.stroke();
+    }
 }
