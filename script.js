@@ -1,3 +1,4 @@
+//script.js
 const secs = 3;
 const halfEvalHeight = 10;
 const halfEvalWidth = 200;
@@ -129,4 +130,16 @@ function vertLineInCanvas(canvas, pos) {
     context.moveTo(pos, 0);
     context.lineTo(pos, canvas.height);
     context.stroke();
+
+    const ctx = canvas.getContext('2d'); // Obtiene el contexto 2D del canvas
+    const centerX = canvas.width / 2; // Calcula el centro del canvas en el eje X
+
+    ctx.strokeStyle = 'red'; // Establece el color de la línea a rojo
+    ctx.lineWidth = 2; // Establece el ancho de la línea a 2 píxeles
+
+    // Dibuja la línea vertical
+    ctx.beginPath(); // Comienza un nuevo camino
+    ctx.moveTo(centerX, 0); // Mueve el cursor al inicio de la línea (centro superior del canvas)
+    ctx.lineTo(centerX, canvas.height); // Dibuja una línea hasta el centro inferior del canvas
+    ctx.stroke(); // Aplica el trazo al camino, dibujando la línea
 }
