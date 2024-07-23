@@ -34,7 +34,7 @@ export default class ImageProcessor {
                 secs = secs(this.duration);
             }
             video.currentTime = Math.min(Math.max(0, (secs < 0 ? video.duration : 0) + secs), video.duration);
-            console.log("currentTime", video.currentTime);
+            //console.log("currentTime", video.currentTime);
             const vid = this.videoToImg(video);
             const img = vid.image;
             callback(vid, video.currentTime, undefined);
@@ -108,7 +108,7 @@ export default class ImageProcessor {
         drawCenterRuler(context, 'blue', 10, 10);
 
         // Calcular y mostrar el desvío
-        const deviation = Math.abs(centerX - pos);
+        const deviation = pos - centerX;
         context.fillStyle = 'white'; // Color del texto
         context.font = '20px Arial'; // Fuente del texto
         context.fillText(`Desvío: ${deviation}px`, 10, 30); // Mostrar el desvío en la esquina superior izquierda
