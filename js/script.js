@@ -1,4 +1,7 @@
-// script.js
+// js/script.js
+
+//import VideoManager from './videoManager.js';
+
 const secs = 3;
 const halfEvalHeight = 10;
 const halfEvalWidth = 200;
