@@ -1,3 +1,5 @@
 __pycache__/
 docs/00-Prompt-for-ProjectAnalysis.md
 src/logs/sistema.log
+server.crt
+server.key
