@@ -1,6 +1,6 @@
-#server.py
 import http.server
 import os
+import socket
 from ssl_config import SSLConfig
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -9,9 +9,25 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.path = '/index.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
+def get_local_ip():
+    """Obtiene la dirección IP local de la máquina."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # Esto no necesita conectarse realmente a un host, solo inicializar la conexión
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return ip
+
 def run_server():
+    # Obtener la dirección IP local
+    local_ip = get_local_ip()
+    
     # Configuración del servidor
-    server_address = ('localhost', 4443)  # Puedes cambiar el puerto si lo deseas
+    server_address = (local_ip, 4443)
     httpd = http.server.HTTPServer(server_address, MyHTTPRequestHandler)
 
     # Configuración SSL
