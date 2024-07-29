@@ -3,6 +3,7 @@ import os
 import socket
 import asyncio
 import websockets
+import requests
 from ssl_config import SSLConfig
 from logs.config_logger import logger_configurator
 
@@ -11,7 +12,7 @@ logger = logger_configurator.get_logger()
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/':
+        if (self.path == '/'):
             self.path = '/index.html'
         logger.info(f"Handling GET request for {self.path}")
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
@@ -34,6 +35,16 @@ def get_local_ip():
 async def websocket_handler(websocket, path):
     async for message in websocket:
         logger.info(f"Received console.log message: {message}")
+        try:
+            deviation = float(message)
+            if deviation > 10:
+                response = requests.get('http://192.168.0.184/ena_f')
+                logger.info(f"HTTP request to ena_f: {response.status_code}")
+            elif deviation < -10:
+                response = requests.get('http://192.168.0.184/ena_r')
+                logger.info(f"HTTP request to ena_r: {response.status_code}")
+        except ValueError:
+            logger.error(f"Invalid message received: {message}")
 
 def run_server():
     # Obtener la dirección IP local
