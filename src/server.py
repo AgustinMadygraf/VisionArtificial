@@ -1,6 +1,8 @@
 import http.server
 import os
 import socket
+import asyncio
+import websockets
 from ssl_config import SSLConfig
 from logs.config_logger import logger_configurator
 
@@ -29,11 +31,15 @@ def get_local_ip():
     logger.info(f"Local IP obtained: {ip}")
     return ip
 
+async def websocket_handler(websocket, path):
+    async for message in websocket:
+        logger.info(f"Received console.log message: {message}")
+
 def run_server():
     # Obtener la dirección IP local
     local_ip = get_local_ip()
     
-    # Configuración del servidor
+    # Configuración del servidor HTTP
     server_address = (local_ip, 4443)
     httpd = http.server.HTTPServer(server_address, MyHTTPRequestHandler)
 
@@ -42,7 +48,22 @@ def run_server():
     httpd.socket = ssl_config.get_ssl_context().wrap_socket(httpd.socket, server_side=True)
 
     logger.info(f"Servidor corriendo en https://{server_address[0]}:{server_address[1]}")
-    httpd.serve_forever()
+
+    # Iniciar el servidor HTTP en un hilo separado
+    import threading
+    http_thread = threading.Thread(target=httpd.serve_forever)
+    http_thread.daemon = True
+    http_thread.start()
+
+    # Iniciar el servidor WebSocket
+    start_websocket_server()
+
+def start_websocket_server():
+    async def main():
+        async with websockets.serve(websocket_handler, "localhost", 8765):
+            await asyncio.Future()  # Run forever
+
+    asyncio.run(main())
 
 if __name__ == '__main__':
     # Cambiar al directorio donde están los archivos web

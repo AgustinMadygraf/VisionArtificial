@@ -1,4 +1,3 @@
-// js/script.js
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
@@ -15,6 +14,27 @@ function getUrlParameter(name) {
 
 // Obtener el tiempo de refresco de la URL, por defecto 3000 milisegundos
 const refreshInterval = parseInt(getUrlParameter('t')) || 3000;
+
+// Interceptar console.log y enviar los mensajes al servidor WebSocket
+(function() {
+    const originalConsoleLog = console.log;
+    const ws = new WebSocket("ws://localhost:8765");
+
+    ws.onopen = function() {
+        console.log = function(message) {
+            originalConsoleLog.apply(console, arguments);
+            ws.send(message);
+        };
+    };
+
+    ws.onerror = function(error) {
+        originalConsoleLog("WebSocket error: " + error);
+    };
+
+    ws.onclose = function() {
+        console.log = originalConsoleLog;
+    };
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
     const videoManager = new VideoManager();
