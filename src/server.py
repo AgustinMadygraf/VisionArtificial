@@ -59,7 +59,7 @@ def run_server():
     ssl_config = SSLConfig()
     httpd.socket = ssl_config.get_ssl_context().wrap_socket(httpd.socket, server_side=True)
 
-    logger.info(f"Servidor corriendo en https://{server_address[0]}:{server_address[1]}")
+    logger.info(f"Servidor corriendo en https://{server_address[0]}:{server_address[1]}/?t=500")
 
     # Iniciar el servidor HTTP en un hilo separado
     import threading
