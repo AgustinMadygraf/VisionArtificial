@@ -6,6 +6,7 @@ import websockets
 from ssl_config import SSLConfig
 from logs.config_logger import logger_configurator
 import json
+import requests
 
 # Obtener el logger configurado
 logger = logger_configurator.get_logger()
@@ -46,6 +47,25 @@ def get_local_ip():
 async def websocket_handler(websocket, path):
     async for message in websocket:
         logger.info(f"Received console.log message: {message}")
+        
+        try:
+            # Convertir la cadena de texto a entero
+            message_as_int = int(message[25:])
+            tolerancia = 10 
+            upper_threshold = tolerancia
+            lower_threshold = -tolerancia
+            
+            # Enviar solicitudes HTTP según el valor de message_as_int
+            if message_as_int > upper_threshold:
+                response = requests.get('http://192.168.0.184/ena_f')
+                logger.info(f"Sent HTTP GET to http://192.168.0.184/ena_f")
+                logger.debug(f"response: {response.status_code}")
+            elif message_as_int < lower_threshold:
+                response = requests.get('http://192.168.0.184/ena_r')
+                logger.info(f"Sent HTTP GET to http://192.168.0.184/ena_r")
+                logger.debug(f"response: {response.status_code}")
+        except ValueError:
+            logger.error("Failed to convert message to integer")
 
 def run_server():
     # Obtener la dirección IP local
