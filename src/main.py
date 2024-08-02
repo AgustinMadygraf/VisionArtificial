@@ -2,9 +2,9 @@
 import os
 from views.http_server import HTTPServer
 from views.websocket_server import WebSocketServer
+from views.http_server import MyHTTPRequestHandler
 from utils.ssl_config import SSLConfig
 from utils.server_utility import ServerUtility
-from views.http_server import MyHTTPRequestHandler
 
 def run_server():
     local_ip = ServerUtility.get_local_ip()
