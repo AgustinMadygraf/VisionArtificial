@@ -1,10 +1,10 @@
 #src/main.py
 import os
-from server.http_server import HTTPServer
+from views.http_server import HTTPServer
 from server.websocket_server import WebSocketServer
 from utils.ssl_config import SSLConfig
 from utils.server_utility import ServerUtility
-from server.http_server import MyHTTPRequestHandler
+from views.http_server import MyHTTPRequestHandler
 
 def run_server():
     local_ip = ServerUtility.get_local_ip()
