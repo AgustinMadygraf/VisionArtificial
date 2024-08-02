@@ -1,7 +1,7 @@
 #src/main.py
 import os
 from views.http_server import HTTPServer
-from server.websocket_server import WebSocketServer
+from views.websocket_server import WebSocketServer
 from utils.ssl_config import SSLConfig
 from utils.server_utility import ServerUtility
 from views.http_server import MyHTTPRequestHandler
