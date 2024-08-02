@@ -22,15 +22,20 @@ class WebSocketServer:
                 lower_threshold = -tolerancia
 
                 if message_as_int > upper_threshold:
-                    response = requests.get('http://192.168.0.184/ena_f')
-                    logger.info(f"Sent HTTP GET to http://192.168.0.184/ena_f")
-                    logger.debug(f"response: {response.status_code}")
+                    self.send_http_request('http://192.168.0.184/ena_f')
                 elif message_as_int < lower_threshold:
-                    response = requests.get('http://192.168.0.184/ena_r')
-                    logger.info(f"Sent HTTP GET to http://192.168.0.184/ena_r")
-                    logger.debug(f"response: {response.status_code}")
+                    self.send_http_request('http://192.168.0.184/ena_r')
             except ValueError:
                 logger.error("Failed to convert message to integer")
+
+    def send_http_request(self, url):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            logger.info(f"Sent HTTP GET to {url}")
+            logger.debug(f"Response status code: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            logger.error(f"HTTP request to {url} failed: {e}")
 
     def start(self):
         async def main():
