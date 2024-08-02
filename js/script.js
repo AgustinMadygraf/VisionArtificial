@@ -15,10 +15,18 @@ function getUrlParameter(name) {
 // Obtener el tiempo de refresco de la URL, por defecto 3000 milisegundos
 const refreshInterval = parseInt(getUrlParameter('t')) || 3000;
 
+// Obtener la IP local desde el servidor
+async function getLocalIp() {
+    const response = await fetch('/local-ip');
+    const data = await response.json();
+    return data.ip;
+}
+
 // Interceptar console.log y enviar los mensajes al servidor WebSocket
-(function() {
+(async function() {
+    const localIp = await getLocalIp();
     const originalConsoleLog = console.log;
-    const ws = new WebSocket("ws://localhost:8765");
+    const ws = new WebSocket(`wss://${localIp}:8765`);
 
     ws.onopen = function() {
         console.log = function(message) {

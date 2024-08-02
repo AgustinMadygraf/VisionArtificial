@@ -90,7 +90,6 @@ export default class ImageProcessor {
     }
 
     vertLineInCanvas(canvas, pos) {
-        console.log(`Drawing line in position ${pos}`); // Actualizar para mostrar la posición
         const context = canvas.getContext('2d');
 
         // Dibujar la línea vertical amarilla
@@ -108,7 +107,7 @@ export default class ImageProcessor {
         drawCenterRuler(context, 'blue', 10, 10);
 
         // Calcular y mostrar el desvío
-        const deviation = pos - centerX;
+        const deviation = + pos - centerX;
         context.fillStyle = 'white'; // Color del texto
         context.font = '20px Arial'; // Fuente del texto
         context.fillText(`Desvío: ${deviation}px`, 10, 30); // Mostrar el desvío en la esquina superior izquierda
@@ -120,5 +119,7 @@ export default class ImageProcessor {
         context.moveTo(centerX, centerY);
         context.lineTo(pos, centerY);
         context.stroke();
+        console.log(`Drawing line in position ${deviation}`); // Actualizar para mostrar la posición
+
     }
 }
