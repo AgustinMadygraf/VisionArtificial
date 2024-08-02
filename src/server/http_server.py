@@ -2,7 +2,7 @@
 import http.server
 import json
 import threading
-from server.server_utility import ServerUtility
+from utils.server_utility import ServerUtility
 from logs.config_logger import logger_configurator
 
 logger = logger_configurator.get_logger()
