@@ -1,4 +1,3 @@
-// js/script.js
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
@@ -23,29 +22,34 @@ async function getLocalIp() {
     return data.ip;
 }
 
-// Interceptar console.log y enviar los mensajes al servidor WebSocket
-(async function() {
+let ws;
+async function initializeWebSocket() {
     const localIp = await getLocalIp();
-    const originalConsoleLog = console.log;
-    const ws = new WebSocket(`wss://${localIp}:8765`);
+    ws = new WebSocket(`wss://${localIp}:8765`);
 
     ws.onopen = function() {
-        console.log = function(message) {
-            originalConsoleLog.apply(console, arguments);
-            ws.send(message);
-        };
+        console.log("WebSocket connection established");
     };
 
     ws.onerror = function(error) {
-        originalConsoleLog("WebSocket error: " + error);
+        console.error("WebSocket error: " + error);
     };
 
     ws.onclose = function() {
-        console.log = originalConsoleLog;
+        console.log("WebSocket connection closed");
     };
-})();
+}
+
+export function sendWebSocketMessage(message) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(message);
+    } else {
+        console.error("WebSocket is not open. Unable to send message.");
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
+    initializeWebSocket();
     const videoManager = new VideoManager();
     const imageProcessor = new ImageProcessor(secs, halfEvalHeight, halfEvalWidth);
     const domUpdater = new DOMUpdater();

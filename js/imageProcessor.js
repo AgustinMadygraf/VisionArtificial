@@ -1,5 +1,5 @@
-// js/imageProcessor.js
 import { drawVerticalLine, drawHorizontalLine, drawCenterRuler } from './canvasUtils.js';
+import { sendWebSocketMessage } from './script.js';
 
 export default class ImageProcessor {
     constructor(secs, halfEvalHeight, halfEvalWidth) {
@@ -11,8 +11,6 @@ export default class ImageProcessor {
     pickImage(video) {
         this.getVideoImage(video, this.secs, this.printImageDetails.bind(this));
         const vid = this.videoToImg(video);
-        //console.log("image to convert dimensions:", vid.image);
-        //console.log("image data", vid.data);
         return vid.image;
     }
 
@@ -34,7 +32,6 @@ export default class ImageProcessor {
                 secs = secs(this.duration);
             }
             video.currentTime = Math.min(Math.max(0, (secs < 0 ? video.duration : 0) + secs), video.duration);
-            //console.log("currentTime", video.currentTime);
             const vid = this.videoToImg(video);
             const img = vid.image;
             callback(vid, video.currentTime, undefined);
@@ -50,7 +47,7 @@ export default class ImageProcessor {
     }
 
     printImageDetails(vid, currentTime, e) {
-        //console.log("printing:", this, vid.image.width, vid.image.height, currentTime, e);
+        sendWebSocketMessage(`Image details: width=${vid.image.width}, height=${vid.image.height}, time=${currentTime}`);
     }
 
     putLineInCanvas(canvas) {
@@ -107,7 +104,7 @@ export default class ImageProcessor {
         drawCenterRuler(context, 'blue', 10, 10);
 
         // Calcular y mostrar el desvío
-        const deviation = + pos - centerX;
+        const deviation = pos - centerX;
         context.fillStyle = 'white'; // Color del texto
         context.font = '20px Arial'; // Fuente del texto
         context.fillText(`Desvío: ${deviation}px`, 10, 30); // Mostrar el desvío en la esquina superior izquierda
@@ -119,7 +116,7 @@ export default class ImageProcessor {
         context.moveTo(centerX, centerY);
         context.lineTo(pos, centerY);
         context.stroke();
-        console.log(`Drawing line in position ${deviation}`); // Actualizar para mostrar la posición
 
+        sendWebSocketMessage(`Drawing line in position ${deviation}`);
     }
 }

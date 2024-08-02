@@ -13,8 +13,7 @@ class WebSocketServer:
 
     async def handler(self, websocket, path):
         async for message in websocket:
-            logger.info(f"Received console.log message: {message}")
-
+            logger.info(f"Received message: {message}")
             try:
                 message_as_int = int(message[25:])
                 tolerancia = 10
