@@ -1,4 +1,3 @@
-#src/store_data.py
 import requests
 import mysql.connector
 from mysql.connector import Error
@@ -6,23 +5,32 @@ import re
 from dotenv import load_dotenv
 import os
 import time
+from logs.config_logger import logger_configurator
+
+logger = logger_configurator.get_logger()
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
-# Configuración de la base de datos desde las variables de entorno
+# Validar la configuración de la base de datos desde las variables de entorno
 db_config = {
     'host': os.getenv('DB_HOST'),
     'user': os.getenv('DB_USER'),
     'password': os.getenv('DB_PASSWORD')
 }
 
-# Nombre de la base de datos y la tabla
+if not all(db_config.values()):
+    logger.error("Database configuration variables are missing in the environment.")
+    raise EnvironmentError("Database configuration variables are missing.")
+
+# Validar el nombre de la base de datos y la URL del ESPWROOM32 desde las variables de entorno
 database_name = os.getenv('DB_NAME')
 table_name = "vueltas_table"
-
-# URL del ESPWROOM32 desde la variable de entorno
 esp_url = os.getenv('ESP_URL')
+
+if not database_name or not esp_url:
+    logger.error("DB_NAME or ESP_URL variables are missing in the environment.")
+    raise EnvironmentError("DB_NAME or ESP_URL variables are missing.")
 
 def fetch_esp_data(url, retries=5, timeout=10):
     attempt = 0
@@ -32,10 +40,10 @@ def fetch_esp_data(url, retries=5, timeout=10):
             response.raise_for_status()
             return response.text
         except requests.exceptions.RequestException as e:
-            print(f"Intento {attempt + 1} fallido al obtener datos de {url}: {e}")
+            logger.error(f"Attempt {attempt + 1} failed to fetch data from {url}: {e}")
             attempt += 1
-            time.sleep(2 ** attempt)  # Espera exponencial antes de reintentar
-    print(f"Error: No se pudo obtener datos de {url} después de {retries} intentos.")
+            time.sleep(2 ** attempt)  # Exponential backoff before retrying
+    logger.error(f"Failed to fetch data from {url} after {retries} attempts.")
     return None
 
 def extract_vueltas(html):
@@ -44,10 +52,10 @@ def extract_vueltas(html):
         if match:
             return int(match.group(1))
         else:
-            print("No se encontró el valor de 'Vueltas' en la respuesta.")
+            logger.info("Vueltas value not found in the response.")
             return None
     except re.error as e:
-        print(f"Error al extraer datos: {e}")
+        logger.error(f"Error extracting data: {e}")
         return None
 
 def create_database_and_table(config, database_name, table_name):
@@ -69,9 +77,9 @@ def create_database_and_table(config, database_name, table_name):
             )
         """)
         connection.commit()
-        print(f"Base de datos '{database_name}' y tabla '{table_name}' creadas/existentes.")
+        logger.info(f"Database '{database_name}' and table '{table_name}' created/existing.")
     except Error as e:
-        print(f"Error al crear la base de datos o la tabla: {e}")
+        logger.error(f"Error creating database or table: {e}")
     finally:
         if connection and connection.is_connected():
             cursor.close()
@@ -87,9 +95,9 @@ def store_vueltas_to_db(vueltas, config, database_name, table_name):
             cursor = connection.cursor()
             cursor.execute(f"INSERT INTO {table_name} (vueltas) VALUES (%s)", (vueltas,))
             connection.commit()
-            print("Valor insertado correctamente en la base de datos.")
+            logger.info("Value successfully inserted into the database.")
     except Error as e:
-        print(f"Error al conectar a la base de datos: {e}")
+        logger.error(f"Error connecting to the database: {e}")
     finally:
         if connection and connection.is_connected():
             cursor.close()
