@@ -1,3 +1,4 @@
+#src/main.py
 import os
 from server.http_server import HTTPServer
 from server.websocket_server import WebSocketServer
