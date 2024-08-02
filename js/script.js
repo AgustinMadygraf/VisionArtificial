@@ -12,8 +12,8 @@ function getUrlParameter(name) {
     return urlParams.get(name);
 }
 
-// Obtener el tiempo de refresco de la URL, por defecto 3000 milisegundos
-const refreshInterval = parseInt(getUrlParameter('t')) || 3000;
+// Obtener el tiempo de refresco de la URL, por defecto 20 milisegundos
+const refreshInterval = parseInt(getUrlParameter('t')) || 20;
 
 // Obtener la IP local desde el servidor
 async function getLocalIp() {
@@ -23,12 +23,16 @@ async function getLocalIp() {
 }
 
 let ws;
+let isWebSocketOpen = false; // Bandera para controlar el estado del WebSocket
+let messageCount = 0; // Contador de mensajes
+
 async function initializeWebSocket() {
     const localIp = await getLocalIp();
     ws = new WebSocket(`wss://${localIp}:8765`);
 
     ws.onopen = function() {
         console.log("WebSocket connection established");
+        isWebSocketOpen = true; // Establecer la bandera a true cuando se abre la conexión
     };
 
     ws.onerror = function(error) {
@@ -37,14 +41,19 @@ async function initializeWebSocket() {
 
     ws.onclose = function() {
         console.log("WebSocket connection closed");
+        isWebSocketOpen = false; // Establecer la bandera a false cuando se cierra la conexión
     };
 }
 
 export function sendWebSocketMessage(message) {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(message);
-    } else {
-        console.error("WebSocket is not open. Unable to send message.");
+    messageCount++; // Incrementar el contador de mensajes
+
+    if (messageCount % 100 === 0) { // Enviar el mensaje si el contador es múltiplo
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(message);
+        } else {
+            console.error("WebSocket is not open. Unable to send message.");
+        }
     }
 }
 
