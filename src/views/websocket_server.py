@@ -31,7 +31,7 @@ class WebSocketServer:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            logger.info(f"Sent HTTP GET to {url}")
+            logger.debug(f"Sent HTTP GET to {url}")
             logger.debug(f"Response status code: {response.status_code}")
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP request to {url} failed: {e}")
