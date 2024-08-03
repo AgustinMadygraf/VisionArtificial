@@ -17,7 +17,9 @@
             "class": "logging.StreamHandler",
             "level": "INFO",
             "formatter": "standard",
-            "filters": ["exclude_http_logs"],
+            "filters": [
+                "exclude_http_logs"
+            ],
             "stream": "ext://sys.stdout"
         },
         "file": {
