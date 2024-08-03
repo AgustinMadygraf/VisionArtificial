@@ -17,7 +17,16 @@ async def run_server():
     websocket_server = WebSocketServer((local_ip, 8765), ssl_config)
     await websocket_server.start()  # Await the coroutine
 
-if __name__ == '__main__':
-    web_dir = '.'
-    os.chdir(web_dir)
-    asyncio.run(run_server())  # Use asyncio.run to execute the async function
+async def run_store_data():
+    while True:
+        print("")
+        print('Storing data...')
+        print("")
+        os.system('python src/store_data.py')
+        await asyncio.sleep(15)  # Espera de 15 segundos
+
+async def run_main():
+    await asyncio.gather(
+        run_server(),
+        run_store_data()
+    )
