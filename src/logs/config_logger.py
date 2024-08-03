@@ -8,7 +8,6 @@ class LoggerConfigurator:
         self.default_path = default_path
         self.default_level = default_level
         self.env_key = env_key
-        self.logger = None
         self.configure_logging()
 
     def configure_logging(self):
@@ -20,8 +19,9 @@ class LoggerConfigurator:
             with open(path, 'rt') as f:
                 config = json.load(f)
             logging.config.dictConfig(config)
+            logging.getLogger("http.server").setLevel(logging.WARNING)
         else:
-            logging.basicConfig(level=self.default_level)
+            logging.basicConfig(level=self.default_level)      
         self.logger = logging.getLogger(__name__)
     
     def get_logger(self):

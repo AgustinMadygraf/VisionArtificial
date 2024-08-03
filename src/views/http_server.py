@@ -30,12 +30,12 @@ class HTTPServer:
         self.address = address
         self.handler_class = handler_class
         self.ssl_config = ssl_config
+        self.logger = logger
 
     def start(self):
         httpd = http.server.HTTPServer(self.address, self.handler_class)
         httpd.socket = self.ssl_config.get_ssl_context().wrap_socket(httpd.socket, server_side=True)
-
-        logger.info(f"Servidor corriendo en https://{self.address[0]}:{self.address[1]}")
+        self.logger.info(f"Servidor corriendo en https://{self.address[0]}:{self.address[1]}")
 
         http_thread = threading.Thread(target=httpd.serve_forever)
         http_thread.daemon = True
