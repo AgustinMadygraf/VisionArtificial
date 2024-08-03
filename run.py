@@ -1,6 +1,7 @@
-#IOTIMAGEPROC\run.py
+# run.py
 import sys
 import os
+import asyncio
 
 # Asegúrate de que el directorio `src` esté en el `PYTHONPATH`
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
@@ -14,4 +15,4 @@ if __name__ == '__main__':
     #updater.run()
     web_dir = '.'
     os.chdir(web_dir)
-    run_server()
+    asyncio.run(run_server())  # Use asyncio.run to execute the async function
