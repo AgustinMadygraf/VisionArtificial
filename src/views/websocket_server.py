@@ -2,6 +2,7 @@
 import asyncio
 import websockets
 import requests
+import socket
 from logs.config_logger import logger_configurator
 
 logger = logger_configurator.get_logger()
@@ -39,7 +40,11 @@ class WebSocketServer:
     def start(self):
         async def main():
             ssl_context = self.ssl_config.get_ssl_context()
-            async with websockets.serve(self.handler, self.address[0], 8765, ssl=ssl_context):
-                await asyncio.Future()  # Run forever
+            server = await websockets.serve(self.handler, self.address[0], 8765, ssl=ssl_context)
+            
+            # Set the reuse address option
+            server.sockets[0].setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            
+            await asyncio.Future()  # Run forever
 
         asyncio.run(main())

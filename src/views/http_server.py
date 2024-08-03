@@ -1,4 +1,4 @@
-#src/server/http_server.py
+# src/server/http_server.py
 import http.server
 import json
 import threading
@@ -10,7 +10,7 @@ logger = logger_configurator.get_logger()
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
-            self.path = '/index.html'
+            self.path = '/static/index.html'
         elif self.path == '/local-ip':
             self.handle_local_ip()
             return
@@ -35,7 +35,7 @@ class HTTPServer:
         httpd = http.server.HTTPServer(self.address, self.handler_class)
         httpd.socket = self.ssl_config.get_ssl_context().wrap_socket(httpd.socket, server_side=True)
 
-        logger.info(f"Servidor corriendo en https://{self.address[0]}:{self.address[1]}/?t=20")
+        logger.info(f"Servidor corriendo en https://{self.address[0]}:{self.address[1]}")
 
         http_thread = threading.Thread(target=httpd.serve_forever)
         http_thread.daemon = True
