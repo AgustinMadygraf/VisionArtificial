@@ -32,10 +32,9 @@ class WebSocketServer:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            logger.debug(f"Sent HTTP GET to {url}")
-            logger.debug(f"Response status code: {response.status_code}")
+            logger.debug(f"Sent HTTP GET to {url}, status code: {response.status_code}")
         except requests.exceptions.RequestException as e:
-            logger.error(f"HTTP request to {url} failed: {e}")
+            logger.error(f"Failed to connect to {url}: {str(e).split(':')[0]}")  # Simplify the error message
 
     def start(self):
         async def main():

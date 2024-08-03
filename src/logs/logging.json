@@ -3,7 +3,7 @@
     "disable_existing_loggers": false,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(levelname)s - %(message)s",
+            "format": "%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S"
         }
     },
@@ -25,9 +25,6 @@
     },
     "root": {
         "level": "DEBUG",
-        "handlers": [
-            "console",
-            "file"
-        ]
+        "handlers": ["console", "file"]
     }
 }
