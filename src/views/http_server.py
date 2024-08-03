@@ -1,4 +1,4 @@
-# src/server/http_server.py
+# src/views/http_server.py
 import http.server
 import json
 import threading

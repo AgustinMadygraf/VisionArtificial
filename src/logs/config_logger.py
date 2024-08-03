@@ -27,10 +27,5 @@ class LoggerConfigurator:
     def get_logger(self):
         return self.logger
 
-class InfoErrorFilter(logging.Filter):
-    def filter(self, record):
-        # Permitir solo registros de nivel INFO y ERROR
-        return record.levelno in (logging.INFO, logging.ERROR)
-
 # Configuración inicial del logger para módulos individuales
 logger_configurator = LoggerConfigurator()
