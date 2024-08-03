@@ -56,6 +56,7 @@ class ShortcutManager:
         escritorio = Path(winshell.desktop())
         ruta_acceso_directo = escritorio / f"{self.name_proj}.lnk"
         ruta_icono = self.project_dir / "config" / f"{self.name_proj}.ico"
+        ruta_icono = self.project_dir / "static" / "favicon.ico"
 
         if not self.verificar_icono(ruta_icono):
             return False
