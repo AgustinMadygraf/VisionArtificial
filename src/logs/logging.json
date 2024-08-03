@@ -7,16 +7,22 @@
             "datefmt": "%Y-%m-%d %H:%M:%S"
         }
     },
+    "filters": {
+        "exclude_http_logs": {
+            "()": "src.logs.ExcludeHTTPLogsFilter.ExcludeHTTPLogsFilter"
+        }
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "level": "INFO",
             "formatter": "standard",
+            "filters": ["exclude_http_logs"],
             "stream": "ext://sys.stdout"
         },
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
-            "level": "DEBUG",
+            "level": "INFO",
             "formatter": "standard",
             "filename": "src/logs/sistema.log",
             "maxBytes": 10485760,
@@ -25,6 +31,9 @@
     },
     "root": {
         "level": "DEBUG",
-        "handlers": ["console", "file"]
+        "handlers": [
+            "console",
+            "file"
+        ]
     }
 }
