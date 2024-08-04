@@ -5,6 +5,11 @@ let ws;
 let isWebSocketOpen = false;
 let messageCount = 0;
 
+/**
+ * Inicializa la conexión WebSocket.
+ * Obtiene la IP local y establece una conexión WebSocket a esa IP.
+ * Si la conexión falla, reintenta después de 5 segundos.
+ */
 async function initializeWebSocket() {
     console.log("Initializing WebSocket...");
     const localIp = await getLocalIp();
@@ -30,10 +35,16 @@ async function initializeWebSocket() {
     ws.onclose = function() {
         console.log("WebSocket connection closed");
         isWebSocketOpen = false;
+        // Reintentar conexión después de 5 segundos
         setTimeout(initializeWebSocket, 5000);
     };
 }
 
+/**
+ * Envía un mensaje a través del WebSocket si está abierto.
+ * Sólo envía el mensaje si el contador de mensajes es múltiplo de 100.
+ * @param {string} message - El mensaje a enviar.
+ */
 function sendWebSocketMessage(message) {
     messageCount++;
 
