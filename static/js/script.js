@@ -22,7 +22,9 @@ async function initializeWebSocket() {
     }
     
     console.log(`Local IP obtained: ${localIp}`);
-    ws = new WebSocket(`wss://${localIp}:8765`);
+    const wsUrl = `ws://${localIp}:8765`;
+    console.log(`Connecting to WebSocket at ${wsUrl}`);
+    ws = new WebSocket(wsUrl);
 
     ws.onopen = function() {
         console.log("WebSocket connection established");
