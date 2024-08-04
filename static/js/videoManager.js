@@ -20,6 +20,7 @@ export default class VideoManager {
                 this.video.srcObject = stream;
                 this.video.addEventListener("loadedmetadata", () => {
                     this.video.play();
+                    document.getElementById("but").classList.add("hidden");
                 });
             })
             .catch(() => {
@@ -33,6 +34,7 @@ export default class VideoManager {
                         this.video.srcObject = stream;
                         this.video.addEventListener("loadedmetadata", () => {
                             this.video.play();
+                            document.getElementById("but").classList.add("hidden");
                         });
                     })
                     .catch(alert);

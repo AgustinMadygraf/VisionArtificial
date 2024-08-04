@@ -1,3 +1,9 @@
+/* Agrega una clase para ocultar el botón */
+.hidden {
+    display: none;
+}
+
+/* Otros estilos */
 body {
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
@@ -59,4 +65,3 @@ button:hover {
     height: auto;
     border: 2px solid #000;
 }
-
