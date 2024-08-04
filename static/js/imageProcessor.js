@@ -1,6 +1,6 @@
 // static/js/imageProcessor.js
 import { drawVerticalLine, drawHorizontalLine, drawCenterRuler } from './utils/canvasUtils.js';
-import { sendWebSocketMessage } from './script.js';
+import { sendWebSocketMessage } from './webSocketManager.js';
 
 export default class ImageProcessor {
     constructor(secs, halfEvalHeight, halfEvalWidth) {
@@ -90,29 +90,23 @@ export default class ImageProcessor {
     vertLineInCanvas(canvas, pos) {
         const context = canvas.getContext('2d');
 
-        // Dibujar la línea vertical amarilla
         drawVerticalLine(context, pos, 'yellow');
 
-        // Dibujar la línea vertical roja en el centro del canvas
         const centerX = canvas.width / 2;
         drawVerticalLine(context, centerX, 'red');
 
-        // Dibujar la línea horizontal verde en el centro del canvas
         const centerY = canvas.height / 2;
         drawHorizontalLine(context, centerY, 'green');
 
-        // Dibujar la regla horizontal en el centro del canvas
         drawCenterRuler(context, 'blue', 10, 10);
 
-        // Calcular y mostrar el desvío
         const deviation = pos - centerX;
-        context.fillStyle = 'white'; // Color del texto
-        context.font = '20px Arial'; // Fuente del texto
-        context.fillText(`Desvío: ${deviation}px`, 10, 30); // Mostrar el desvío en la esquina superior izquierda
+        context.fillStyle = 'white';
+        context.font = '20px Arial';
+        context.fillText(`Desvío: ${deviation}px`, 10, 30);
 
-        // Dibujar línea que conecta las dos posiciones
-        context.strokeStyle = 'white'; // Color de la línea de desvío
-        context.lineWidth = 1; // Ancho de la línea de desvío
+        context.strokeStyle = 'white';
+        context.lineWidth = 1;
         context.beginPath();
         context.moveTo(centerX, centerY);
         context.lineTo(pos, centerY);
