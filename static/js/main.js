@@ -1,4 +1,4 @@
-// static/js/script.js
+// static/js/main.js
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
