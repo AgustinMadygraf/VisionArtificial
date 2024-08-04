@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Initializing VideoManager...");
     videoManager.initialize();
+    videoManager.startVideoStream();
 
     setInterval(() => {
         const img = imageProcessor.pickImage(videoManager.video);
