@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 requests = "*"
 websockets = "*"
+mysql-connector-python = "*"
+python-dotenv = "*"
 
 
 [dev-packages]
