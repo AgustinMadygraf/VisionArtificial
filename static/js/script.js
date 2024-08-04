@@ -3,24 +3,17 @@ import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
 
-const secs = 3;
-const halfEvalHeight = 10;
-const halfEvalWidth = 200;
-
-// Función para obtener el valor de un parámetro de la URL
-function getUrlParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
-// Obtener el tiempo de refresco de la URL, por defecto 20 milisegundos
-const refreshInterval = parseInt(getUrlParameter('t')) || 20;
+const secs = 3;             // Obtener el número de segundos para la evaluación de la imagen
+const halfEvalHeight = 10;  // Obtener la mitad de la altura de la evaluación de la imagen
+const halfEvalWidth = 200;  // Obtener la mitad del ancho de la evaluación de la imagen
+const refreshInterval = 20; // Obtener el tiempo de refresco de la URL, 20 milisegundos
 
 // Obtener la IP local desde el servidor
 async function getLocalIp() {
     try {
         const response = await fetch('/local-ip');
         const data = await response.json();
+        console.log('Local IP:', data.ip);
         return data.ip;
     } catch (error) {
         console.error('Error fetching local IP:', error);

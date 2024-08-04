@@ -1,3 +1,4 @@
+// static/js/imageProcessor.js
 import { drawVerticalLine, drawHorizontalLine, drawCenterRuler } from './canvasUtils.js';
 import { sendWebSocketMessage } from './script.js';
 
