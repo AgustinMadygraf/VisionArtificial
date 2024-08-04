@@ -1,3 +1,4 @@
+// static/js/script.js
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
@@ -17,9 +18,14 @@ const refreshInterval = parseInt(getUrlParameter('t')) || 20;
 
 // Obtener la IP local desde el servidor
 async function getLocalIp() {
-    const response = await fetch('/local-ip');
-    const data = await response.json();
-    return data.ip;
+    try {
+        const response = await fetch('/local-ip');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error('Error fetching local IP:', error);
+        return null;
+    }
 }
 
 let ws;
@@ -28,6 +34,11 @@ let messageCount = 0; // Contador de mensajes
 
 async function initializeWebSocket() {
     const localIp = await getLocalIp();
+    if (!localIp) {
+        console.error('Unable to get local IP. WebSocket will not be initialized.');
+        return;
+    }
+    
     ws = new WebSocket(`wss://${localIp}:8765`);
 
     ws.onopen = function() {
@@ -36,12 +47,14 @@ async function initializeWebSocket() {
     };
 
     ws.onerror = function(error) {
-        console.error("WebSocket error: " + error);
+        console.error("WebSocket error:", error);
     };
 
     ws.onclose = function() {
         console.log("WebSocket connection closed");
         isWebSocketOpen = false; // Establecer la bandera a false cuando se cierra la conexión
+        // Intentar reconectar después de un tiempo
+        setTimeout(initializeWebSocket, 5000);
     };
 }
 
