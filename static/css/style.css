@@ -31,18 +31,20 @@ main {
     padding: 1rem;
 }
 
-.video-container {
+#container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
-}
-
-video {
     width: 100%;
     max-width: 500px;
     border: 2px solid #000;
-    margin-bottom: 1rem;
+}
+
+video, #image-canvas {
+    width: 100%;
+    max-width: 500px;
+    border: 2px solid #000;
+    margin: 1rem 0;
 }
 
 button {
@@ -59,9 +61,14 @@ button:hover {
     background-color: #0056b3;
 }
 
-#image-canvas {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    border: 2px solid #000;
+/* Estilos para orientación horizontal */
+@media (orientation: landscape) {
+    #container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    video, #image-canvas {
+        width: 48%;
+    }
 }

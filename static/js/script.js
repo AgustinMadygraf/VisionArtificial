@@ -56,6 +56,17 @@ export function sendWebSocketMessage(message) {
     }
 }
 
+function adjustLayoutForOrientation() {
+    const container = document.getElementById('container');
+    if (window.innerWidth > window.innerHeight) {
+        // Landscape orientation
+        container.classList.add('landscape');
+    } else {
+        // Portrait orientation
+        container.classList.remove('landscape');
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM fully loaded and parsed");
     initializeWebSocket();
@@ -71,4 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img);
     }, refreshInterval);
+
+    // Adjust layout initially and on resize
+    adjustLayoutForOrientation();
+    window.addEventListener('resize', adjustLayoutForOrientation);
 });
