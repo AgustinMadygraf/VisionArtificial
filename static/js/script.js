@@ -14,12 +14,14 @@ let isWebSocketOpen = false; // Bandera para controlar el estado del WebSocket
 let messageCount = 0; // Contador de mensajes
 
 async function initializeWebSocket() {
+    console.log("Initializing WebSocket...");
     const localIp = await getLocalIp();
     if (!localIp) {
         console.error('Unable to get local IP. WebSocket will not be initialized.');
         return;
     }
     
+    console.log(`Local IP obtained: ${localIp}`);
     ws = new WebSocket(`wss://${localIp}:8765`);
 
     ws.onopen = function() {
@@ -44,6 +46,7 @@ export function sendWebSocketMessage(message) {
 
     if (messageCount % 100 === 0) { // Enviar el mensaje si el contador es múltiplo
         if (ws && ws.readyState === WebSocket.OPEN) {
+            console.log(`Sending message: ${message}`);
             ws.send(message);
         } else {
             console.error("WebSocket is not open. Unable to send message.");
@@ -52,11 +55,13 @@ export function sendWebSocketMessage(message) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM fully loaded and parsed");
     initializeWebSocket();
     const videoManager = new VideoManager();
     const imageProcessor = new ImageProcessor(secs, halfEvalHeight, halfEvalWidth);
     const domUpdater = new DOMUpdater();
 
+    console.log("Initializing VideoManager...");
     videoManager.initialize();
 
     setInterval(() => {
