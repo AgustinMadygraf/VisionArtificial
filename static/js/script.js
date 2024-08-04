@@ -2,7 +2,7 @@
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
-import { getLocalIp } from './networkUtils.js';
+import { getLocalIp } from './utils/networkUtils.js';
 
 const secs = 3;             // Obtener el número de segundos para la evaluación de la imagen
 const halfEvalHeight = 10;  // Obtener la mitad de la altura de la evaluación de la imagen
