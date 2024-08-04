@@ -6,3 +6,4 @@ server.key
 .env
 src/docs/00-Prompt-for-ProjectAnalysis.md
 IoTImageProc.bat
+static/docs/00-Prompt-for-ProjectAnalysis.md
