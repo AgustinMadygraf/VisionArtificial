@@ -2,21 +2,13 @@
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor.js';
 import DOMUpdater from './domUpdater.js';
-import { initializeWebSocket, sendWebSocketMessage } from './webSocketManager.js';
+import { initializeWebSocket } from './webSocketManager.js';
+import { adjustLayoutForOrientation } from './uiManager.js';
 
 const secs = 3;
 const halfEvalHeight = 10;
 const halfEvalWidth = 200;
 const refreshInterval = 20;
-
-function adjustLayoutForOrientation() {
-    const container = document.getElementById('container');
-    if (window.innerWidth > window.innerHeight) {
-        container.classList.add('landscape');
-    } else {
-        container.classList.remove('landscape');
-    }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM fully loaded and parsed");
