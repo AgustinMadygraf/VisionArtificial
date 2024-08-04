@@ -2,19 +2,38 @@
 import { drawVerticalLine, drawHorizontalLine, drawCenterRuler } from './utils/canvasUtils.js';
 import { sendWebSocketMessage } from './webSocketManager.js';
 
+/**
+ * Clase que gestiona el procesamiento de imágenes desde un video.
+ */
 export default class ImageProcessor {
+    /**
+     * Constructor de ImageProcessor.
+     * @param {number} secs - Número de segundos para la evaluación de la imagen.
+     * @param {number} halfEvalHeight - La mitad de la altura de la evaluación de la imagen.
+     * @param {number} halfEvalWidth - La mitad del ancho de la evaluación de la imagen.
+     */
     constructor(secs, halfEvalHeight, halfEvalWidth) {
         this.secs = secs;
         this.halfEvalHeight = halfEvalHeight;
         this.halfEvalWidth = halfEvalWidth;
     }
 
+    /**
+     * Selecciona una imagen del video.
+     * @param {HTMLVideoElement} video - El elemento de video.
+     * @returns {HTMLImageElement} - La imagen seleccionada.
+     */
     pickImage(video) {
         this.getVideoImage(video, this.secs, this.printImageDetails.bind(this));
         const vid = this.videoToImg(video);
         return vid.image;
     }
 
+    /**
+     * Convierte un frame del video en una imagen.
+     * @param {HTMLVideoElement} video - El elemento de video.
+     * @returns {Object} - Un objeto que contiene la imagen.
+     */
     videoToImg(video) {
         const canvas = document.createElement('canvas');
         canvas.height = video.videoHeight;
@@ -27,6 +46,12 @@ export default class ImageProcessor {
         return { image: img };
     }
 
+    /**
+     * Obtiene una imagen del video en el tiempo especificado.
+     * @param {HTMLVideoElement} video - El elemento de video.
+     * @param {number|Function} secs - El número de segundos o una función para calcular el tiempo.
+     * @param {Function} callback - La función de callback.
+     */
     getVideoImage(video, secs, callback) {
         video.onloadedmetadata = () => {
             if (typeof secs === 'function') {
@@ -47,15 +72,30 @@ export default class ImageProcessor {
         };
     }
 
+    /**
+     * Imprime los detalles de la imagen en el WebSocket.
+     * @param {Object} vid - El objeto que contiene la imagen.
+     * @param {number} currentTime - El tiempo actual del video.
+     * @param {Event} e - El evento.
+     */
     printImageDetails(vid, currentTime, e) {
         sendWebSocketMessage(`Image details: width=${vid.image.width}, height=${vid.image.height}, time=${currentTime}`);
     }
 
+    /**
+     * Dibuja líneas en el canvas basado en la posición de la mayor diferencia vertical.
+     * @param {HTMLCanvasElement} canvas - El elemento canvas.
+     */
     putLineInCanvas(canvas) {
         const pos = this.maxVerticalJumpPixelPos(canvas);
         this.vertLineInCanvas(canvas, pos.pos);
     }
 
+    /**
+     * Encuentra la posición del mayor salto vertical en los píxeles del canvas.
+     * @param {HTMLCanvasElement} canvas - El elemento canvas.
+     * @returns {Object} - Un objeto que contiene la posición y la diferencia máxima.
+     */
     maxVerticalJumpPixelPos(canvas) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
@@ -87,6 +127,11 @@ export default class ImageProcessor {
         return maxDiff;
     }
 
+    /**
+     * Dibuja varias líneas en el canvas.
+     * @param {HTMLCanvasElement} canvas - El elemento canvas.
+     * @param {number} pos - La posición de la línea vertical amarilla.
+     */
     vertLineInCanvas(canvas, pos) {
         const context = canvas.getContext('2d');
 
