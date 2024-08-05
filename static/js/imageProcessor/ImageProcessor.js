@@ -3,10 +3,12 @@ import { drawVerticalLine, drawHorizontalLine, drawCenterRuler } from '../utils/
 import { sendWebSocketMessage } from './webSocketUtils.js';
 
 export default class ImageProcessor {
-    constructor(secs, halfEvalHeight, halfEvalWidth) {
+    constructor(secs, halfEvalHeight, halfEvalWidth, canvasUtils, webSocketUtils) {
         this.secs = secs;
         this.halfEvalHeight = halfEvalHeight;
         this.halfEvalWidth = halfEvalWidth;
+        this.canvasUtils = canvasUtils;
+        this.webSocketUtils = webSocketUtils;
     }
 
     pickImage(video) {
@@ -90,15 +92,15 @@ export default class ImageProcessor {
     vertLineInCanvas(canvas, pos) {
         const context = canvas.getContext('2d');
 
-        drawVerticalLine(context, pos, 'yellow');
+        this.canvasUtils.drawVerticalLine(context, pos, 'yellow');
 
         const centerX = canvas.width / 2;
-        drawVerticalLine(context, centerX, 'red');
+        this.canvasUtils.drawVerticalLine(context, centerX, 'red');
 
         const centerY = canvas.height / 2;
-        drawHorizontalLine(context, centerY, 'green');
+        this.canvasUtils.drawHorizontalLine(context, centerY, 'green');
 
-        drawCenterRuler(context, 'blue', 10, 10);
+        this.canvasUtils.drawCenterRuler(context, 'blue', 10, 10);
 
         const deviation = pos - centerX;
         context.fillStyle = 'white';
@@ -112,7 +114,7 @@ export default class ImageProcessor {
         context.lineTo(pos, centerY);
         context.stroke();
 
-        sendWebSocketMessage(`Drawing line in position ${deviation}`);
+        this.webSocketUtils.sendWebSocketMessage(`Drawing line in position ${deviation}`);
     }
 }
 
