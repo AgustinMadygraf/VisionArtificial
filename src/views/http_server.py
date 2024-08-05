@@ -2,6 +2,7 @@
 import http.server
 import json
 import threading
+import urllib.parse
 from utils.server_utility import ServerUtility
 from logs.config_logger import logger_configurator
 
@@ -9,17 +10,31 @@ logger = logger_configurator.get_logger()
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/':
+        parsed_path = urllib.parse.urlparse(self.path)
+        query_params = urllib.parse.parse_qs(parsed_path.query)
+
+        if parsed_path.path == '/':
             self.path = '/static/index.html'
-        elif self.path == '/local-ip':
+        elif parsed_path.path == '/local-ip':
             self.handle_local_ip()
             return
+        elif 'test' in query_params:
+            self.handle_test(query_params['test'][0])
+            return
+
         logger.info(f"Handling GET request for {self.path}")
         return super().do_GET()
 
     def handle_local_ip(self):
         local_ip = ServerUtility.get_local_ip()
         response = {'ip': local_ip}
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(response).encode('utf-8'))
+
+    def handle_test(self, test_value):
+        response = {'test': test_value}
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()

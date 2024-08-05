@@ -1,11 +1,14 @@
-// static/js/main.js
-
 import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor/ImageProcessor.js';
 import DOMUpdater from './domUpdater.js';
 import { initializeWebSocket, sendWebSocketMessage } from './imageProcessor/webSocketUtils.js';
 import { adjustLayoutForOrientation } from './uiManager.js';
 import * as canvasUtils from './utils/canvasUtils.js';
+import { getQueryParam } from './getQueryParam.js';
+
+// Usa la función para obtener el valor del parámetro GET llamado "test"
+const testValue = getQueryParam('test');
+console.log("el valor del parámetro GET llamado 'test' es: ", testValue); 
 
 // Implement the interfaces
 import CanvasUtilsInterface from './interfaces/canvasUtilsInterface.js';
@@ -50,13 +53,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const domUpdater = new DOMUpdater();
 
     console.log("Initializing VideoManager...");
-    videoManager.initialize();
-    videoManager.startVideoStream();
 
-    setInterval(() => {
-        const img = imageProcessor.pickImage(videoManager.video);
-        domUpdater.updateCanvas(img);
-    }, refreshInterval);
+    if (testValue === 'True') {
+        // Transmit an image instead of the camera stream
+        const videoElement = document.getElementById('vid');
+        videoElement.src = 'test.jpeg';
+        videoElement.style.display = 'block';
+    } else {
+        videoManager.initialize();
+        videoManager.startVideoStream();
+
+        setInterval(() => {
+            const img = imageProcessor.pickImage(videoManager.video);
+            domUpdater.updateCanvas(img);
+        }, refreshInterval);
+    }
 
     adjustLayoutForOrientation();
     window.addEventListener('resize', adjustLayoutForOrientation);
