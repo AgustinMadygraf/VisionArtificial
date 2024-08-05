@@ -90,7 +90,6 @@ function initializeApp() {
         console.log("Test value is not True, starting image processing interval");
         setInterval(() => {
             const img = imageProcessor.pickImage(videoManager.video);
-            console.log("Picked image:", img);
             domUpdater.updateCanvas(img);
         }, refreshInterval);
     }
