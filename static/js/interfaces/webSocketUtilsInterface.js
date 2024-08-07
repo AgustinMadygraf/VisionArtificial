@@ -1,6 +1,9 @@
-// static/js/interfaces/webSocketUtilsInterface.js
-
+// static/js/interfaces/WebSocketUtilsInterface.js
 export default class WebSocketUtilsInterface {
-    initializeWebSocket() {}
-    sendWebSocketMessage(message) {}
+    initializeWebSocket() {
+        throw new Error('You have to implement the method initializeWebSocket!');
+    }
+    sendWebSocketMessage(message) {
+        throw new Error('You have to implement the method sendWebSocketMessage!');
+    }
 }

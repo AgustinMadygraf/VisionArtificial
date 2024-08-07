@@ -1,49 +1,22 @@
 // static/js/main.js
-
-import VideoManager from './videoManager.js';
 import ImageProcessor from './imageProcessor/ImageProcessor.js';
-import DOMUpdater from './domUpdater.js';
-import { initializeWebSocket, sendWebSocketMessage } from './imageProcessor/webSocketUtils.js';
-import { adjustLayoutForOrientation } from './uiManager.js';
-import * as canvasUtils from './utils/canvasUtils.js';
-import { getQueryParam } from './getQueryParam.js';
-import CanvasUtilsInterface from './interfaces/canvasUtilsInterface.js';
-import WebSocketUtilsInterface from './interfaces/webSocketUtilsInterface.js';
-
-// Variables de configuración
-const secs = 3;
-const halfEvalHeight = 10;
-const halfEvalWidth = 200;
-const refreshInterval = 20;
+import VerticalLineStrategy from './imageProcessor/strategies/VerticalLineStrategy.js';
+import CanvasUtilsImpl from './implementations/CanvasUtilsImpl.js';
+import WebSocketUtilsImpl from './implementations/WebSocketUtilsImpl.js';
+import VideoManager from './videoManager.js';
+import { getQueryParam } from './utils/urlUtils.js'; // Import the function
+import { adjustLayoutForOrientation } from './uiManager.js'; // Import the function
+import DOMUpdater from './domUpdater.js'; // Import the class
 
 // Implementaciones de interfaces
-class CanvasUtilsImpl extends CanvasUtilsInterface {
-    drawVerticalLine(context, pos, color) {
-        canvasUtils.drawVerticalLine(context, pos, color);
-    }
-    drawHorizontalLine(context, pos, color) {
-        canvasUtils.drawHorizontalLine(context, pos, color);
-    }
-    drawCenterRuler(context, color, lineLength, spacing) {
-        canvasUtils.drawCenterRuler(context, color, lineLength, spacing);
-    }
-}
+const canvasUtils = new CanvasUtilsImpl();
+const webSocketUtils = new WebSocketUtilsImpl();
+const strategy = new VerticalLineStrategy(canvasUtils, webSocketUtils);
+const imageProcessor = new ImageProcessor(5, 100, 50, canvasUtils, webSocketUtils, strategy);
+const domUpdater = new DOMUpdater(); // Create an instance of DOMUpdater
 
-class WebSocketUtilsImpl extends WebSocketUtilsInterface {
-    initializeWebSocket() {
-        initializeWebSocket();
-    }
-    sendWebSocketMessage(message) {
-        sendWebSocketMessage(message);
-    }
-}
-
-// Función para inicializar WebSocketUtils
-function initializeWebSocketUtils() {
-    const webSocketUtilsImpl = new WebSocketUtilsImpl();
-    webSocketUtilsImpl.initializeWebSocket();
-    return webSocketUtilsImpl;
-}
+// Define refreshInterval
+const refreshInterval = 20;
 
 // Función para inicializar VideoManager
 function initializeVideoManager() {
@@ -63,36 +36,29 @@ function setupEventListeners() {
 function initializeApp() {
     console.log("DOM fully loaded and parsed");
 
-    const canvasUtilsImpl = new CanvasUtilsImpl();
-    console.log("CanvasUtilsImpl initialized:", canvasUtilsImpl);
-
-    const webSocketUtilsImpl = initializeWebSocketUtils();
-    console.log("WebSocketUtilsImpl initialized:", webSocketUtilsImpl);
+    console.log("CanvasUtilsImpl initialized:", canvasUtils);
+    console.log("WebSocketUtilsImpl initialized:", webSocketUtils);
 
     const videoManager = initializeVideoManager();
     console.log("VideoManager initialized:", videoManager);
 
-    const imageProcessor = new ImageProcessor(secs, halfEvalHeight, halfEvalWidth, canvasUtilsImpl, webSocketUtilsImpl);
     console.log("ImageProcessor initialized:", imageProcessor);
-
-    const domUpdater = new DOMUpdater();
-    console.log("DOMUpdater initialized:", domUpdater);
 
     console.log("Initializing VideoManager...");
 
-    const testValue = getQueryParam('test');
+    const testValue = getQueryParam('test'); // Use the imported function
     console.log("Query parameter 'test':", testValue);
 
     if (testValue === 'True') {
         console.log("Test value is True, setting video source to 'test.jpeg'");
-        const videoElement = document.getElementById('vid'); // Corrección aquí
+        const videoElement = document.getElementById('vid');
         videoElement.src = 'test.jpeg';
         videoElement.style.display = 'block';
     } else {
         console.log("Test value is not True, starting image processing interval");
         setInterval(() => {
             const img = imageProcessor.pickImage(videoManager.video);
-            domUpdater.updateCanvas(img);
+            domUpdater.updateCanvas(img); // Use the instance method
         }, refreshInterval);
     }
 
@@ -101,4 +67,6 @@ function initializeApp() {
 }
 
 // Evento DOMContentLoaded
-document.addEventListener("DOMContentLoaded", initializeApp);
+document.addEventListener('DOMContentLoaded', (event) => {
+    initializeApp();
+});
