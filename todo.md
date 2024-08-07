@@ -69,6 +69,6 @@
   - **Descripción**: Rediseñar `store_data.py` para separar claramente las responsabilidades de extracción de datos, procesamiento de datos y almacenamiento de datos.
   - **Archivo**: `src/store_data.py`
 
-- [ ] **Documentación del Código y las Clases**:
+- [x] **Documentación del Código y las Clases**:
   - **Descripción**: Agregar documentación detallada en cada clase y método, explicando su propósito y cómo cumple con los principios SOLID.
   - **Archivo**: Todos los archivos, comenzando por los más complejos como `src/installer_utils.py` y `src/views/websocket_server.py`
