@@ -43,9 +43,10 @@ class TestShortcutManager(unittest.TestCase):
         manager = ShortcutManager(Path('/dummy'), 'TestProject', mock_logger, mock_strategy)
         
         with patch('winshell.desktop', return_value='/dummy'):
-            result = manager.create_shortcut(Path('/dummy/test.bat'))
-            self.assertTrue(result)
-            mock_strategy.create_shortcut.assert_called_once()
+            with patch.object(manager, 'verificar_icono', return_value=True):
+                result = manager.create_shortcut(Path('/dummy/test.bat'))
+                self.assertTrue(result)
+                mock_strategy.create_shortcut.assert_called_once()
 
     def test_verificar_icono(self):
         mock_logger = MagicMock()
