@@ -21,6 +21,11 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         elif 'test' in query_params:
             self.handle_test(query_params['test'][0])
             return
+        # elif parsed_path.path == '/test.jpg':
+        #     self.path = '/static/test.jpg'  # Asegúrate de que el archivo esté en el directorio static
+        # else:
+        #     self.send_error(404, "File not found")
+        #     return
 
         logger.info(f"Handling GET request for {self.path}")
         return super().do_GET()

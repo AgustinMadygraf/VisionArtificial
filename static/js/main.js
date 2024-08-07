@@ -50,9 +50,9 @@ function initializeApp() {
     console.log("Query parameter 'test':", testValue);
 
     if (testValue === 'True') {
-        console.log("Test value is True, setting video source to 'test.jpeg'");
+        console.log("Test value is True, setting video source to 'test.jpg'");
         const videoElement = document.getElementById('vid');
-        videoElement.src = 'test.jpeg';
+        videoElement.src = 'test.jpg';
         videoElement.style.display = 'block';
     } else {
         console.log("Test value is not True, starting image processing interval");
