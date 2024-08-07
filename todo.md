@@ -41,7 +41,7 @@
   - **Descripción**: Dividir la clase `ProjectInstaller` en varias clases con responsabilidades específicas: una clase para la instalación, otra para la creación de accesos directos y otra para la creación de archivos BAT.
   - **Archivo**: `src/installer_utils.py`
 
-- [ ] **Inyección de Dependencias**:
+- [x] **Inyección de Dependencias**:
   - **Descripción**: Implementar inyección de dependencias para las clases que dependen de configuraciones o servicios externos, permitiendo mayor flexibilidad y facilidad de pruebas.
   - **Archivo**: Varios archivos, comenzando por `src/store_data.py` y `src/views/websocket_server.py`
 

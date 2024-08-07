@@ -1,17 +1,17 @@
 # src/views/websocket_server.py
 import asyncio
-import websockets
 import requests
-import socket
+from websockets import serve
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from src.logs.config_logger import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 
 class WebSocketServer:
-    def __init__(self, address, ssl_config):
+    def __init__(self, address, ssl_service, http_service):
         self.address = address
-        self.ssl_config = ssl_config
+        self.ssl_service = ssl_service
+        self.http_service = http_service
         self.failed_attempts = 0
         self.max_attempts = 5
 
@@ -44,18 +44,16 @@ class WebSocketServer:
             return
 
         try:
-            response = requests.get(url)
-            response.raise_for_status()
-            logger.debug(f"Sent HTTP GET to {url}, status code: {response.status_code}")
+            self.http_service.send_request(url)
             self.failed_attempts = 0  # Reset the counter on a successful request
         except requests.exceptions.RequestException as e:
             self.failed_attempts += 1
             logger.error(f"Failed to connect to {url}: {str(e).split(':')[0]} (Attempt {self.failed_attempts})")
 
     async def start(self):
-        ssl_context = self.ssl_config.get_ssl_context()
+        ssl_context = self.ssl_service.get_ssl_context()
         try:
-            async with websockets.serve(self.handler, self.address[0], 8765, ssl=ssl_context, ping_interval=None):
+            async with serve(self.handler, self.address[0], 8765, ssl=ssl_context, ping_interval=None):
                 logger.info(f"WebSocket server started at wss://{self.address[0]}:{8765}")
                 await asyncio.Future()  # Run forever
         except Exception as e:

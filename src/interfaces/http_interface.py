@@ -5,3 +5,6 @@ class HTTPInterface(ABC):
     @abstractmethod
     def fetch_data(self, url, retries=5, timeout=10):
         pass
+
+    def send_request(self, url):
+        pass
