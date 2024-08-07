@@ -3,7 +3,7 @@
 - [x] **Implementar Inyección de Dependencias (DIP) en `ImageProcessor`**
   - Crear interfaces para las dependencias en `ImageProcessor` y utilizar inyección de dependencias para mayor flexibilidad y facilidad de prueba.
 
-- [ ] **Refactorizar `ImageProcessor` utilizando el Patrón Strategy (OCP)**
+- [x] **Refactorizar `ImageProcessor` utilizando el Patrón Strategy (OCP)**
   - Permitir diferentes estrategias de procesamiento de imágenes sin modificar la clase base `ImageProcessor`.
 
 - [ ] **Segregar Interfaces en `ImageProcessor` (ISP)**
