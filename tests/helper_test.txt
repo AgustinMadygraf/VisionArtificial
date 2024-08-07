@@ -1,0 +1,1 @@
+$env:PYTHONPATH="C:\AppServ\www\VisionArtificial;C:\AppServ\www\VisionArtificial\src"
