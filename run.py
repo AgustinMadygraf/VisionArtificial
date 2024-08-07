@@ -13,6 +13,8 @@ if __name__ == '__main__':
     repo_path = 'C:\AppServ\www\IOTIMAGEPROC'
     #updater = RepoUpdater(repo_path)
     #updater.run()
+    #limpiar pantalla
+    os.system('cls')
     web_dir = '.'
     os.chdir(web_dir)
     asyncio.run(run_main())  # Use asyncio.run to execute the async function

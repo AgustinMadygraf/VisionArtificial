@@ -1,5 +1,5 @@
-# src/views/websocket_server.py
 import asyncio
+import subprocess
 import requests
 from websockets import serve
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
@@ -7,6 +7,25 @@ from src.config.network_config import NETWORK_CONFIG
 from src.logs.config_logger import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
+
+def get_pid_using_port(port):
+    try:
+        result = subprocess.check_output(f"netstat -ano | findstr :{port}", shell=True).decode()
+        if result:
+            lines = result.strip().split("\n")
+            for line in lines:
+                if f":{port}" in line:
+                    return int(line.strip().split()[-1])
+    except subprocess.CalledProcessError as e:
+        return None
+    return None
+
+def kill_process(pid):
+    try:
+        subprocess.check_output(f"taskkill /PID {pid} /F", shell=True)
+        logger.info(f"Successfully terminated process with PID {pid}.")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to terminate process with PID {pid}. Error: {e}")
 
 class WebSocketServer:
     """
@@ -33,6 +52,13 @@ class WebSocketServer:
         Inicia el servidor WebSocket y lo configura para ejecutarse indefinidamente.
         """
         ssl_context = self.ssl_service.get_ssl_context()
+        port = self.address[1]
+        pid = get_pid_using_port(port)
+        if pid:
+            logger.info(f"Port {port} is being used by PID {pid}. Terminating the process...")
+            kill_process(pid)
+            await asyncio.sleep(2)  # Wait for a moment to ensure the port is released
+
         try:
             async with serve(self.handler.handle, self.address[0], self.address[1], ssl=ssl_context, ping_interval=None):
                 logger.info(f"WebSocket server started at wss://{self.address[0]}:{self.address[1]}")
