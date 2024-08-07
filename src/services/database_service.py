@@ -2,17 +2,19 @@
 import mysql.connector
 from mysql.connector import Error
 from src.interfaces.db_interface import DatabaseInterface
+from src.config.database_config import DATABASE_CONFIG
 
 class MySQLDatabaseService(DatabaseInterface):
-    def __init__(self, config, logger):
-        self.config = config
+    def __init__(self, logger):
+        self.config = DATABASE_CONFIG
         self.logger = logger
 
     def connect(self):
         return mysql.connector.connect(
             host=self.config['host'],
             user=self.config['user'],
-            password=self.config['password']
+            password=self.config['password'],
+            database=self.config['database']
         )
 
     def create_database_and_table(self, database_name, table_name):

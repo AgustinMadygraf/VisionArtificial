@@ -1,8 +1,8 @@
+# src/main.py
 import os
 import asyncio
-from views.http_server import HTTPServer
-from views.websocket_server import WebSocketServer
-from views.http_server import MyHTTPRequestHandler
+from views.http_server import HTTPServer, MyHTTPRequestHandler
+from views.websocket_server import WebSocketServer, WebSocketHandler, HTTPRequestHandler, MessageHandler
 from utils.server_utility import ServerUtility
 from services.http_service import HTTPService
 from services.ssl_service import SSLService
@@ -13,11 +13,14 @@ async def run_server():
     ssl_service = SSLService()
     logger = LoggerConfigurator().configure()
     http_service = HTTPService(logger)
+    http_request_handler = HTTPRequestHandler(http_service)
+    message_handler = MessageHandler(http_request_handler)
+    websocket_handler = WebSocketHandler(message_handler)
 
     http_server = HTTPServer((local_ip, 4443), MyHTTPRequestHandler, ssl_service)
     http_server.start()
 
-    websocket_server = WebSocketServer((local_ip, 8765), ssl_service, http_service)
+    websocket_server = WebSocketServer(ssl_service, websocket_handler)
     await websocket_server.start()  # Await the coroutine
 
 async def run_store_data():

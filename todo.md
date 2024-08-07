@@ -53,15 +53,15 @@
   - **Descripción**: Rediseñar la clase `ShortcutManager` para permitir la extensión de funcionalidades sin modificar la clase base. Esto puede implicar el uso de patrones de diseño como Estrategia o Composición.
   - **Archivo**: `src/installer_utils.py`
 
-- [ ] **Pruebas Unitarias para Cada Componente**:
+- [x] **Pruebas Unitarias para Cada Componente**:
   - **Descripción**: Escribir pruebas unitarias para cada clase y método, asegurando que cada componente cumple con su responsabilidad específica.
   - **Archivo**: Crear archivos de prueba en `tests/`, por ejemplo, `tests/test_installer_utils.py`
 
-- [ ] **Refactorización de `WebSocketServer`**:
+- [x] **Refactorización de `WebSocketServer`**:
   - **Descripción**: Refactorizar la clase `WebSocketServer` para cumplir con los principios SOLID, especialmente el principio de Responsabilidad Única y el principio de Inversión de Dependencias.
   - **Archivo**: `src/views/websocket_server.py`
 
-- [ ] **Modularización de Configuraciones**:
+- [x] **Modularización de Configuraciones**:
   - **Descripción**: Separar las configuraciones en módulos distintos, por ejemplo, configuraciones de base de datos, configuraciones de red, etc.
   - **Archivo**: Crear archivos de configuración específicos en `src/config/`
 
