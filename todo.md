@@ -37,7 +37,7 @@
   - **Descripción**: Crear una clase `LoggerConfigurator` independiente para la configuración del logger, como se mostró en el ejemplo anterior.
   - **Archivo**: `src/logger_config.py`
 
-- [ ] **División de Responsabilidades en `ProjectInstaller`**:
+- [x] **División de Responsabilidades en `ProjectInstaller`**:
   - **Descripción**: Dividir la clase `ProjectInstaller` en varias clases con responsabilidades específicas: una clase para la instalación, otra para la creación de accesos directos y otra para la creación de archivos BAT.
   - **Archivo**: `src/installer_utils.py`
 

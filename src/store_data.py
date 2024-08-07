@@ -1,14 +1,18 @@
-import requests
-import mysql.connector
-from mysql.connector import Error
+import sys
+import os
+
+# Asegúrate de que el directorio `src` esté en el `PYTHONPATH`
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 import re
 from dotenv import load_dotenv
-import os
-import time
+from src.services.database_service import MySQLDatabaseService
+from src.services.http_service import HTTPService
 from src.logs.config_logger import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
-
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
@@ -32,20 +36,6 @@ if not database_name or not esp_url:
     logger.error("DB_NAME or ESP_URL variables are missing in the environment.")
     raise EnvironmentError("DB_NAME or ESP_URL variables are missing.")
 
-def fetch_esp_data(url, retries=5, timeout=10):
-    attempt = 0
-    while attempt < retries:
-        try:
-            response = requests.get(url, timeout=timeout)
-            response.raise_for_status()
-            return response.text
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Attempt {attempt + 1} failed to fetch data from {url}: {e}")
-            attempt += 1
-            time.sleep(2 ** attempt)  # Exponential backoff before retrying
-    logger.error(f"Failed to fetch data from {url} after {retries} attempts.")
-    return None
-
 def extract_vueltas(html):
     try:
         match = re.search(r'Vueltas:\s*(\d+)', html)
@@ -58,59 +48,16 @@ def extract_vueltas(html):
         logger.error(f"Error extracting data: {e}")
         return None
 
-def create_database_and_table(config, database_name, table_name):
-    connection = None
-    try:
-        connection = mysql.connector.connect(
-            host=config['host'],
-            user=config['user'],
-            password=config['password']
-        )
-        cursor = connection.cursor()
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
-        cursor.execute(f"USE {database_name}")
-        cursor.execute(f"""
-            CREATE TABLE IF NOT EXISTS {table_name} (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                vueltas INT NOT NULL,
-                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        connection.commit()
-        logger.info(f"Database '{database_name}' and table '{table_name}' created/existing.")
-    except Error as e:
-        logger.error(f"Error creating database or table: {e}")
-    finally:
-        if connection and connection.is_connected():
-            cursor.close()
-            connection.close()
-
-def store_vueltas_to_db(vueltas, config, database_name, table_name):
-    config_with_db = config.copy()
-    config_with_db['database'] = database_name
-    connection = None
-    try:
-        connection = mysql.connector.connect(**config_with_db)
-        if connection.is_connected():
-            cursor = connection.cursor()
-            cursor.execute(f"INSERT INTO {table_name} (vueltas) VALUES (%s)", (vueltas,))
-            connection.commit()
-            logger.info("Value successfully inserted into the database.")
-    except Error as e:
-        logger.error(f"Error connecting to the database: {e}")
-    finally:
-        if connection and connection.is_connected():
-            cursor.close()
-            connection.close()
-
-def main():
-    create_database_and_table(db_config, database_name, table_name)
+def main(db_service, http_service):
+    db_service.create_database_and_table(database_name, table_name)
     
-    html_content = fetch_esp_data(esp_url)
+    html_content = http_service.fetch_data(esp_url)
     if html_content:
         vueltas = extract_vueltas(html_content)
         if vueltas is not None:
-            store_vueltas_to_db(vueltas, db_config, database_name, table_name)
+            db_service.store_vueltas(vueltas, database_name, table_name)
 
 if __name__ == '__main__':
-    main()
+    db_service = MySQLDatabaseService(db_config, logger)
+    http_service = HTTPService(logger)
+    main(db_service, http_service)
