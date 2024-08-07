@@ -65,7 +65,7 @@
   - **Descripción**: Separar las configuraciones en módulos distintos, por ejemplo, configuraciones de base de datos, configuraciones de red, etc.
   - **Archivo**: Crear archivos de configuración específicos en `src/config/`
 
-- [ ] **Rediseño de `store_data.py`**:
+- [x] **Rediseño de `store_data.py`**:
   - **Descripción**: Rediseñar `store_data.py` para separar claramente las responsabilidades de extracción de datos, procesamiento de datos y almacenamiento de datos.
   - **Archivo**: `src/store_data.py`
 
