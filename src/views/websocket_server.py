@@ -4,9 +4,9 @@ import websockets
 import requests
 import socket
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
-from logs.config_logger import logger_configurator
+from src.logs.config_logger import LoggerConfigurator
 
-logger = logger_configurator.get_logger()
+logger = LoggerConfigurator().configure()
 
 class WebSocketServer:
     def __init__(self, address, ssl_config):

@@ -4,14 +4,13 @@ import os
 import json
 
 class LoggerConfigurator:
-    def __init__(self, default_path='src/logs/logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
-        self.default_path = default_path
+    def __init__(self, config_path='src/logs/logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
+        self.config_path = config_path
         self.default_level = default_level
         self.env_key = env_key
-        self.configure_logging()
 
-    def configure_logging(self):
-        path = self.default_path
+    def configure(self):
+        path = self.config_path
         value = os.getenv(self.env_key, None)
         if value:
             path = value
@@ -21,10 +20,7 @@ class LoggerConfigurator:
             logging.config.dictConfig(config)
         else:
             logging.basicConfig(level=self.default_level)
-        self.logger = logging.getLogger(__name__)
-
-    def get_logger(self):
-        return self.logger
+        return logging.getLogger(__name__)
 
 # Configuración inicial del logger para módulos individuales
 logger_configurator = LoggerConfigurator()

@@ -1,8 +1,8 @@
 # src/utils/server_utility.py
 import socket
-from logs.config_logger import logger_configurator
+from src.logs.config_logger import LoggerConfigurator
 
-logger = logger_configurator.get_logger()
+logger = LoggerConfigurator().configure()
 
 class ServerUtility:
     @staticmethod

@@ -4,9 +4,9 @@ import json
 import threading
 import urllib.parse
 from utils.server_utility import ServerUtility
-from logs.config_logger import logger_configurator
+from src.logs.config_logger import LoggerConfigurator
 
-logger = logger_configurator.get_logger()
+logger = LoggerConfigurator().configure()
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):

@@ -5,9 +5,9 @@ import re
 from dotenv import load_dotenv
 import os
 import time
-from logs.config_logger import logger_configurator
+from src.logs.config_logger import LoggerConfigurator
 
-logger = logger_configurator.get_logger()
+logger = LoggerConfigurator().configure()
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
