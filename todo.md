@@ -1,3 +1,7 @@
+- [ ] **Generación de Certificados SSL mediante Python**
+  - **Descripción**: Implementar un script en Python para generar certificados SSL automáticamente. Este script debe crear una clave privada y un certificado autofirmado, y guardarlos en el directorio raíz del proyecto.
+  - **Archivo**: Crear un nuevo archivo `src/generate_ssl_certificates.py`
+
 ### Lista de Tareas para Implementar SOLID en JS
 
 - [x] **Implementar Inyección de Dependencias (DIP) en `ImageProcessor`**
