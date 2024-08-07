@@ -1,6 +1,6 @@
 ### Lista de Tareas para Implementar SOLID en JS
 
-- [ ] **Implementar Inyección de Dependencias (DIP) en `ImageProcessor`**
+- [x] **Implementar Inyección de Dependencias (DIP) en `ImageProcessor`**
   - Crear interfaces para las dependencias en `ImageProcessor` y utilizar inyección de dependencias para mayor flexibilidad y facilidad de prueba.
 
 - [ ] **Refactorizar `ImageProcessor` utilizando el Patrón Strategy (OCP)**

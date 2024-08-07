@@ -50,7 +50,7 @@ export default class ImageProcessor {
     }
 
     printImageDetails(vid, currentTime, e) {
-        sendWebSocketMessage(`Image details: width=${vid.image.width}, height=${vid.image.height}, time=${currentTime}`);
+        this.webSocketUtils.sendWebSocketMessage(`Image details: width=${vid.image.width}, height=${vid.image.height}, time=${currentTime}`);
     }
 
     putLineInCanvas(canvas) {
