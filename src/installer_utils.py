@@ -1,8 +1,8 @@
-# AnalizadorDeProyectos/src/installer_utils.py
+# src/installer_utils.py
 from pathlib import Path
 from src.logs.config_logger import LoggerConfigurator
 import winshell
-from win32com.client import Dispatch
+from src.shortcut_strategy import ShortcutCreationStrategy, DefaultShortcutCreationStrategy
 from pywintypes import com_error
 
 class ProjectInstaller:
@@ -34,14 +34,16 @@ class ProjectInstaller:
             print(f"Creando archivo '{self.name_proj}.bat'")
             BatFileCreator(self.project_dir, self.name_proj, self.logger).crear_archivo_bat_con_pipenv()
 
-        ShortcutManager(self.project_dir, self.name_proj, self.logger).create_shortcut(ruta_archivo_bat)
+        shortcut_strategy = DefaultShortcutCreationStrategy()
+        ShortcutManager(self.project_dir, self.name_proj, self.logger, shortcut_strategy).create_shortcut(ruta_archivo_bat)
 
 
 class ShortcutManager:
-    def __init__(self, project_dir, name_proj, logger):
+    def __init__(self, project_dir, name_proj, logger, strategy: ShortcutCreationStrategy):
         self.project_dir = project_dir
         self.name_proj = name_proj
         self.logger = logger
+        self.strategy = strategy
 
     def verificar_icono(self, ruta_icono):
         """
@@ -61,21 +63,7 @@ class ShortcutManager:
         if not self.verificar_icono(ruta_icono):
             return False
 
-        try:
-            shell = Dispatch('WScript.Shell')
-            acceso_directo = shell.CreateShortCut(str(ruta_acceso_directo))
-            acceso_directo.Targetpath = str(ruta_archivo_bat)
-            acceso_directo.WorkingDirectory = str(self.project_dir)
-            acceso_directo.IconLocation = str(ruta_icono)
-            acceso_directo.save()
-            self.logger.debug(f"Acceso directo {'actualizado' if ruta_acceso_directo.exists() else 'creado'} exitosamente.")
-            return True
-        except com_error as e:
-            self.logger.error(f"No se pudo crear/actualizar el acceso directo debido a un error de COM: {e}", exc_info=True)
-            return False
-        except OSError as e:
-            self.logger.error(f"No se pudo crear/actualizar el acceso directo debido a un error del sistema operativo: {e}", exc_info=True)
-            return False
+        return self.strategy.create_shortcut(ruta_acceso_directo, ruta_archivo_bat, ruta_icono, self.logger)
 
 
 class BatFileCreator:

@@ -45,11 +45,11 @@
   - **Descripción**: Implementar inyección de dependencias para las clases que dependen de configuraciones o servicios externos, permitiendo mayor flexibilidad y facilidad de pruebas.
   - **Archivo**: Varios archivos, comenzando por `src/store_data.py` y `src/views/websocket_server.py`
 
-- [ ] **Segregación de Interfaces**:
+- [x] **Segregación de Interfaces**:
   - **Descripción**: Dividir interfaces grandes en interfaces más pequeñas y específicas. Asegurar que cada clase implemente solo las interfaces que realmente necesita.
   - **Archivo**: Varios archivos, a revisar durante la implementación.
 
-- [ ] **Apertura/Cierre en `ShortcutManager`**:
+- [x] **Apertura/Cierre en `ShortcutManager`**:
   - **Descripción**: Rediseñar la clase `ShortcutManager` para permitir la extensión de funcionalidades sin modificar la clase base. Esto puede implicar el uso de patrones de diseño como Estrategia o Composición.
   - **Archivo**: `src/installer_utils.py`
 
