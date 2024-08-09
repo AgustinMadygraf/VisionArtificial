@@ -9,18 +9,18 @@ import { adjustLayoutForOrientation } from './uiManager.js'; // Import the funct
 import DOMUpdater from './domUpdater.js'; // Import the class
 
 // Implementaciones de interfaces
-const canvasUtils = new CanvasUtilsImpl();
-const webSocketUtils = new WebSocketUtilsImpl();
-const strategy = new VerticalLineStrategy(canvasUtils, webSocketUtils);
-const imageProcessor = new ImageProcessor(5, 100, 50, canvasUtils, webSocketUtils, strategy);
-const domUpdater = new DOMUpdater(); // Create an instance of DOMUpdater
+const canvasUtils       = new CanvasUtilsImpl();
+const webSocketUtils    = new WebSocketUtilsImpl();
+const strategy          = new VerticalLineStrategy(canvasUtils, webSocketUtils);
+const imageProcessor    = new ImageProcessor(5, 100, 50, canvasUtils, webSocketUtils, strategy);
+const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 
 // Define refreshInterval
 const refreshInterval = 20;
 
 // Función para inicializar VideoManager
-function initializeVideoManager() {
-    const videoManager = new VideoManager();
+function initializeVideoManager(testValue) {
+    const videoManager = new VideoManager(testValue);
     videoManager.initialize();
     videoManager.startVideoStream();
     return videoManager;
@@ -36,25 +36,14 @@ function setupEventListeners() {
 function initializeApp() {
     console.log("DOM fully loaded and parsed");
 
-    console.log("CanvasUtilsImpl initialized:", canvasUtils);
-    console.log("WebSocketUtilsImpl initialized:", webSocketUtils);
-
-    const videoManager = initializeVideoManager();
-    console.log("VideoManager initialized:", videoManager);
-
-    console.log("ImageProcessor initialized:", imageProcessor);
-
-    console.log("Initializing VideoManager...");
-
     const testValue = getQueryParam('test'); // Use the imported function
     console.log("Query parameter 'test':", testValue);
 
-    if (testValue === 'True') {
-        console.log("Test value is True, setting video source to 'test.jpg'");
-        const videoElement = document.getElementById('vid');
-        videoElement.src = 'test.jpg';
-        videoElement.style.display = 'block';
-    } else {
+    const videoManager = initializeVideoManager(testValue);
+    console.log("VideoManager initialized:", videoManager);
+
+
+    if (testValue !== 'True') {
         console.log("Test value is not True, starting image processing interval");
         setInterval(() => {
             const img = imageProcessor.pickImage(videoManager.video);
