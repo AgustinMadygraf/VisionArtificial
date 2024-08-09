@@ -1,3 +1,4 @@
+# setup.py
 import subprocess
 import sys
 import os
@@ -126,6 +127,23 @@ class DependencyInstallerManager:
         else:
             print("Todas las dependencias fueron instaladas exitosamente.")
 
+def is_pipenv_updated() -> bool:
+    """
+    Verifica si pipenv está actualizado con Pipfile y Pipfile.lock.
+    """
+    print("Verificando si pipenv está actualizado...")
+    try:
+        result = subprocess.run(['pipenv', 'sync', '--dry-run'], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("pipenv está actualizado.")
+            return True
+        else:
+            print("pipenv no está actualizado.")
+            return False
+    except subprocess.CalledProcessError as e:
+        print(f"Error al verificar pipenv. Error: {e}")
+        return False
+
 if __name__ == "__main__":
     # Limpiar pantalla
     os.system("cls")
@@ -152,6 +170,11 @@ if __name__ == "__main__":
     else:
         print("Todas las dependencias están instaladas.")
     
+    # Verifica si pipenv está actualizado
+    if not is_pipenv_updated():
+        print("Actualizando dependencias con pipenv...")
+        subprocess.check_call(['pipenv', 'install'])
+
     try:
         # Intento de importar y ejecutar el instalador del proyecto
         from src.install.installer_utils import ProjectInstaller
