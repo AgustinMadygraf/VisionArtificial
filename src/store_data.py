@@ -6,7 +6,10 @@ from dotenv import load_dotenv
 from src.logs.config_logger import LoggerConfigurator
 from src.services.data_extractor import DataExtractor
 from src.services.data_processor import DataProcessor
-from src.services.data_storer import DataStorer, MySQLDatabaseService
+from src.services.data_storer import DataStorer
+from src.services.database_connection import DatabaseConnection
+from src.services.table_manager import TableManager
+from src.services.data_inserter import DataInserter
 
 # Asegúrate de que el directorio `src` esté en el `PYTHONPATH`
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -40,16 +43,31 @@ logger.debug("Nombre de la tabla: %s", table_name)
 logger.debug("URL ESP: %s", esp_url)
 
 def main():
-    data_extractor = DataExtractor(esp_url)  
-    data_processor = DataProcessor() 
-    db_service = MySQLDatabaseService(db_config, logger)
-    data_storer = DataStorer(db_service)
-    
-    html_content = data_extractor.fetch_data()
-    if html_content:
-        vueltas = data_processor.extract_vueltas(html_content)
-        if vueltas is not None:
-            data_storer.store_vueltas(vueltas, database_name, table_name)
+    # Crear instancias de las clases necesarias
+    data_extractor = DataExtractor(esp_url)
+    data_processor = DataProcessor()
+
+    # Inicializar la conexión a la base de datos
+    connection = DatabaseConnection(db_config, logger).connect()
+
+    if connection:
+        # Crear y gestionar la tabla
+        table_manager = TableManager(connection, logger)
+        table_manager.create_database_and_table(database_name, table_name)
+
+        # Insertar los datos en la tabla
+        data_inserter = DataInserter(connection, logger)
+        data_storer = DataStorer(db_config, logger)
+        
+        # Procesar y almacenar los datos
+        html_content = data_extractor.fetch_data()
+        if html_content:
+            vueltas = data_processor.extract_vueltas(html_content)
+            if vueltas is not None:
+                data_storer.store_vueltas(vueltas, database_name, table_name)
+
+        # Cerrar la conexión después de realizar las operaciones
+        connection.close()
 
 if __name__ == '__main__':
     main()

@@ -9,7 +9,7 @@ class DatabaseConnection:
     def connect(self):
         try:
             connection = mysql.connector.connect(
-                host=self.config['host'],
+                host=self.config.get('host'),
                 user=self.config['user'],
                 password=self.config['password'],
                 database=self.config.get('database')
@@ -19,4 +19,3 @@ class DatabaseConnection:
         except Error as e:
             self.logger.error(f"Error connecting to the database: {e}")
             return None
-        
