@@ -1,7 +1,7 @@
 from pathlib import Path
 from src.logs.config_logger import LoggerConfigurator
 import winshell
-from src.install.shortcut_strategy import ShortcutCreationStrategy, DefaultShortcutCreationStrategy  # Actualizar la ruta de importación
+from src.install.shortcut_strategy import ShortcutCreationStrategy, DefaultShortcutCreationStrategy  
 from pywintypes import com_error
 
 class ProjectInstaller:
@@ -13,7 +13,7 @@ class ProjectInstaller:
         Inicializa el instalador del proyecto.
         """
         self.logger = LoggerConfigurator().configure()
-        self.project_dir = Path(__file__).parent.parent.resolve()
+        self.project_dir = Path(__file__).parent.parent.parent.resolve()
         self.name_proj = self.get_project_name()
 
     def get_project_name(self):
