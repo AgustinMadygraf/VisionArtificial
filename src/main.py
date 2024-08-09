@@ -30,7 +30,7 @@ async def run_store_data():
         print("")
         print('Storing data...')
         print("")
-        os.system('python src/store_data.py')
+        #os.system('python src/store_data.py')
         #await asyncio.sleep(300)  # Espera de 300 segundos     
     
 ###################################################################

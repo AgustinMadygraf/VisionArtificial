@@ -76,3 +76,27 @@
 - [x] **Documentación del Código y las Clases**:
   - **Descripción**: Agregar documentación detallada en cada clase y método, explicando su propósito y cómo cumple con los principios SOLID.
   - **Archivo**: Todos los archivos, comenzando por los más complejos como `src/installer_utils.py` y `src/views/websocket_server.py`
+
+
+
+# Instalador
+
+- [ ] **1. Refactorizar `DependencyChecker`:** Dividir esta clase en dos, una que verifique las dependencias (`DependencyVerifier`) y otra que las instale (`DependencyInstaller`).
+
+- [ ] **2. Crear una interfaz para `PipUpdater`:** Implementar una interfaz para `PipUpdater` que permita a `DependencyChecker` depender de una abstracción en lugar de una clase concreta.
+
+- [ ] **3. Aplicar el Patrón Estrategia en `DependencyChecker`:** Implementar un patrón de estrategia para la instalación de dependencias, permitiendo que diferentes estrategias de instalación sean intercambiables.
+
+- [ ] **4. Crear Interfaz para `ProjectInstaller`:** Definir una interfaz o clase abstracta para las operaciones relacionadas con el instalador del proyecto, permitiendo la extensión sin modificar la clase base.
+
+- [ ] **5. Segregar la Interfaz `DependencyInstaller`:** Dividir la interfaz `DependencyInstaller` en interfaces más específicas y enfocadas en tareas concretas.
+
+- [ ] **6. Crear Clase Abstracta para `PipUpdater`:** Implementar una clase base abstracta para el actualizador de `pip` que permita diferentes formas de actualizar `pip`.
+
+- [ ] **7. Inversión de Dependencias en `DependencyChecker`:** Invertir las dependencias en `DependencyChecker` para que dependa de interfaces o abstracciones en lugar de implementaciones concretas.
+
+- [ ] **8. Crear Pruebas Unitarias para Nuevas Interfaces:** Desarrollar pruebas unitarias para cada una de las nuevas interfaces o clases abstractas introducidas para garantizar su correcto funcionamiento.
+
+- [ ] **9. Documentar Clases Refactorizadas:** Documentar cada clase e interfaz nueva para asegurar la comprensión y facilidad de uso en el futuro.
+
+- [ ] **10. Crear Mock Tests para `PipUpdater`:** Implementar pruebas automatizadas utilizando mocks para `PipUpdater` y `DependencyInstaller` para verificar su integración con `DependencyChecker` sin modificar el entorno de desarrollo.

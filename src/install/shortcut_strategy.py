@@ -1,5 +1,4 @@
-# src/instal/shortcut_strategy.py
-
+# VisionArtificial/src/install/shorcut_strategy.py
 from abc import ABC, abstractmethod
 from pathlib import Path
 from win32com.client import Dispatch
