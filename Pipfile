@@ -8,6 +8,7 @@ requests = "*"
 websockets = "*"
 mysql-connector-python = "*"
 python-dotenv = "*"
+schedule = "*"
 
 
 [dev-packages]
