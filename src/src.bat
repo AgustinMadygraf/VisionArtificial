@@ -1,0 +1,1 @@
+pipenv run python "C:\AppServ\www\VisionArtificial\src\run.py"

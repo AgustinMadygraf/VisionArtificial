@@ -1,3 +1,4 @@
+# setup.py
 import subprocess
 import sys
 import os
@@ -150,7 +151,7 @@ if __name__ == "__main__":
     
     try:
         # Intento de importar y ejecutar el instalador del proyecto
-        from src.installer_utils import ProjectInstaller
+        from src.install.installer_utils import ProjectInstaller
         installer = ProjectInstaller()
         installer.main()
     except ImportError as e:

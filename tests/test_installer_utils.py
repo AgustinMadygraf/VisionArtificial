@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock, PropertyMock
-from src.installer_utils import ProjectInstaller, ShortcutManager, BatFileCreator
+from install.installer_utils import ProjectInstaller, ShortcutManager, BatFileCreator
 from pathlib import Path
 from dotenv import load_dotenv
 

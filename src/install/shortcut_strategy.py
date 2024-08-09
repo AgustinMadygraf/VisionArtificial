@@ -1,4 +1,4 @@
-# src/shortcut_strategy.py
+# src/instal/shortcut_strategy.py
 
 from abc import ABC, abstractmethod
 from pathlib import Path
