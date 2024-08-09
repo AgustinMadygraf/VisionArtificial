@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import os
 
 class PipUpdater:
     """
@@ -32,35 +33,40 @@ class PipDependencyInstaller(DependencyInstaller):
     """
     Clase concreta que implementa la instalación de dependencias usando pip.
     """
-    def install(self, dependency: str) -> None:
+    def install(self, dependency: str) -> bool:
         """
         Instala una dependencia usando pip.
 
         :param dependency: Nombre de la dependencia a instalar.
+        :return: True si la instalación fue exitosa, False en caso contrario.
         """
         print(f"Instalando {dependency} usando pip...")
         try:
             # Ejecuta el comando pip para instalar la dependencia
             subprocess.check_call([sys.executable, '-m', 'pip', 'install', dependency])
             print(f"{dependency} instalado correctamente.")
+            return True
         except subprocess.CalledProcessError as e:
             print(f"No se pudo instalar {dependency}. Error: {e}")
+            return False
 
 class DependencyChecker:
     """
     Clase responsable de verificar e instalar las dependencias faltantes.
     """
-    def __init__(self, dependencies: list, installer: DependencyInstaller, pip_updater: PipUpdater):
+    def __init__(self, dependencies: list, installer: DependencyInstaller, pip_updater: PipUpdater, max_retries: int = 3):
         """
-        Inicializa la clase DependencyChecker con una lista de dependencias, un instalador y un actualizador de pip.
+        Inicializa la clase DependencyChecker con una lista de dependencias, un instalador, un actualizador de pip y un número máximo de reintentos.
 
         :param dependencies: Lista de nombres de dependencias a verificar.
         :param installer: Instancia de una clase que hereda de DependencyInstaller.
         :param pip_updater: Instancia de PipUpdater para actualizar pip antes de instalar dependencias.
+        :param max_retries: Número máximo de intentos para instalar cada dependencia.
         """
         self.dependencies = dependencies
         self.installer = installer
         self.pip_updater = pip_updater
+        self.max_retries = max_retries
 
     def check_dependencies(self) -> None:
         """
@@ -92,23 +98,52 @@ class DependencyChecker:
     def install_missing_dependencies(self, missing_dependencies: list) -> None:
         """
         Instala las dependencias faltantes utilizando el instalador proporcionado.
+        Si una instalación falla, se reintentará hasta max_retries veces.
 
         :param missing_dependencies: Lista de dependencias que necesitan ser instaladas.
         """
+        failed_dependencies = []  # Lista para almacenar dependencias que no se pudieron instalar
+
         print(f"Las siguientes dependencias están faltantes: {', '.join(missing_dependencies)}")
         print("Intentando instalar dependencias faltantes...")
+
         for dep in missing_dependencies:
-            # Usa el instalador inyectado para instalar cada dependencia
-            self.installer.install(dep)
+            success = False
+            for attempt in range(self.max_retries):
+                print(f"Intentando instalar {dep} (intento {attempt + 1}/{self.max_retries})...")
+                if self.installer.install(dep):
+                    success = True
+                    break
+                else:
+                    print(f"Reintentando instalación de {dep}...")
+
+            if not success:
+                print(f"Fallo la instalación de {dep} después de {self.max_retries} intentos.")
+                failed_dependencies.append(dep)
+
+        if failed_dependencies:
+            print("Las siguientes dependencias no pudieron ser instaladas:")
+            print(", ".join(failed_dependencies))
+        else:
+            print("Todas las dependencias fueron instaladas exitosamente.")
 
 if __name__ == "__main__":
+    # Limpiar pantalla
+    os.system("cls")
+
+    # Imprimir mensaje de inicio
+    print("Iniciando instalador...")
+
+    # Mostrar versión de Python
+    print(f"Versión de Python: {sys.version}")
+
     # Lista de dependencias que se requiere verificar e instalar
     dependencies = ["pipenv", "winshell", "win32com.client", "pywintypes", "colorlog"]
     
     # Crear instancias de las clases necesarias
     pip_updater = PipUpdater()
     installer = PipDependencyInstaller()
-    checker = DependencyChecker(dependencies, installer, pip_updater)
+    checker = DependencyChecker(dependencies, installer, pip_updater, max_retries=3)
     
     # Verifica e instala las dependencias faltantes
     checker.check_dependencies()
