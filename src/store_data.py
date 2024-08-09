@@ -35,9 +35,13 @@ if not database_name or not esp_url:
     logger.error("DB_NAME or ESP_URL variables are missing in the environment.")
     raise EnvironmentError("DB_NAME or ESP_URL variables are missing.")
 
+logger.debug("Nombre de la base de datos: %s", database_name)
+logger.debug("Nombre de la tabla: %s", table_name)
+logger.debug("URL ESP: %s", esp_url)
+
 def main():
-    data_extractor = DataExtractor(esp_url)
-    data_processor = DataProcessor()
+    data_extractor = DataExtractor(esp_url)  
+    data_processor = DataProcessor() 
     db_service = MySQLDatabaseService(db_config, logger)
     data_storer = DataStorer(db_service)
     

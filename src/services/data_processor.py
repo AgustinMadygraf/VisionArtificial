@@ -11,9 +11,10 @@ class DataProcessor:
         try:
             match = re.search(r'Vueltas:\s*(\d+)', html)
             if match:
+                logger.info(f"Valor de vueltas encontrado: {match.group(1)}")
                 return int(match.group(1))
             else:
-                logger.info("Vueltas value not found in the response.")
+                logger.info("Valor de vueltas no encontrado en la respuesta.")
                 return None
         except re.error as e:
             logger.error(f"Error extracting data: {e}")
