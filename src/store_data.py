@@ -6,8 +6,7 @@ from dotenv import load_dotenv
 from src.logs.config_logger import LoggerConfigurator
 from src.services.data_extractor import DataExtractor
 from src.services.data_processor import DataProcessor
-from src.services.data_storer import DataStorer
-from src.services.database_service import MySQLDatabaseService
+from src.services.data_storer import DataStorer, MySQLDatabaseService
 
 # Asegúrate de que el directorio `src` esté en el `PYTHONPATH`
 current_dir = os.path.dirname(os.path.abspath(__file__))
