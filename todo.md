@@ -81,7 +81,7 @@
 
 # Instalador
 
-- [ ] **1. Refactorizar `DependencyChecker`:** Dividir esta clase en dos, una que verifique las dependencias (`DependencyVerifier`) y otra que las instale (`DependencyInstaller`).
+- [x] **1. Refactorizar `DependencyChecker`:** Dividir esta clase en dos, una que verifique las dependencias (`DependencyVerifier`) y otra que las instale (`DependencyInstaller`).
 
 - [ ] **2. Crear una interfaz para `PipUpdater`:** Implementar una interfaz para `PipUpdater` que permita a `DependencyChecker` depender de una abstracción en lugar de una clase concreta.
 
