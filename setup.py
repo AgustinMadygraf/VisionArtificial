@@ -1,4 +1,3 @@
-# setup.py
 import subprocess
 import sys
 import os
@@ -51,34 +50,17 @@ class PipDependencyInstaller(DependencyInstaller):
             print(f"No se pudo instalar {dependency}. Error: {e}")
             return False
 
-class DependencyChecker:
+class DependencyVerifier:
     """
-    Clase responsable de verificar e instalar las dependencias faltantes.
+    Clase responsable de verificar las dependencias faltantes.
     """
-    def __init__(self, dependencies: list, installer: DependencyInstaller, pip_updater: PipUpdater, max_retries: int = 3):
+    def __init__(self, dependencies: list):
         """
-        Inicializa la clase DependencyChecker con una lista de dependencias, un instalador, un actualizador de pip y un número máximo de reintentos.
+        Inicializa la clase DependencyVerifier con una lista de dependencias.
 
         :param dependencies: Lista de nombres de dependencias a verificar.
-        :param installer: Instancia de una clase que hereda de DependencyInstaller.
-        :param pip_updater: Instancia de PipUpdater para actualizar pip antes de instalar dependencias.
-        :param max_retries: Número máximo de intentos para instalar cada dependencia.
         """
         self.dependencies = dependencies
-        self.installer = installer
-        self.pip_updater = pip_updater
-        self.max_retries = max_retries
-
-    def check_dependencies(self) -> None:
-        """
-        Verifica las dependencias, actualiza pip si es necesario e instala las dependencias faltantes.
-        """
-        missing_dependencies = self.get_missing_dependencies()
-        if missing_dependencies:
-            self.pip_updater.update_pip()  # Actualiza pip antes de instalar las dependencias faltantes
-            self.install_missing_dependencies(missing_dependencies)
-        else:
-            print("Todas las dependencias están instaladas.")
 
     def get_missing_dependencies(self) -> list:
         """
@@ -95,6 +77,22 @@ class DependencyChecker:
                 # Si falla la importación, agrega la dependencia a la lista de faltantes
                 missing_dependencies.append(dependency)
         return missing_dependencies
+
+class DependencyInstallerManager:
+    """
+    Clase responsable de instalar las dependencias faltantes.
+    """
+    def __init__(self, installer: DependencyInstaller, pip_updater: PipUpdater, max_retries: int = 3):
+        """
+        Inicializa la clase DependencyInstallerManager con un instalador, un actualizador de pip y un número máximo de reintentos.
+
+        :param installer: Instancia de una clase que hereda de DependencyInstaller.
+        :param pip_updater: Instancia de PipUpdater para actualizar pip antes de instalar dependencias.
+        :param max_retries: Número máximo de intentos para instalar cada dependencia.
+        """
+        self.installer = installer
+        self.pip_updater = pip_updater
+        self.max_retries = max_retries
 
     def install_missing_dependencies(self, missing_dependencies: list) -> None:
         """
@@ -143,11 +141,16 @@ if __name__ == "__main__":
     
     # Crear instancias de las clases necesarias
     pip_updater = PipUpdater()
-    installer = PipDependencyInstaller()
-    checker = DependencyChecker(dependencies, installer, pip_updater, max_retries=3)
+    verifier = DependencyVerifier(dependencies)
+    installer_manager = DependencyInstallerManager(PipDependencyInstaller(), pip_updater, max_retries=3)
     
     # Verifica e instala las dependencias faltantes
-    checker.check_dependencies()
+    missing_dependencies = verifier.get_missing_dependencies()
+    if missing_dependencies:
+        pip_updater.update_pip()
+        installer_manager.install_missing_dependencies(missing_dependencies)
+    else:
+        print("Todas las dependencias están instaladas.")
     
     try:
         # Intento de importar y ejecutar el instalador del proyecto
