@@ -1,4 +1,4 @@
-# src/install/dependency_manager.py
+# VisionArtificial/src/install/dependency_manager.py
 import subprocess
 import sys
 
