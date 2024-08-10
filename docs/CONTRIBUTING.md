@@ -9,8 +9,8 @@
 Haz un fork del repositorio en GitHub y clona tu fork en tu máquina local:
 
 ```bash
-git clone https://github.com/AgustinMadygraf/IOTIMAGEPROC.git
-cd IOTIMAGEPROC
+git clone https://github.com/AgustinMadygraf/VisionArtificial.git
+cd VisionArtificial
 ```
 
 ### 2. Crear una Rama
