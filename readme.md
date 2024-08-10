@@ -40,7 +40,7 @@ Este proyecto ofrece un servidor web seguro que permite la visualización en tie
    Puedes iniciar el servidor utilizando el archivo `VisionArtificial.bat` o a través del acceso directo creado en el escritorio. También puedes iniciar el servidor manualmente desde la línea de comandos:
 
    ```bash
-   python run.py
+   pipenv run python run.py
    ```
 
    El servidor estará disponible en `https://<TU_DIRECCION_IP>:4443`.
