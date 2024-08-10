@@ -1,8 +1,8 @@
 
 ### Tareas para la "To Do List" 
 1. **[x]** Refactorizar la clase `MyHTTPRequestHandler` para separar la lógica de manejo de rutas en clases o funciones específicas.
-2. **[ ]** Implementar un sistema de registro de rutas para permitir la adición de nuevas rutas sin modificar la clase `MyHTTPRequestHandler`.
-3. **[ ]** Revisar el uso de herencia en `MyHTTPRequestHandler` para asegurar que se cumple el principio de sustitución de Liskov.
+2. **[x]** Implementar un sistema de registro de rutas para permitir la adición de nuevas rutas sin modificar la clase `MyHTTPRequestHandler`.
+3. **[x]** Revisar el uso de herencia en `MyHTTPRequestHandler` para asegurar que se cumple el principio de sustitución de Liskov.
 4. **[ ]** Dividir la clase `MyHTTPRequestHandler` en múltiples clases más pequeñas para mejorar la segregación de interfaces.
 5. **[ ]** Introducir una abstracción para la configuración SSL en la clase `HTTPServer` para permitir la inyección de dependencias.
 6. **[ ]** Crear pruebas unitarias para cada nueva clase o función que maneje rutas, asegurando que cumplen con sus responsabilidades.

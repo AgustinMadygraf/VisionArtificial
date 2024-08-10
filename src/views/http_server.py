@@ -54,15 +54,20 @@ route_registry.register_route('/test', TestHandler())
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        if not self.handle_custom_routes():
+            logger.info(f"Handling GET request for {self.path}")
+            super().do_GET()
+    
+    def handle_custom_routes(self):
         parsed_path = urllib.parse.urlparse(self.path)
         query_params = urllib.parse.parse_qs(parsed_path.query)
 
         handler = route_registry.get_handler(parsed_path.path)
         if handler:
             handler.handle(self, query_params)
-        else:
-            logger.info(f"Handling GET request for {self.path}")
-            super().do_GET()
+            return True
+        return False
+
 
 class HTTPServer:
     def __init__(self, address, handler_class, ssl_config):
