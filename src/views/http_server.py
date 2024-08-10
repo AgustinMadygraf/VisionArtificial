@@ -35,20 +35,29 @@ class TestHandler(RouteHandler):
         handler.end_headers()
         handler.wfile.write(json.dumps(response).encode('utf-8'))
 
-class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        self.routes = {
-            '/': RootHandler(),
-            '/local-ip': LocalIPHandler(),
-            '/test': TestHandler(),
-        }
-        super().__init__(*args, **kwargs)
+class RouteRegistry:
+    def __init__(self):
+        self.routes = {}
 
+    def register_route(self, path, handler):
+        self.routes[path] = handler
+
+    def get_handler(self, path):
+        return self.routes.get(path, None)
+
+route_registry = RouteRegistry()
+
+# Register default routes
+route_registry.register_route('/', RootHandler())
+route_registry.register_route('/local-ip', LocalIPHandler())
+route_registry.register_route('/test', TestHandler())
+
+class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
         query_params = urllib.parse.parse_qs(parsed_path.query)
 
-        handler = self.routes.get(parsed_path.path)
+        handler = route_registry.get_handler(parsed_path.path)
         if handler:
             handler.handle(self, query_params)
         else:
