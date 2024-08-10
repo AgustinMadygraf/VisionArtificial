@@ -8,42 +8,52 @@ from src.logs.config_logger import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 
+class RouteHandler:
+    def handle(self, handler, query_params):
+        raise NotImplementedError("Each route handler must implement the handle method.")
+
+class RootHandler(RouteHandler):
+    def handle(self, handler, query_params):
+        handler.path = '/static/index.html'
+        return super(handler.__class__, handler).do_GET()
+
+class LocalIPHandler(RouteHandler):
+    def handle(self, handler, query_params):
+        local_ip = ServerUtility.get_local_ip()
+        response = {'ip': local_ip}
+        handler.send_response(200)
+        handler.send_header('Content-type', 'application/json')
+        handler.end_headers()
+        handler.wfile.write(json.dumps(response).encode('utf-8'))
+
+class TestHandler(RouteHandler):
+    def handle(self, handler, query_params):
+        test_value = query_params.get('test', [None])[0]
+        response = {'test': test_value}
+        handler.send_response(200)
+        handler.send_header('Content-type', 'application/json')
+        handler.end_headers()
+        handler.wfile.write(json.dumps(response).encode('utf-8'))
+
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        self.routes = {
+            '/': RootHandler(),
+            '/local-ip': LocalIPHandler(),
+            '/test': TestHandler(),
+        }
+        super().__init__(*args, **kwargs)
+
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
         query_params = urllib.parse.parse_qs(parsed_path.query)
 
-        if parsed_path.path == '/':
-            self.path = '/static/index.html'
-        elif parsed_path.path == '/local-ip':
-            self.handle_local_ip()
-            return
-        elif 'test' in query_params:
-            self.handle_test(query_params['test'][0])
-            return
-        # elif parsed_path.path == '/test.jpg':
-        #     self.path = '/static/test.jpg'  # Asegúrate de que el archivo esté en el directorio static
-        # else:
-        #     self.send_error(404, "File not found")
-        #     return
-
-        logger.info(f"Handling GET request for {self.path}")
-        return super().do_GET()
-
-    def handle_local_ip(self):
-        local_ip = ServerUtility.get_local_ip()
-        response = {'ip': local_ip}
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write(json.dumps(response).encode('utf-8'))
-
-    def handle_test(self, test_value):
-        response = {'test': test_value}
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write(json.dumps(response).encode('utf-8'))
+        handler = self.routes.get(parsed_path.path)
+        if handler:
+            handler.handle(self, query_params)
+        else:
+            logger.info(f"Handling GET request for {self.path}")
+            super().do_GET()
 
 class HTTPServer:
     def __init__(self, address, handler_class, ssl_config):

@@ -1,44 +1,15 @@
-1. **Separar la lógica de manejo de solicitudes HTTP en clases específicas**:
-   - Crear clases separadas para manejar diferentes tipos de solicitudes (GET, POST, etc.) y rutas específicas (`/`, `/local-ip`, etc.).
-   - **Archivos a modificar/crear**: `src/views/http_server.py`, `src/views/handlers.py`
 
-2. **Aplicar el principio de Responsabilidad Única (SRP)**:
-   - Dividir la clase `MyHTTPRequestHandler` en múltiples clases, cada una con una única responsabilidad, como manejar la IP local, manejar pruebas, etc.
-   - **Archivos a modificar/crear**: `src/views/http_server.py`, `src/views/handlers.py`
-
-3. **Utilizar Inyección de Dependencias (DI)**:
-   - Inyectar dependencias como `ServerUtility` y `LoggerConfigurator` en lugar de instanciarlas directamente dentro de las clases.
-   - **Archivos a modificar**: `src/views/http_server.py`, `src/views/handlers.py`
-
-4. **Implementar Interfaces para el manejo de solicitudes**:
-   - Definir interfaces para el manejo de solicitudes HTTP y asegurarse de que las clases las implementen, facilitando la extensión y modificación del comportamiento.
-   - **Archivos a modificar/crear**: `src/views/handlers.py`, `src/interfaces/request_handler_interface.py`
-
-5. **Aplicar el principio de Sustitución de Liskov (LSP)**:
-   - Asegurarse de que las clases derivadas puedan sustituir a las clases base sin alterar el comportamiento esperado del programa.
-   - **Archivos a modificar/crear**: `src/views/handlers.py`, `src/interfaces/request_handler_interface.py`
-
-6. **Utilizar el principio de Segregación de Interfaces (ISP)**:
-   - Crear interfaces más pequeñas y específicas para diferentes funcionalidades en lugar de una interfaz grande y monolítica.
-   - **Archivos a modificar/crear**: `src/interfaces/request_handler_interface.py`
-
-7. **Aplicar el principio de Inversión de Dependencias (DIP)**:
-   - Depender de abstracciones en lugar de implementaciones concretas, permitiendo cambiar las implementaciones sin afectar el código que las utiliza.
-   - **Archivos a modificar**: `src/views/http_server.py`, `src/views/handlers.py`
-
-8. **Crear una clase de configuración para el servidor**:
-   - Encapsular la configuración del servidor (dirección, clase de manejador, configuración SSL) en una clase separada para mejorar la modularidad y la reutilización.
-   - **Archivos a modificar/crear**: `src/views/http_server.py`, `src/config/server_config.py`
-
-9. **Implementar pruebas unitarias para cada clase y método**:
-   - Escribir pruebas unitarias para cada clase y método, asegurando que cada componente funcione correctamente de manera aislada.
-   - **Archivos a modificar/crear**: `tests/test_http_server.py`, `tests/test_handlers.py`, `tests/test_server_config.py`
-
-10. **Refactorizar el manejo de video en el frontend**:
-    - Separar la lógica de manejo de video y botones en clases distintas, aplicando el principio de Responsabilidad Única y facilitando la prueba y mantenimiento del código.
-    - **Archivos a modificar/crear**: `static/js/videoManager.js`, `static/js/buttonManager.js`, `static/js/videoStreamManager.js`
-
-
+### Tareas para la "To Do List" 
+1. **[x]** Refactorizar la clase `MyHTTPRequestHandler` para separar la lógica de manejo de rutas en clases o funciones específicas.
+2. **[ ]** Implementar un sistema de registro de rutas para permitir la adición de nuevas rutas sin modificar la clase `MyHTTPRequestHandler`.
+3. **[ ]** Revisar el uso de herencia en `MyHTTPRequestHandler` para asegurar que se cumple el principio de sustitución de Liskov.
+4. **[ ]** Dividir la clase `MyHTTPRequestHandler` en múltiples clases más pequeñas para mejorar la segregación de interfaces.
+5. **[ ]** Introducir una abstracción para la configuración SSL en la clase `HTTPServer` para permitir la inyección de dependencias.
+6. **[ ]** Crear pruebas unitarias para cada nueva clase o función que maneje rutas, asegurando que cumplen con sus responsabilidades.
+7. **[ ]** Revisar el logger utilizado en la clase `MyHTTPRequestHandler` para permitir inyección de un logger externo, facilitando pruebas y manteniendo el cumplimiento de DIP.
+8. **[ ]** Asegurar que todas las nuevas clases cumplen con SRP mediante una revisión de responsabilidades y una prueba de concepto.
+9. **[ ]** Documentar todas las nuevas interfaces y abstracciones creadas para facilitar su uso y mantenimiento.
+10. **[ ]** Implementar pruebas de integración para asegurar que todas las rutas y servicios funcionan correctamente después de la refactorización. 
 
 
 
