@@ -1,4 +1,8 @@
-# VisionArtificial/src/install/dependency_manager.py
+"""
+Este módulo proporciona clases para la gestión de dependencias, incluyendo la actualización de pip,
+la instalación de dependencias y la verificación de dependencias faltantes.
+"""
+
 import subprocess
 import sys
 
@@ -7,6 +11,7 @@ class PipUpdater:
     """
     Clase responsable de actualizar pip a la última versión disponible.
     """
+    # pylint: disable=too-few-public-methods
     def update_pip(self) -> None:
         """
         Actualiza pip utilizando el comando `pip install --upgrade pip`.
@@ -19,6 +24,7 @@ class PipUpdater:
         except subprocess.CalledProcessError as e:
             print(f"No se pudo actualizar pip. Error: {e}")
 
+
 class DependencyInstaller:
     """
     Interfaz para la instalación de dependencias.
@@ -29,6 +35,7 @@ class DependencyInstaller:
         Método para instalar una dependencia. Debe ser implementado por una subclase.
         """
         raise NotImplementedError("Este método debe ser implementado por una subclase")
+
 
 class PipDependencyInstaller(DependencyInstaller):
     """
@@ -51,41 +58,16 @@ class PipDependencyInstaller(DependencyInstaller):
             print(f"No se pudo instalar {dependency}. Error: {e}")
             return False
 
-class DependencyVerifier:
-    """
-    Clase responsable de verificar las dependencias faltantes.
-    """
-    def __init__(self, dependencies: list):
-        """
-        Inicializa la clase DependencyVerifier con una lista de dependencias.
-
-        :param dependencies: Lista de nombres de dependencias a verificar.
-        """
-        self.dependencies = dependencies
-
-    def get_missing_dependencies(self) -> list:
-        """
-        Verifica qué dependencias están faltando y devuelve una lista de ellas.
-
-        :return: Lista de dependencias que no están instaladas.
-        """
-        missing_dependencies = []
-        for dependency in self.dependencies:
-            try:
-                # Intenta importar la dependencia para verificar si está instalada
-                __import__(dependency)
-            except ImportError:
-                # Si falla la importación, agrega la dependencia a la lista de faltantes
-                missing_dependencies.append(dependency)
-        return missing_dependencies
 
 class DependencyInstallerManager:
     """
     Clase responsable de instalar las dependencias faltantes.
     """
+    # pylint: disable=too-few-public-methods
     def __init__(self, installer: DependencyInstaller, pip_updater: PipUpdater, max_retries: int = 3):
         """
-        Inicializa la clase DependencyInstallerManager con un instalador, un actualizador de pip y un número máximo de reintentos.
+        Inicializa la clase DependencyInstallerManager con un instalador, un actualizador de pip 
+        y un número máximo de reintentos.
 
         :param installer: Instancia de una clase que hereda de DependencyInstaller.
         :param pip_updater: Instancia de PipUpdater para actualizar pip antes de instalar dependencias.
@@ -95,27 +77,35 @@ class DependencyInstallerManager:
         self.pip_updater = pip_updater
         self.max_retries = max_retries
 
-    def install_missing_dependencies(self, missing_dependencies: list) -> None:
+    def install_missing_dependencies(self, requirements_file: str = 'requirements.txt') -> None:
         """
         Instala las dependencias faltantes utilizando el instalador proporcionado.
         Si una instalación falla, se reintentará hasta max_retries veces.
 
-        :param missing_dependencies: Lista de dependencias que necesitan ser instaladas.
+        :param requirements_file: Ruta al archivo requirements.txt que contiene las dependencias.
         """
         failed_dependencies = []  # Lista para almacenar dependencias que no se pudieron instalar
 
-        print(f"Las siguientes dependencias están faltantes: {', '.join(missing_dependencies)}")
+        print(f"Leyendo dependencias desde {requirements_file}...")
+
+        try:
+            with open(requirements_file, 'r', encoding='utf-8') as file:
+                dependencies = file.read().splitlines()
+        except FileNotFoundError:
+            print(f"El archivo {requirements_file} no fue encontrado.")
+            return
+
+        print(f"Las siguientes dependencias están faltantes: {', '.join(dependencies)}")
         print("Intentando instalar dependencias faltantes...")
 
-        for dep in missing_dependencies:
+        for dep in dependencies:
             success = False
             for attempt in range(self.max_retries):
                 print(f"Intentando instalar {dep} (intento {attempt + 1}/{self.max_retries})...")
                 if self.installer.install(dep):
                     success = True
                     break
-                else:
-                    print(f"Reintentando instalación de {dep}...")
+                print(f"Reintentando instalación de {dep}...")
 
             if not success:
                 print(f"Fallo la instalación de {dep} después de {self.max_retries} intentos.")
