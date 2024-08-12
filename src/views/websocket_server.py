@@ -101,7 +101,7 @@ class WebSocketHandler:
         except Exception as e:
             logger.error(f"Unhandled exception in WebSocket handler: {e}")
 
-class HTTPRequestHandler:
+class HTTPHandler:
     """
     Clase responsable de enviar solicitudes HTTP y manejar intentos fallidos.
 
