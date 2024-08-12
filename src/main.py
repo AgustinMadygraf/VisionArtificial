@@ -8,7 +8,7 @@ from views.websocket_server import WebSocketServer, WebSocketHandler, HTTPReques
 from utils.server_utility import ServerUtility
 from services.http_service import HTTPService
 from services.ssl_service import SSLService
-from src.logs.config_logger import LoggerConfigurator
+from logs.config_logger import LoggerConfigurator
 
 async def run_server():
     local_ip = ServerUtility.get_local_ip()
