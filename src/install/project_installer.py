@@ -4,12 +4,20 @@ Este módulo proporciona utilidades para la instalación del proyecto.
 
 from pathlib import Path
 import winshell
-from src.logs.config_logger import LoggerConfigurator
-from src.install.shortcut_creation_strategy import (
-    ShortcutCreationStrategy, DefaultShortcutCreationStrategy
-)
-from src.install.project_name_utils import ProjectNameRetriever
 
+# Asegúrate de que las rutas de importación son correctas y accesibles
+try:
+    from src.logs.config_logger import LoggerConfigurator
+    from src.install.shortcut_creation_strategy import (
+        ShortcutCreationStrategy, DefaultShortcutCreationStrategy
+    )
+    from src.install.project_name_utils import ProjectNameRetriever
+except ImportError:
+    from logs.config_logger import LoggerConfigurator
+    from install.shortcut_creation_strategy import (
+        ShortcutCreationStrategy, DefaultShortcutCreationStrategy
+    )
+    from install.project_name_utils import ProjectNameRetriever
 
 class ProjectInstaller:
     """
@@ -56,9 +64,6 @@ class ShortcutManager:
     def verificar_icono(self, ruta_icono):
         """
         Verifica si el archivo de ícono existe.
-
-        :param ruta_icono: Ruta al archivo de ícono.
-        :return: True si el archivo existe, False en caso contrario.
         """
         if not ruta_icono.is_file():
             self.logger.error(f"El archivo de icono '{ruta_icono}' no existe.")
@@ -68,9 +73,6 @@ class ShortcutManager:
     def create_shortcut(self, ruta_archivo_bat):
         """
         Crea un acceso directo en el escritorio para el archivo BAT.
-
-        :param ruta_archivo_bat: Ruta al archivo BAT.
-        :return: True si el acceso directo se creó exitosamente, False en caso contrario.
         """
         escritorio = Path(winshell.desktop())
         ruta_acceso_directo = escritorio / f"{self.name_proj}.lnk"
@@ -99,3 +101,5 @@ class BatFileCreator:
         """
         ruta_app_py = self.project_dir / 'run.py'
         ruta_archivo_bat = self.project_dir / f"{self.name_proj}.bat"
+        with open(ruta_archivo_bat, 'w') as bat_file:
+             bat_file.write(f"@echo off\npython {ruta_app_py}")
