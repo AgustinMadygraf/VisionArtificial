@@ -1,5 +1,6 @@
 """
-Este módulo proporciona utilidades para la gestión de entornos Python y la verificación de la configuración de pipenv.
+Este módulo proporciona utilidades para la gestión de entornos Python 
+y la verificación de la configuración de pipenv.
 """
 
 import os
@@ -25,7 +26,6 @@ def is_pipenv_updated(python_executable: str) -> bool:
         if result.returncode == 0:
             print("pipenv está actualizado.")
             return True
-        
         print("pipenv no está actualizado.")
         return False
     except subprocess.CalledProcessError as e:
@@ -40,8 +40,7 @@ def list_python_interpreters():
     :return: Lista de rutas a los intérpretes de Python encontrados.
     """
     possible_locations = []
-    
-    if os.name == "nt":  # Windows
+    if os.name == "nt":
         possible_locations += glob.glob("C:\\Python*\\python.exe")
         possible_locations += glob.glob("C:\\Users\\*\\AppData\\Local\\Programs\\Python\\Python*\\python.exe")
     else:  # Unix-based systems

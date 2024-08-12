@@ -43,7 +43,8 @@ class ProjectInstaller:
         print(f"Ruta del archivo BAT: {ruta_archivo_bat}")
         if not ruta_archivo_bat.is_file():
             print(f"Creando archivo '{self.name_proj}.bat'")
-            BatFileCreator(self.project_dir, self.name_proj, self.logger).crear_archivo_bat_con_pipenv()
+            BatFileCreator(self.project_dir, self.name_proj, self.logger)\
+                .crear_archivo_bat_con_pipenv()
 
         shortcut_strategy = DefaultShortcutCreationStrategy()
         ShortcutManager(
@@ -101,5 +102,6 @@ class BatFileCreator:
         """
         ruta_app_py = self.project_dir / 'run.py'
         ruta_archivo_bat = self.project_dir / f"{self.name_proj}.bat"
-        with open(ruta_archivo_bat, 'w') as bat_file:
-             bat_file.write(f"@echo off\npython {ruta_app_py}")
+        # Especifica una codificación para la apertura del archivo
+        with open(ruta_archivo_bat, 'w', encoding='utf-8') as bat_file:
+            bat_file.write(f"@echo off\npython {ruta_app_py}")
