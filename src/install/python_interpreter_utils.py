@@ -42,18 +42,16 @@ def list_python_interpreters():
     possible_locations = []
     if os.name == "nt":
         possible_locations += glob.glob("C:\\Python*\\python.exe")
-        possible_locations += glob.glob("C:\\Users\\*\\AppData\\Local\\Programs\\Python\\Python*\\python.exe")
-    else:  # Unix-based systems
+        possible_locations += glob.glob("C:\\Users\\*\\AppData\\Local\\Programs\\"
+                                         "Python\\Python*\\python.exe")
+    else:
         possible_locations += glob.glob("/usr/bin/python*")
         possible_locations += glob.glob("/usr/local/bin/python*")
-        possible_locations += glob.glob("/opt/*/bin/python*")
-    
-    python_paths = set()  # Utilizamos un set para eliminar duplicados
-    python_paths.add(os.path.normcase(os.path.normpath(sys.executable)))  # Incluye el intérprete actual
-
+        possible_locations += glob.glob("/opt/*/bin/python*")    
+    python_paths = set()
+    python_paths.add(os.path.normcase(os.path.normpath(sys.executable)))
     for path in possible_locations:
         normalized_path = os.path.normcase(os.path.normpath(path))
         if os.path.exists(normalized_path):
             python_paths.add(normalized_path)
-    
     return sorted(python_paths)
