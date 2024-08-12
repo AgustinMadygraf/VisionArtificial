@@ -1,8 +1,10 @@
 # VisionArtificial/src/install/installer_utils.py
+
 from pathlib import Path
 from src.logs.config_logger import LoggerConfigurator
-import winshell
 from src.install.shortcut_strategy import ShortcutCreationStrategy, DefaultShortcutCreationStrategy  
+from src.install.project_name_retriever import ProjectNameRetriever
+import winshell
 from pywintypes import com_error
 
 class ProjectInstaller:
@@ -15,22 +17,7 @@ class ProjectInstaller:
         """
         self.logger = LoggerConfigurator().configure()
         self.project_dir = Path(__file__).parent.parent.parent.resolve()
-        self.name_proj = self.get_project_name()
-
-    def get_project_name(self):
-        """
-        Recupera el nombre del proyecto basado en el nombre del directorio principal o un archivo específico.
-        
-        Returns:
-            str: Nombre del proyecto.
-        """
-        try:
-            project_name = self.project_dir.name
-            self.logger.debug(f"Nombre del proyecto detectado: {project_name}")
-            return project_name
-        except Exception as e:
-            self.logger.error(f"Error al obtener el nombre del proyecto: {e}")
-            return "Unknown_Project"
+        self.name_proj = ProjectNameRetriever(self.project_dir).get_project_name()
 
     def main(self):
         """
@@ -89,11 +76,3 @@ class BatFileCreator:
         ruta_app_py = self.project_dir / 'run.py'
         ruta_archivo_bat = self.project_dir / f"{self.name_proj}.bat"
 
-        contenido_bat = f"""
-        pipenv run python "{ruta_app_py}"
-        """
-
-        with open(ruta_archivo_bat, 'w') as archivo_bat:
-            archivo_bat.write(contenido_bat.strip())
-        self.logger.debug(f"Archivo '{self.name_proj}.bat' creado exitosamente.")
-        self.logger.debug(f"La dirección del archivo .bat es {ruta_archivo_bat}")

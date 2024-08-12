@@ -1,80 +1,66 @@
-# Webcam Server Project
+# Visión Artificial e Ingesta de Datos
 
-Este proyecto proporciona un servidor web seguro que permite la visualización de la transmisión de video desde una webcam, la toma de capturas de pantalla y la visualización de varias líneas y reglas sobre la imagen capturada.
-
-## Estructura del Proyecto
-
-```
-webcam2/
-├── index.html
-├── js/
-│   ├── script.js
-│   ├── videoManager.js
-│   ├── imageProcessor.js
-│   ├── domUpdater.js
-│   ├── canvasUtils.js
-├── server.py
-├── ssl_config.py
-├── style.css
-└── logs/
-    ├── config_logger.py
-    ├── logging.json
-    └── __init__.py
-```
+Este proyecto ofrece un servidor web seguro que permite la visualización en tiempo real de la transmisión de video desde una webcam, la captura de imágenes, y la superposición de líneas y reglas para análisis visual. Además, facilita la ingesta de datos desde dispositivos externos, procesando y almacenando la información para su integración en flujos de trabajo de análisis de datos.
 
 ## Requisitos
 
-- Python 3.6 o superior
-- OpenSSL (para la generación de certificados SSL)
-- Navegador moderno que soporte ES6 módulos
+- **Python 3.6 o superior**: Asegúrate de tener instalada una versión compatible de Python.
+- **OpenSSL**: Necesario para la generación de certificados SSL que aseguran la conexión.
+- **Navegador Moderno**: Requiere un navegador con soporte para módulos ES6 para interactuar con la interfaz web.
 
 ## Configuración
 
-1. Clona el repositorio del proyecto:
+1. **Clonación del Repositorio**:
+   
+   Clona el repositorio del proyecto desde GitHub y navega al directorio del proyecto:
 
    ```bash
-   git clone https://github.com/AgustinMadygraf/webcam2
-   cd webcam2
+   git clone https://github.com/AgustinMadygraf/VisionArtificial
+   cd VisionArtificial
    ```
 
-2. Instala las dependencias necesarias (si las hay).
+2. **Instalación de Dependencias**:
+   
+   Instala todas las dependencias necesarias y configura un entorno virtual utilizando el archivo `setup.py`:
 
-3. Genera los certificados SSL (si no existen). Los certificados se generarán automáticamente si no se encuentran.
+   ```bash
+   python setup.py
+   ```
+
+   Esto actualizará `pip`, instalará las dependencias requeridas y verificará que estén correctamente configuradas.
+
+3. **Configuración SSL**:
+   
+   Adjunta los certificados SSL en la ubicación indicada para asegurar la conexión segura del servidor web.
 
 ## Ejecución del Servidor
 
-1. Ejecuta el servidor utilizando Python:
+1. **Iniciar el Servidor**:
+
+   Puedes iniciar el servidor utilizando el archivo `VisionArtificial.bat` o a través del acceso directo creado en el escritorio. También puedes iniciar el servidor manualmente desde la línea de comandos:
 
    ```bash
-   python server.py
+   pipenv run python run.py
    ```
 
    El servidor estará disponible en `https://<TU_DIRECCION_IP>:4443`.
 
 ## Uso
 
-1. Abre un navegador y navega a `https://<TU_DIRECCION_IP>:4443`.
+1. **Acceso a la Interfaz**:
 
-2. Presiona el botón "Open WebCam" para iniciar la transmisión de video desde tu webcam.
+   Abre un navegador y navega a `https://<TU_DIRECCION_IP>:4443` para acceder a la interfaz del sistema.
 
-3. Presiona el botón "Take Screenshot" para tomar una captura de pantalla de la transmisión de video.
+2. **Funcionalidades Disponibles**:
 
-4. Puedes ajustar el tiempo de refresco de la captura de pantalla utilizando el parámetro `t` en la URL. Por ejemplo, `https://<TU_DIRECCION_IP>:4443/?t=2500` ajustará el tiempo de refresco a 2500 milisegundos. El valor por defecto es 3000 milisegundos.
+   - **Transmisión en Vivo**: Visualiza la transmisión de video desde la webcam en tiempo real.
+   - **Captura de Imágenes**: Toma capturas de pantalla para su posterior análisis.
+   - **Ingesta de Datos**: El sistema automáticamente ingiere datos desde dispositivos externos configurados, procesándolos y almacenándolos en la base de datos para su análisis.
 
-## Descripción de los Archivos
+3. **Ajustes Avanzados**:
 
-- **index.html**: Página principal del proyecto.
-- **js/script.js**: Archivo principal de JavaScript que inicializa los componentes y gestiona el intervalo de refresco.
-- **js/videoManager.js**: Clase para manejar la transmisión de video.
-- **js/imageProcessor.js**: Clase para procesar las imágenes capturadas.
-- **js/domUpdater.js**: Clase para actualizar el DOM con la nueva imagen capturada.
-- **js/canvasUtils.js**: Utilidades para dibujar líneas y reglas en el canvas.
-- **server.py**: Servidor web principal que maneja las solicitudes HTTP y HTTPS.
-- **ssl_config.py**: Configuración y generación de certificados SSL.
-- **logs/config_logger.py**: Configuración del sistema de logging.
-- **logs/logging.json**: Archivo de configuración para el logging.
-- **style.css**: Archivo de estilos para la página web.
+   - **Configuración del Tiempo de Refresco**: Puedes ajustar el tiempo de refresco de la captura de pantalla utilizando el parámetro `t` en la URL. Ejemplo: `https://<TU_DIRECCION_IP>:4443/?t=2500`.
 
 ## Logs
 
-Los logs se generan en la carpeta `logs/` y están configurados para registrar información de nivel `INFO` y `ERROR`.
+Los registros del sistema se almacenan en la carpeta `logs/`, dentro del archivo `sistema.log`. Estos logs capturan información a nivel `INFO` y `ERROR`, proporcionando un seguimiento detallado de las operaciones del sistema y facilitando la identificación y resolución de problemas.
