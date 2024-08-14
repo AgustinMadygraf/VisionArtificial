@@ -1,13 +1,11 @@
 """
 run.py
-Script de inicio Vision
+Script de ejecución del servidor de mensajería.
 """
-import os
 import asyncio
-from main import run_server
+import os
+from src.main import run_server
 
 if __name__ == '__main__':
-    os.system('cls')
-    WEB_DIR = '.'
-    os.chdir(WEB_DIR)
+    os.system("cls" if os.name == "nt" else "clear")
     asyncio.run(run_server())

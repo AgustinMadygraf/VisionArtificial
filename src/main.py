@@ -1,5 +1,8 @@
-"""Módulo principal del servidor de mensajería. 
-Inicializa y ejecuta el servidor HTTP y WebSocket."""
+"""
+src/main.py
+Módulo principal del servidor de mensajería. 
+Inicializa y ejecuta el servidor HTTP y WebSocket.
+"""
 import asyncio
 from views.http_server import HTTPServer, MyHTTPRequestHandler
 from views.websocket_server import WebSocketServer, WebSocketHandler, HTTPHandler, MessageHandler

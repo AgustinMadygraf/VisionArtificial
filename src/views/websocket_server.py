@@ -9,6 +9,15 @@ from src.logs.config_logger import LoggerConfigurator
 logger = LoggerConfigurator().configure()
 
 def get_pid_using_port(port):
+    """
+    Get the PID of the process using the specified port.
+
+    Args:
+        port (int): The port number.
+
+    Returns:
+        int: The PID of the process using the port, or None if not found.
+    """
     try:
         result = subprocess.check_output(f"netstat -ano | findstr :{port}", shell=True).decode()
         if result:
@@ -16,32 +25,38 @@ def get_pid_using_port(port):
             for line in lines:
                 if f":{port}" in line:
                     return int(line.strip().split()[-1])
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         return None
     return None
 
 def kill_process(pid):
+    """
+    Kill the process with the specified PID.
+
+    Args:
+        pid (int): The PID of the process to kill.
+    """
     try:
         subprocess.check_output(f"taskkill /PID {pid} /F", shell=True)
-        logger.info(f"Successfully terminated process with PID {pid}.")
+        logger.info("Successfully terminated process with PID %d.", pid)
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to terminate process with PID {pid}. Error: {e}")
+        logger.error("Failed to terminate process with PID %d. Error: %s", pid, e)
 
 class WebSocketServer:
     """
-    Clase responsable de iniciar y manejar un servidor WebSocket.
+    Class responsible for starting and managing a WebSocket server.
 
-    Principios SOLID aplicados:
-    - Responsabilidad Única (SRP): Esta clase tiene la única responsabilidad de gestionar el servidor WebSocket.
-    - Inversión de Dependencias (DIP): Depende de una abstracción para el servicio SSL y el manejador de mensajes.
+    SOLID Principles Applied:
+    - Single Responsibility Principle (SRP): This class is responsible for managing the WebSocket server.
+    - Dependency Inversion Principle (DIP): Depends on abstractions for SSL service and message handler.
     """
     def __init__(self, ssl_service, handler):
         """
-        Inicializa el servidor WebSocket.
+        Initialize the WebSocket server.
 
         Args:
-            ssl_service: Servicio SSL para manejar la configuración SSL.
-            handler: Manejador de mensajes para procesar los mensajes recibidos.
+            ssl_service: SSL service for handling SSL configuration.
+            handler: Message handler for processing received messages.
         """
         self.address = (NETWORK_CONFIG['websocket_host'], NETWORK_CONFIG['websocket_port'])
         self.ssl_service = ssl_service
@@ -49,72 +64,72 @@ class WebSocketServer:
 
     async def start(self):
         """
-        Inicia el servidor WebSocket y lo configura para ejecutarse indefinidamente.
+        Start the WebSocket server and configure it to run indefinitely.
         """
         ssl_context = self.ssl_service.get_ssl_context()
         port = self.address[1]
         pid = get_pid_using_port(port)
         if pid:
-            logger.info(f"Port {port} is being used by PID {pid}. Terminating the process...")
+            logger.info("Port %d is being used by PID %d. Terminating the process...", port, pid)
             kill_process(pid)
             await asyncio.sleep(2)  # Wait for a moment to ensure the port is released
 
         try:
             async with serve(self.handler.handle, self.address[0], self.address[1], ssl=ssl_context, ping_interval=None):
-                logger.info(f"WebSocket server started at wss://{self.address[0]}:{self.address[1]}")
-                await asyncio.Future()  # Ejecutar indefinidamente
+                logger.info("WebSocket server started at wss://%s:%d", self.address[0], self.address[1])
+                await asyncio.Future()  # Run indefinitely
         except Exception as e:
-            logger.error(f"Failed to start WebSocket server: {e}")
+            logger.error("Failed to start WebSocket server: %s", e)
 
 class WebSocketHandler:
     """
-    Clase responsable de manejar las conexiones y mensajes WebSocket.
+    Class responsible for handling WebSocket connections and messages.
 
-    Principios SOLID aplicados:
-    - Responsabilidad Única (SRP): Maneja las conexiones y mensajes WebSocket.
+    SOLID Principles Applied:
+    - Single Responsibility Principle (SRP): Handles WebSocket connections and messages.
     """
     def __init__(self, message_handler):
         """
-        Inicializa el manejador WebSocket.
+        Initialize the WebSocket handler.
 
         Args:
-            message_handler: Manejador de mensajes para procesar los mensajes recibidos.
+            message_handler: Message handler for processing received messages.
         """
         self.message_handler = message_handler
 
     async def handle(self, websocket, path):
         """
-        Maneja las conexiones WebSocket y procesa los mensajes recibidos.
+        Handle WebSocket connections and process received messages.
 
         Args:
-            websocket: Conexión WebSocket.
-            path: Ruta del WebSocket.
+            websocket: WebSocket connection.
+            path: WebSocket path.
         """
         try:
             async for message in websocket:
-                logger.info(f"Received message: {message}")
+                logger.info("Received message: %s", message)
                 await self.message_handler.process_message(message)
         except ConnectionClosedError as e:
-            logger.error(f"WebSocket connection closed with error: {e}")
+            logger.error("WebSocket connection closed with error: %s", e)
         except ConnectionClosedOK:
             logger.info("WebSocket connection closed normally.")
         except Exception as e:
-            logger.error(f"Unhandled exception in WebSocket handler: {e}")
+            logger.error("Unhandled exception in WebSocket handler: %s", e)
 
 class HTTPHandler:
     """
-    Clase responsable de enviar solicitudes HTTP y manejar intentos fallidos.
+    Class responsible for sending HTTP requests and handling failed attempts.
 
-    Principios SOLID aplicados:
-    - Responsabilidad Única (SRP): Maneja el envío de solicitudes HTTP.
+    SOLID Principles Applied:
+    - Single Responsibility Principle (SRP): Handles sending HTTP requests.
     """
     def __init__(self, http_service, max_attempts=5):
         """
-        Inicializa el manejador de solicitudes HTTP.
+        Initialize the HTTP request handler.
 
         Args:
-            http_service: Servicio HTTP para enviar las solicitudes.
-            max_attempts: Número máximo de intentos en caso de fallo.
+            http_service: HTTP service for sending requests.
+            max_attempts: Maximum number of attempts in case of failure.
         """
         self.http_service = http_service
         self.failed_attempts = 0
@@ -122,46 +137,46 @@ class HTTPHandler:
 
     def send_request(self, url):
         """
-        Envía una solicitud HTTP a la URL especificada y maneja los intentos fallidos.
+        Send an HTTP request to the specified URL and handle failed attempts.
 
         Args:
-            url (str): URL a la que se enviará la solicitud.
+            url (str): URL to send the request to.
         """
         if self.failed_attempts >= self.max_attempts:
-            logger.warning(f"Maximum failed attempts reached. Stopping requests to {url}.")
+            logger.warning("Maximum failed attempts reached. Stopping requests to %s.", url)
             return
 
         try:
             self.http_service.send_request(url)
-            self.failed_attempts = 0  # Reinicia el contador en caso de éxito
+            self.failed_attempts = 0  # Reset the counter on success
         except requests.exceptions.RequestException as e:
             self.failed_attempts += 1
-            logger.error(f"Failed to connect to {url}: {str(e).split(':')[0]} (Attempt {self.failed_attempts})")
+            logger.error("Failed to connect to %s: %s (Attempt %d)", url, str(e).split(':')[0], self.failed_attempts)
 
 class MessageHandler:
     """
-    Clase responsable de procesar los mensajes recibidos a través de WebSocket.
+    Class responsible for processing messages received via WebSocket.
 
-    Principios SOLID aplicados:
-    - Responsabilidad Única (SRP): Procesa los mensajes recibidos.
+    SOLID Principles Applied:
+    - Single Responsibility Principle (SRP): Processes received messages.
     """
     def __init__(self, http_request_handler, tolerance=10):
         """
-        Inicializa el manejador de mensajes.
+        Initialize the message handler.
 
         Args:
-            http_request_handler: Manejador de solicitudes HTTP para enviar solicitudes basadas en los mensajes.
-            tolerance: Umbral de tolerancia para determinar la acción a tomar.
+            http_request_handler: HTTP request handler for sending requests based on messages.
+            tolerance: Tolerance threshold for determining the action to take.
         """
         self.http_request_handler = http_request_handler
         self.tolerance = tolerance
 
     async def process_message(self, message):
         """
-        Procesa un mensaje recibido y envía una solicitud HTTP basada en el contenido del mensaje.
+        Process a received message and send an HTTP request based on the message content.
 
         Args:
-            message (str): Mensaje recibido.
+            message (str): Received message.
         """
         try:
             message_as_int = int(message[25:])

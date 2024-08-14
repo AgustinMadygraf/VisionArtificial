@@ -1,9 +1,17 @@
-# src/services/http_service.py
-import requests
+"""
+src/services/http_service.py
+This module provides the HTTPService class which implements the HTTPInterface.
+"""
+
 import time
+import requests
 from src.interfaces.http_interface import HTTPInterface
 
 class HTTPService(HTTPInterface):
+    """
+    HTTPService is responsible for making HTTP requests and handling retries.
+    """
+
     def __init__(self, logger):
         self.logger = logger
 
@@ -21,12 +29,12 @@ class HTTPService(HTTPInterface):
         self.logger.error(f"Failed to fetch data from {url} after {retries} attempts.")
         return None
 
-    def send_request(self, url):
+    def send_request(self, url, timeout=10):
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=timeout)
             response.raise_for_status()
             self.logger.debug(f"Sent HTTP GET to {url}, status code: {response.status_code}")
             return response
         except requests.exceptions.RequestException as e:
-            self.logger.error(f"Failed to connect to {url}: {str(e).split(':')[0]}")
+            self.logger.error(f"Failed to connect to {url}: {str(e).split(':', maxsplit=1)[0]}")
             raise e
