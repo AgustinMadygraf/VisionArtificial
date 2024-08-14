@@ -12,7 +12,7 @@ class ServerUtility:
     """
     Utility class for server-related operations.
     """
-
+    # pylint: disable=too-few-public-methods
     @staticmethod
     def get_local_ip():
         """Obtiene la dirección IP local de la máquina."""
@@ -27,8 +27,3 @@ class ServerUtility:
             s.close()
         logger.info("Local IP obtained: %s", ip)
         return ip
-
-    @staticmethod
-    def dummy_method():
-        """A dummy method to avoid too-few-public-methods warning."""
-        pass

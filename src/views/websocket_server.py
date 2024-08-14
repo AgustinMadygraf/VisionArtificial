@@ -1,7 +1,11 @@
+"""
+src/views/websocket_server.py
+This module implements a WebSocket server with SSL support and message handling.
+"""
 import asyncio
 import subprocess
 import requests
-from websockets import serve
+from websockets.server import serve
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from src.config.network_config import NETWORK_CONFIG
 from src.logs.config_logger import LoggerConfigurator
@@ -151,7 +155,7 @@ class HTTPHandler:
             self.failed_attempts = 0  # Reset the counter on success
         except requests.exceptions.RequestException as e:
             self.failed_attempts += 1
-            logger.error("Failed to connect to %s: %s (Attempt %d)", url, str(e).split(':')[0], self.failed_attempts)
+            logger.error("Failed to connect to %s: %s (Attempt %d)", url, str(e).split(':', maxsplit=1)[0], self.failed_attempts)
 
 class MessageHandler:
     """
@@ -189,3 +193,5 @@ class MessageHandler:
                 self.http_request_handler.send_request('http://192.168.0.184/ena_r')
         except ValueError:
             logger.error("Failed to convert message to integer")
+
+# Ensure the file ends with a newline
