@@ -23,7 +23,9 @@ def get_pid_using_port(port):
         int: The PID of the process using the port, or None if not found.
     """
     try:
-        result = subprocess.check_output(f"netstat -ano | findstr :{port}", shell=True).decode()
+        result = subprocess.check_output(
+            f"netstat -ano | findstr :{port}", shell=True
+        ).decode()
         if result:
             lines = result.strip().split("\n")
             for line in lines:
@@ -51,8 +53,10 @@ class WebSocketServer:
     Class responsible for starting and managing a WebSocket server.
 
     SOLID Principles Applied:
-    - Single Responsibility Principle (SRP): This class is responsible for managing the WebSocket server.
-    - Dependency Inversion Principle (DIP): Depends on abstractions for SSL service and message handler.
+    - Single Responsibility Principle (SRP): This class 
+    is responsible for managing the WebSocket server.
+    - Dependency Inversion Principle (DIP): Depends on 
+    abstractions for SSL service and message handler.
     """
     def __init__(self, ssl_service, handler):
         """
@@ -62,7 +66,10 @@ class WebSocketServer:
             ssl_service: SSL service for handling SSL configuration.
             handler: Message handler for processing received messages.
         """
-        self.address = (NETWORK_CONFIG['websocket_host'], NETWORK_CONFIG['websocket_port'])
+        self.address = (
+            NETWORK_CONFIG['websocket_host'],
+            NETWORK_CONFIG['websocket_port']
+        )
         self.ssl_service = ssl_service
         self.handler = handler
 
@@ -74,13 +81,22 @@ class WebSocketServer:
         port = self.address[1]
         pid = get_pid_using_port(port)
         if pid:
-            logger.info("Port %d is being used by PID %d. Terminating the process...", port, pid)
+            logger.info(
+                "Port %d is being used by PID %d. Terminating the process...",
+                port, pid
+            )
             kill_process(pid)
             await asyncio.sleep(2)  # Wait for a moment to ensure the port is released
 
         try:
-            async with serve(self.handler.handle, self.address[0], self.address[1], ssl=ssl_context, ping_interval=None):
-                logger.info("WebSocket server started at wss://%s:%d", self.address[0], self.address[1])
+            async with serve(
+                self.handler.handle, self.address[0], self.address[1],
+                ssl=ssl_context, ping_interval=None
+            ):
+                logger.info(
+                    "WebSocket server started at wss://%s:%d",
+                    self.address[0], self.address[1]
+                )
                 await asyncio.Future()  # Run indefinitely
         except Exception as e:
             logger.error("Failed to start WebSocket server: %s", e)
@@ -147,7 +163,9 @@ class HTTPHandler:
             url (str): URL to send the request to.
         """
         if self.failed_attempts >= self.max_attempts:
-            logger.warning("Maximum failed attempts reached. Stopping requests to %s.", url)
+            logger.warning(
+                "Maximum failed attempts reached. Stopping requests to %s.", url
+            )
             return
 
         try:
@@ -155,7 +173,10 @@ class HTTPHandler:
             self.failed_attempts = 0  # Reset the counter on success
         except requests.exceptions.RequestException as e:
             self.failed_attempts += 1
-            logger.error("Failed to connect to %s: %s (Attempt %d)", url, str(e).split(':', maxsplit=1)[0], self.failed_attempts)
+            logger.error(
+                "Failed to connect to %s: %s (Attempt %d)",
+                url, str(e).split(':', maxsplit=1)[0], self.failed_attempts
+            )
 
 class MessageHandler:
     """
@@ -188,10 +209,12 @@ class MessageHandler:
             lower_threshold = -self.tolerance
 
             if message_as_int > upper_threshold:
-                self.http_request_handler.send_request('http://192.168.0.184/ena_f')
+                self.http_request_handler.send_request(
+                    'http://192.168.0.184/ena_f'
+                )
             elif message_as_int < lower_threshold:
-                self.http_request_handler.send_request('http://192.168.0.184/ena_r')
+                self.http_request_handler.send_request(
+                    'http://192.168.0.184/ena_r'
+                )
         except ValueError:
             logger.error("Failed to convert message to integer")
-
-# Ensure the file ends with a newline
