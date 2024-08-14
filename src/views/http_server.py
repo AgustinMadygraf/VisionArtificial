@@ -8,7 +8,7 @@ import json
 import threading
 import urllib.parse
 import ssl
-from utils.server_utility import ServerUtility
+from src.utils.server_utility import ServerUtility
 from src.logs.config_logger import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
