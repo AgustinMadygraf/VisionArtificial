@@ -1,0 +1,22 @@
+[MASTER]
+# Una lista separada por comas de nombres de paquetes o módulos desde donde se pueden cargar extensiones C.
+extension-pkg-whitelist=
+
+[MESSAGES CONTROL]
+# Deshabilitar el mensaje, informe, categoría o verificador con los id(s) dados.
+disable=
+    E0401,  # ubicación no encontrada
+    E0611,  # no se puede encontrar el nombre
+    R0903,  # demasiadas instancias públicas
+
+[REPORTS]
+# Indica si se debe mostrar un informe completo o solo los mensajes.
+reports=no
+
+[LOGGING]
+# Estilo de formato utilizado para verificar la cadena de formato de registro. `old` significa usar el formato %, `new` es para str.format() y `f-string` es para f-strings.
+logging-format-style=old
+
+[FORMAT]
+# Número máximo de caracteres en una sola línea.
+max-line-length=100

@@ -23,9 +23,8 @@ class HTTPInterface(ABC):
         Returns:
             Any: The data retrieved from the URL.
         """
-        pass
-
-    def send_request(self, url):
+        print ("fetch_data")
+    def send_request(self):
         """
         Method to send a request to a given URL.
 
@@ -35,4 +34,4 @@ class HTTPInterface(ABC):
         Returns:
             Any: The response from the request.
         """
-        pass
+        print ("send_request")

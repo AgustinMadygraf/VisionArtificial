@@ -18,4 +18,4 @@ class SSLInterface(ABC):
         Returns:
             ssl.SSLContext: An SSL context for secure connections.
         """
-        pass
+        print ("get_ssl_context")

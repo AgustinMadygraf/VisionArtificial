@@ -178,7 +178,7 @@ class HTTPHandler:
                 url, str(error).split(':', maxsplit=1)[0], self.failed_attempts
             )
 
-class MessageHandler:
+class MessHandler:
     """
     Class responsible for processing messages received via WebSocket.
 

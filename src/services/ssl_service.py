@@ -65,11 +65,10 @@ class OpenSSLCertificateProvider:
             keyfile (str): Path to the key file.
         """
         try:
-            #chequear que "openssl.cnf" exista en el directorio actual
+            # Chequear que "openssl.cnf" exista en el directorio actual
             if not os.path.exists("openssl.cnf"):
                 raise FileNotFoundError("openssl.cnf not found in the current directory")
-            else:
-                openssl_config = "openssl.cnf"
+            openssl_config = "openssl.cnf"
             # Command to generate the certificate and key using OpenSSL
             result = subprocess.run([
                 'openssl', 'req', '-x509', '-newkey', 'rsa:4096', '-keyout', keyfile,

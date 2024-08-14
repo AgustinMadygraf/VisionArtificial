@@ -16,6 +16,9 @@ class HTTPService(HTTPInterface):
         self.logger = logger
 
     def fetch_data(self, url, retries=5, timeout=10):
+        """
+        Realiza una solicitud HTTP GET a la URL especificada y maneja las excepciones.
+        """
         attempt = 0
         while attempt < retries:
             try:
@@ -30,6 +33,9 @@ class HTTPService(HTTPInterface):
         return None
 
     def send_request(self, url, timeout=10):
+        """
+        Envía una solicitud HTTP GET a la URL especificada y maneja las excepciones
+        """
         try:
             response = requests.get(url, timeout=timeout)
             response.raise_for_status()
