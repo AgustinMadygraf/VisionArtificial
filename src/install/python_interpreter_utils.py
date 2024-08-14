@@ -1,6 +1,7 @@
 """
-Este módulo proporciona utilidades para la gestión de entornos Python 
-y la verificación de la configuración de pipenv.
+src/install/python_interpreter_utils.py
+Este módulo proporciona utilidades para la gestión de entornos 
+Python y la verificación de la configuración de pipenv.
 """
 
 import os
@@ -40,15 +41,16 @@ def list_python_interpreters():
     :return: Lista de rutas a los intérpretes de Python encontrados.
     """
     possible_locations = []
-    if os.name == "nt":
+    if os.name == "nt":  # Windows
         possible_locations += glob.glob("C:\\Python*\\python.exe")
-        possible_locations += glob.glob("C:\\Users\\*\\AppData\\Local\\Programs\\"
-                                         "Python\\Python*\\python.exe")
-    else:
+        possible_locations += glob.glob("C:\\Users\\*\\"
+                                        "AppData\\Local\\Programs\\"
+                                        "Python\\Python*\\python.exe")
+    else:  # Unix-based systems
         possible_locations += glob.glob("/usr/bin/python*")
         possible_locations += glob.glob("/usr/local/bin/python*")
-        possible_locations += glob.glob("/opt/*/bin/python*")    
-    python_paths = set()
+        possible_locations += glob.glob("/opt/*/bin/python*")
+    python_paths = set()  # Utilizamos un set para eliminar duplicados
     python_paths.add(os.path.normcase(os.path.normpath(sys.executable)))
     for path in possible_locations:
         normalized_path = os.path.normcase(os.path.normpath(path))
