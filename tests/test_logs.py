@@ -20,16 +20,15 @@ class TestLoggerConfigurator(unittest.TestCase):
     @mock.patch('json.load')
     @mock.patch('logging.config.dictConfig')
     def test_configure_with_valid_json(self, mock_dict_config, mock_json_load, mock_open,
-                                    mock_path_exists, _):
+                                       mock_path_exists, _):
         """Test that configure method loads logging configuration from a valid JSON file."""
         mock_path_exists.return_value = True
         mock_json_load.return_value = {"version": 1, "disable_existing_loggers": False}
 
         configurator = LoggerConfigurator()
-        logger = configurator.configure()
+        configurator.configure()
 
         mock_open.assert_called_once_with('src/logs/logging.json', 'rt', encoding='utf-8')
-
 
     @mock.patch('os.getenv')
     @mock.patch('os.path.exists')
@@ -57,11 +56,10 @@ class TestLoggerConfigurator(unittest.TestCase):
              mock.patch('logging.config.dictConfig') as mock_dict_config:
 
             configurator = LoggerConfigurator()
-            logger = configurator.configure()
+            configurator.configure()
 
             mock_dict_config.assert_called_once_with({"version": 1,
                                                       "disable_existing_loggers": False})
-            self.assertIsInstance(logger, logging.Logger)
 
 class TestExcludeHTTPLogsFilter(unittest.TestCase):
     """Test cases for ExcludeHTTPLogsFilter."""

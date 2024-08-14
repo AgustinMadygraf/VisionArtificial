@@ -36,5 +36,3 @@ class HTTPInterface(ABC):
             Any: The response from the request.
         """
         pass
-
-# Ensure the file ends with a newline

@@ -1,6 +1,5 @@
-# src/views/http_server.py
-
 """
+src/views/http_server.py
 This module implements an HTTP server with SSL support and custom route handling.
 """
 
@@ -31,7 +30,6 @@ class RootHandler(RouteHandler):
     """
     Handler for the root route.
     """
-    # pylint: disable=arguments-differ
     def handle(self, handler, query_params):
         """
         Handle the root route request.
@@ -43,7 +41,6 @@ class LocalIPHandler(RouteHandler):
     """
     Handler for the local IP route.
     """
-    # pylint: disable=arguments-differ
     def handle(self, handler, query_params):
         """
         Handle the local IP route request.
@@ -59,7 +56,6 @@ class TestHandler(RouteHandler):
     """
     Handler for the test route.
     """
-    # pylint: disable=arguments-differ
     def handle(self, handler, query_params):
         """
         Handle the test route request.
@@ -103,7 +99,6 @@ class SSLConfig:
     """
     Abstract base class for SSL configuration.
     """
-    # pylint: disable=unused-argument
     def get_ssl_context(self):
         """
         Get the SSL context.
@@ -111,12 +106,12 @@ class SSLConfig:
         raise NotImplementedError(
             "SSLConfig implementations must provide a get_ssl_context method."
         )
+
 # Concrete SSL configuration implementation
 class DefaultSSLConfig(SSLConfig):
     """
     Default SSL configuration implementation.
     """
-    # pylint: disable=too-few-public-methods
     def __init__(self, certfile, keyfile):
         self.certfile = certfile
         self.keyfile = keyfile
@@ -160,7 +155,6 @@ class HTTPServer:
     """
     HTTP server with SSL support.
     """
-    # pylint: disable=too-few-public-methods
     def __init__(self, address, handler_class, ssl_config: SSLConfig):
         self.address = address
         self.handler_class = handler_class

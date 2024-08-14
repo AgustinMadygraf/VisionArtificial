@@ -45,8 +45,8 @@ def kill_process(pid):
     try:
         subprocess.check_output(f"taskkill /PID {pid} /F", shell=True)
         logger.info("Successfully terminated process with PID %d.", pid)
-    except subprocess.CalledProcessError as e:
-        logger.error("Failed to terminate process with PID %d. Error: %s", pid, e)
+    except subprocess.CalledProcessError as error:
+        logger.error("Failed to terminate process with PID %d. Error: %s", pid, error)
 
 class WebSocketServer:
     """
@@ -98,8 +98,8 @@ class WebSocketServer:
                     self.address[0], self.address[1]
                 )
                 await asyncio.Future()  # Run indefinitely
-        except Exception as e:
-            logger.error("Failed to start WebSocket server: %s", e)
+        except (OSError, asyncio.TimeoutError) as error:
+            logger.error("Failed to start WebSocket server: %s", error)
 
 class WebSocketHandler:
     """
@@ -117,24 +117,24 @@ class WebSocketHandler:
         """
         self.message_handler = message_handler
 
-    async def handle(self, websocket, path):
+    async def handle(self, websocket, _):
         """
         Handle WebSocket connections and process received messages.
 
         Args:
             websocket: WebSocket connection.
-            path: WebSocket path.
+            path: Unused WebSocket path.
         """
         try:
             async for message in websocket:
                 logger.info("Received message: %s", message)
                 await self.message_handler.process_message(message)
-        except ConnectionClosedError as e:
-            logger.error("WebSocket connection closed with error: %s", e)
+        except ConnectionClosedError as error:
+            logger.error("WebSocket connection closed with error: %s", error)
         except ConnectionClosedOK:
             logger.info("WebSocket connection closed normally.")
-        except Exception as e:
-            logger.error("Unhandled exception in WebSocket handler: %s", e)
+        except (OSError, asyncio.TimeoutError) as error:
+            logger.error("Unhandled exception in WebSocket handler: %s", error)
 
 class HTTPHandler:
     """
@@ -171,11 +171,11 @@ class HTTPHandler:
         try:
             self.http_service.send_request(url)
             self.failed_attempts = 0  # Reset the counter on success
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException as error:
             self.failed_attempts += 1
             logger.error(
                 "Failed to connect to %s: %s (Attempt %d)",
-                url, str(e).split(':', maxsplit=1)[0], self.failed_attempts
+                url, str(error).split(':', maxsplit=1)[0], self.failed_attempts
             )
 
 class MessageHandler:
