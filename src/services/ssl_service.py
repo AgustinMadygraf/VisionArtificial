@@ -1,6 +1,5 @@
 """
-src/services/ssl_service.py
-This module provides services for managing SSL context and certificates.
+Servicio para gestionar el contexto SSL y los certificados.
 """
 import os
 import ssl
@@ -20,11 +19,10 @@ class SSLService(SSLInterface):
         """
         certfile = 'server.crt'
         keyfile = 'server.key'
-        # Verificar si el certificado es válido
+        csrfile = 'server.csr'
         if not self.is_certificate_valid(certfile, keyfile):
-            # Regenerar el certificado usando OpenSSLCertificateProvider
-            provider = OpenSSLCertificateProvider()
-            provider.generate_certificate(certfile, keyfile)
+            # Generar CSR y enviar a la CA para obtener un certificado firmado
+            self.generate_csr(keyfile, csrfile)
         # Crear el contexto SSL y cargar el certificado y la clave
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         ssl_context.load_cert_chain(certfile=certfile, keyfile=keyfile)
@@ -52,30 +50,16 @@ class SSLService(SSLInterface):
             return False
         return True
 
-class OpenSSLCertificateProvider:
-    """
-    Provider for generating SSL certificates using OpenSSL.
-    """
-    def generate_certificate(self, certfile, keyfile):
+    def generate_csr(self, keyfile, csrfile):
         """
-        Generate a new SSL certificate and key using OpenSSL.
-
+        Generate a Certificate Signing Request (CSR).
+        
         Args:
-            certfile (str): Path to the certificate file.
             keyfile (str): Path to the key file.
+            csrfile (str): Path to the CSR file.
         """
-        try:
-            # Chequear que "openssl.cnf" exista en el directorio actual
-            if not os.path.exists("openssl.cnf"):
-                raise FileNotFoundError("openssl.cnf not found in the current directory")
-            openssl_config = "openssl.cnf"
-            # Command to generate the certificate and key using OpenSSL
-            result = subprocess.run([
-                'openssl', 'req', '-x509', '-newkey', 'rsa:4096', '-keyout', keyfile,
-                '-out', certfile, '-days', '365', '-nodes', '-subj', '/CN=localhost',
-                '-config', openssl_config
-            ], check=True, capture_output=True, text=True)
-            print(result.stdout)
-        except subprocess.CalledProcessError as e:
-            print(f"Error: {e.stderr}")
-            raise
+        subprocess.run([
+            'openssl', 'req', '-new', '-key', keyfile, '-out', csrfile,
+            '-config', 'openssl.cnf'
+        ],check=True)
+        print('CSR generado con éxito.')

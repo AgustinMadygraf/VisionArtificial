@@ -13,9 +13,34 @@ class SSLInterface(ABC):
     @abstractmethod
     def get_ssl_context(self):
         """
-        Abstract method to be implemented by subclasses to provide an SSL context.
-
+        Get the SSL context, regenerating the certificate if necessary.
+        
         Returns:
-            ssl.SSLContext: An SSL context for secure connections.
+            ssl.SSLContext: The SSL context with the loaded certificate and key.
         """
         print ("get_ssl_context")
+
+    @abstractmethod
+    def is_certificate_valid(self, certfile, keyfile):
+        """
+        Check if the certificate and key are valid.
+        
+        Args:
+            certfile (str): Path to the certificate file.
+            keyfile (str): Path to the key file.
+        
+        Returns:
+            bool: True if the certificate and key are valid, False otherwise.
+        """
+        print ("is_certificate_valid")
+
+    @abstractmethod
+    def generate_csr(self, keyfile, csrfile):
+        """
+        Generate a Certificate Signing Request (CSR).
+        
+        Args:
+            keyfile (str): Path to the key file.
+            csrfile (str): Path to the CSR file.
+        """
+        print ("generate_csr")
