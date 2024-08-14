@@ -56,17 +56,27 @@ class OpenSSLCertificateProvider:
     """
     Provider for generating SSL certificates using OpenSSL.
     """
-    # pylint: disable=too-few-public-methods
     def generate_certificate(self, certfile, keyfile):
         """
         Generate a new SSL certificate and key using OpenSSL.
-        
+
         Args:
             certfile (str): Path to the certificate file.
             keyfile (str): Path to the key file.
         """
-        # Comandos para generar el certificado y la clave usando OpenSSL
-        subprocess.run([
-            'openssl', 'req', '-x509', '-newkey', 'rsa:4096', '-keyout', keyfile,
-            '-out', certfile, '-days', '365', '-nodes', '-subj', '/CN=localhost'
-        ], check=True)
+        try:
+            #chequear que "openssl.cnf" exista en el directorio actual
+            if not os.path.exists("openssl.cnf"):
+                raise FileNotFoundError("openssl.cnf not found in the current directory")
+            else:
+                openssl_config = "openssl.cnf"
+            # Command to generate the certificate and key using OpenSSL
+            result = subprocess.run([
+                'openssl', 'req', '-x509', '-newkey', 'rsa:4096', '-keyout', keyfile,
+                '-out', certfile, '-days', '365', '-nodes', '-subj', '/CN=localhost',
+                '-config', openssl_config
+            ], check=True, capture_output=True, text=True)
+            print(result.stdout)
+        except subprocess.CalledProcessError as e:
+            print(f"Error: {e.stderr}")
+            raise
