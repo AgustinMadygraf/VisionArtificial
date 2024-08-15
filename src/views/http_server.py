@@ -36,6 +36,7 @@ class RootHandler(RouteHandler):
         Handle the root route request.
         """
         handler.path = '/static/index.html'
+        #handler.path = '/static/test.html'        
         return super(handler.__class__, handler).do_GET()
 
 class LocalIPHandler(RouteHandler):
