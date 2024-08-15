@@ -18,7 +18,7 @@
         "ssl_file_handler": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
-            "filename": "src/logs/ssl_events.log",
+            "filename": "src/logs/sistema.log",
             "formatter": "simpleFormatter"
         }
     },
