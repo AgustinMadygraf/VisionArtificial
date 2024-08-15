@@ -8,23 +8,14 @@ import json
 import threading
 import urllib.parse
 import ssl
-from src.utils.server_utility import ServerUtility
 from src.logs.config_logger import LoggerConfigurator
+from src.views.handlers.route_handler import RouteHandler
 from src.utils.ssl_config import SSLConfig
+from src.views.handlers.local_ip_handler import LocalIPHandler
 
 logger = LoggerConfigurator().configure()
 
-# Base interface for handlers
-class RouteHandler:
-    """
-    Base class for route handlers.
-    """
-    # pylint: disable=unused-argument
-    def handle(self, handler, query_params):
-        """
-        Handle the request.
-        """
-        raise NotImplementedError("Each route handler must implement the handle method.")
+
 
 # Specific handlers for different routes
 class RootHandler(RouteHandler):
@@ -41,37 +32,6 @@ class RootHandler(RouteHandler):
         else:
             handler.path = '/static/index.html'
         return super(handler.__class__, handler).do_GET()
-
-
-class LocalIPHandler(RouteHandler):
-    """
-    Handler for the local IP route.
-    """
-    def handle(self, handler, query_params):
-        """
-        Handle the local IP route request.
-        """
-        local_ip = ServerUtility.get_local_ip()
-        response = {'ip': local_ip}
-        handler.send_response(200)
-        handler.send_header('Content-type', 'application/json')
-        handler.end_headers()
-        handler.wfile.write(json.dumps(response).encode('utf-8'))
-
-class TestHandler(RouteHandler):
-    """
-    Handler for the test route.
-    """
-    def handle(self, handler, query_params):
-        """
-        Handle the test route request.
-        """
-        test_value = query_params.get('test', [None])[0]
-        response = {'test': test_value}
-        handler.send_response(200)
-        handler.send_header('Content-type', 'application/json')
-        handler.end_headers()
-        handler.wfile.write(json.dumps(response).encode('utf-8'))
 
 # Registry for managing route handlers
 class RouteRegistry:
@@ -98,7 +58,6 @@ route_registry = RouteRegistry()
 # Register default routes
 route_registry.register_route('/', RootHandler())
 route_registry.register_route('/local-ip', LocalIPHandler())
-route_registry.register_route('/test', TestHandler())
 
 # Concrete SSL configuration implementation
 class DefaultSSLConfig(SSLConfig):
