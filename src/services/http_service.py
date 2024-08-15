@@ -31,16 +31,3 @@ class HTTPService(HTTPInterface):
                 time.sleep(2 ** attempt)  # Exponential backoff before retrying
         self.logger.error(f"Failed to fetch data from {url} after {retries} attempts.")
         return None
-
-    def send_request(self, url, timeout=10):
-        """
-        Envía una solicitud HTTP GET a la URL especificada y maneja las excepciones
-        """
-        try:
-            response = requests.get(url, timeout=timeout)
-            response.raise_for_status()
-            self.logger.debug(f"Sent HTTP GET to {url}, status code: {response.status_code}")
-            return response
-        except requests.exceptions.RequestException as e:
-            self.logger.error(f"Failed to connect to {url}: {str(e).split(':', maxsplit=1)[0]}")
-            raise e
