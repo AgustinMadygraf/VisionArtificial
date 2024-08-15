@@ -1,4 +1,7 @@
-# Base interface for handlers
+"""
+src/views/handlers/route_handler.py
+Base interface for handlers
+"""
 class RouteHandler:
     """
     Base class for route handlers.

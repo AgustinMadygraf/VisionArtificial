@@ -2,9 +2,6 @@
 src/views/http_server.py
 This module implements an HTTP server with SSL support and custom route handling.
 """
-
-import http.server
-import threading
 import ssl
 from src.logs.config_logger import LoggerConfigurator
 from src.utils.ssl_config import SSLConfig
