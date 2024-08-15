@@ -10,16 +10,14 @@ from abc import ABC, abstractmethod
 from src.logs.info_error_filter import InfoErrorFilter
 
 class ConfigStrategy(ABC):
-    """Abstract base class for configuration strategies."""
-    
+    """Abstract base class for configuration strategies."""    
     @abstractmethod
     def load_config(self):
         """Loads configuration from a specific source."""
-        pass
+        print("load_config method not implemented.")
 
 class JSONConfigStrategy(ConfigStrategy):
     """Loads configuration from a JSON file."""
-    
     def __init__(self, config_path='src/logs/logging.json', env_key='LOG_CFG'):
         self.config_path = config_path
         self.env_key = env_key
@@ -56,8 +54,8 @@ class LoggerConfigurator:
         return logging.getLogger(__name__)
 
 # Configuración inicial del logger para módulos individuales
-config_strategy = JSONConfigStrategy()
-logger_configurator = LoggerConfigurator(config_strategy=config_strategy)
+initial_config_strategy = JSONConfigStrategy()
+logger_configurator = LoggerConfigurator(config_strategy=initial_config_strategy)
 logger = logger_configurator.configure()
 #logger.addFilter(ExcludeHTTPLogsFilter())
 logger.addFilter(InfoErrorFilter())
