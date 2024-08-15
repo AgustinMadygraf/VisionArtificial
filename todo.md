@@ -1,21 +1,5 @@
 # Logger
 
-## 1. [Alta Prioridad] Crear la clase `ConfigLoader`
-**Archivo**: `src/logs/config_logger.py`  
-**Descripción**: Crear una nueva clase `ConfigLoader` que sea responsable de la carga y gestión de configuraciones desde diferentes fuentes (JSON, base de datos, etc.). Esta clase debe ser completamente independiente de `LoggerConfigurator` y solo proporcionar una interfaz para obtener la configuración como un diccionario.
-
-## 2. [Alta Prioridad] Refactorizar `LoggerConfigurator` para usar `ConfigLoader`
-**Archivo**: `src/logs/config_logger.py`  
-**Descripción**: Modificar `LoggerConfigurator` para que utilice `ConfigLoader` para obtener su configuración. Esto reducirá la responsabilidad de `LoggerConfigurator` a la configuración del logger exclusivamente.
-
-## 3. [Alta Prioridad] Aplicar el Patrón de Estrategia en `LoggerConfigurator`
-**Archivo**: `src/logs/config_logger.py`  
-**Descripción**: Implementar el patrón de diseño de estrategia en `LoggerConfigurator`, permitiendo que diferentes fuentes de configuración se inyecten a través del constructor. Esto permitirá extender fácilmente las capacidades de `LoggerConfigurator` sin modificar su código.
-
-## 4. [Alta Prioridad] Crear pruebas unitarias para `ConfigLoader`
-**Archivo**: `tests/test_config_loader.py`  
-**Descripción**: Escribir pruebas unitarias para `ConfigLoader`, asegurando que maneje correctamente la carga de configuraciones desde diferentes fuentes. Asegurarse de cubrir casos como archivo inexistente, formato inválido, etc.
-
 ## 5. [Media Prioridad] Separar la funcionalidad de filtros en sus propios módulos
 **Archivo**: `src/logs/exclude_http_logs_filter.py`, `src/logs/info_error_filter.py`  
 **Descripción**: Mantener los filtros en módulos separados es correcto, pero hay que revisar si su funcionalidad podría estar mejor organizada o extendida. Crear una base común para los filtros si hay suficiente lógica compartida entre ellos.
@@ -39,6 +23,10 @@
 ## 10. [Baja Prioridad] Revisar la configuración del logger en `logging.json`
 **Archivo**: `src/logs/logging.json`  
 **Descripción**: Revisar el archivo `logging.json` y asegurarse de que todas las configuraciones sean necesarias y estén optimizadas. Considerar la posibilidad de simplificar o dividir la configuración en diferentes archivos según el entorno (desarrollo, producción, pruebas).
+
+
+
+
 
 # Installer
 

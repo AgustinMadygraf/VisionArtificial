@@ -1,12 +1,12 @@
 __pycache__/
 docs/00-Prompt-for-ProjectAnalysis.md
 src/logs/sistema.log
-server.crt
-server.key
+src/logs/ssl_events.log
 .env
 src/docs/00-Prompt-for-ProjectAnalysis.md
 VisionArtificial.bat
 static/docs/00-Prompt-for-ProjectAnalysis.md
+server.crt
+server.key
 _server.key
 _server.crt
-src/logs/logs/ssl_events.log
