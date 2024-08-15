@@ -1,33 +1,3 @@
-# Logger
-
-## 5. [Media Prioridad] Separar la funcionalidad de filtros en sus propios módulos
-**Archivo**: `src/logs/exclude_http_logs_filter.py`, `src/logs/info_error_filter.py`  
-**Descripción**: Mantener los filtros en módulos separados es correcto, pero hay que revisar si su funcionalidad podría estar mejor organizada o extendida. Crear una base común para los filtros si hay suficiente lógica compartida entre ellos.
-
-## 6. [Media Prioridad] Refactorizar `InfoErrorFilter` para cumplir SRP
-**Archivo**: `src/logs/info_error_filter.py`  
-**Descripción**: Revisar el `InfoErrorFilter` y considerar si la lógica que filtra mensajes por nivel de log debería dividirse en subclases o métodos adicionales. Esto ayudará a asegurar que cada clase tenga una única responsabilidad clara.
-
-## 7. [Media Prioridad] Crear pruebas unitarias para `LoggerConfigurator`
-**Archivo**: `tests/test_logger_configurator.py`  
-**Descripción**: Escribir pruebas unitarias que aseguren que `LoggerConfigurator` funciona correctamente con diferentes configuraciones inyectadas por `ConfigLoader`. Cubrir los casos en los que no se encuentra la configuración o es inválida.
-
-## 8. [Media Prioridad] Documentar `LoggerConfigurator` y `ConfigLoader`
-**Archivo**: `docs/logger_configurator.md`, `docs/config_loader.md`  
-**Descripción**: Crear documentación para `LoggerConfigurator` y `ConfigLoader` que explique cómo usar estas clases, sus responsabilidades, y cómo extenderlas. La documentación debe incluir ejemplos de código.
-
-## 9. [Baja Prioridad] Implementar el patrón de Inversión de Dependencias (DIP)
-**Archivo**: `src/logs/config_logger.py`  
-**Descripción**: Implementar una interfaz o clase abstracta para `ConfigLoader`, permitiendo que `LoggerConfigurator` dependa de la abstracción en lugar de la implementación concreta. Esto facilitará la inyección de diferentes estrategias de carga de configuración.
-
-## 10. [Baja Prioridad] Revisar la configuración del logger en `logging.json`
-**Archivo**: `src/logs/logging.json`  
-**Descripción**: Revisar el archivo `logging.json` y asegurarse de que todas las configuraciones sean necesarias y estén optimizadas. Considerar la posibilidad de simplificar o dividir la configuración en diferentes archivos según el entorno (desarrollo, producción, pruebas).
-
-
-
-
-
 # Installer
 
 ## 1. Refactorizar `ProjectInstaller` para cumplir con DIP

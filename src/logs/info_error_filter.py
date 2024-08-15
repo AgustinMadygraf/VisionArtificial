@@ -11,6 +11,6 @@ class InfoErrorFilter(logging.Filter):
     def __init__(self):
         super().__init__()
 
-    def filter(self, record):
+    def filter(self, record: logging.LogRecord) -> bool:
         """Allow log records with level INFO or ERROR."""
         return record.levelno in (logging.INFO, logging.ERROR)
