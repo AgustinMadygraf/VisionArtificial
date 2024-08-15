@@ -31,22 +31,17 @@ class RootHandler(RouteHandler):
     """
     Handler for the root route.
     """
-    def handle(self, handler, query_params, test = True):
+    def handle(self, handler, query_params):
         """
         Handle the root route request.
         """
-        if test:
+        camara = query_params.get('test', [None])[0]
+        if camara:
             handler.path = '/static/test.html'        
         else:
             handler.path = '/static/index.html'
         return super(handler.__class__, handler).do_GET()
-        
-#agregar metodo para obtener test
-    def get_test(self, handler, query_params):
-        """
-        
-        """
-        print("hola")
+
 
 class LocalIPHandler(RouteHandler):
     """
