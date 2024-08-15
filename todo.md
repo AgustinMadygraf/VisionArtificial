@@ -1,12 +1,4 @@
-### 5. **Modificar `http_server.py`**
-   - **Archivo:** `src/views/http_server.py`
-   - **Descripción:** Modifica este archivo para asegurar que el servidor HTTP está utilizando correctamente los certificados emitidos por la CA. Esto puede incluir la actualización de la configuración SSL para cargar los certificados desde la ubicación correcta.
-
-### 6. **Modificar `network_config.py`**
-   - **Archivo:** `src/config/network_config.py`
-   - **Descripción:** Asegúrate de que la configuración de red esté preparada para soportar conexiones seguras con certificados emitidos por una CA. Esto puede incluir ajustes en las configuraciones del servidor para apuntar a los certificados y claves generadas.
-
-### 7. **Modificar `main.py`**
+**Modificar `main.py`**
    - **Archivo:** `src/main.py`
    - **Descripción:** Revisa el flujo principal del programa para integrar la lógica de configuración de SSL con los certificados emitidos por la CA. Esto puede incluir la inicialización del servidor con el contexto SSL configurado para usar estos certificados.
 

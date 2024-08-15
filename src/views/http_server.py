@@ -10,6 +10,7 @@ import urllib.parse
 import ssl
 from src.utils.server_utility import ServerUtility
 from src.logs.config_logger import LoggerConfigurator
+from src.utils.ssl_config import SSLConfig
 
 logger = LoggerConfigurator().configure()
 
@@ -94,25 +95,13 @@ route_registry.register_route('/', RootHandler())
 route_registry.register_route('/local-ip', LocalIPHandler())
 route_registry.register_route('/test', TestHandler())
 
-# Abstraction for SSL configuration
-class SSLConfig:
-    """
-    Abstract base class for SSL configuration.
-    """
-    def get_ssl_context(self):
-        """
-        Get the SSL context.
-        """
-        raise NotImplementedError(
-            "SSLConfig implementations must provide a get_ssl_context method."
-        )
-
 # Concrete SSL configuration implementation
 class DefaultSSLConfig(SSLConfig):
     """
     Default SSL configuration implementation.
     """
     def __init__(self, certfile, keyfile):
+        super().__init__(certfile, keyfile)
         self.certfile = certfile
         self.keyfile = keyfile
 
@@ -150,7 +139,6 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return True
         return False
 
-# Server class
 class HTTPServer:
     """
     HTTP server with SSL support.
@@ -166,7 +154,8 @@ class HTTPServer:
         Start the server.
         """
         httpd = http.server.HTTPServer(self.address, self.handler_class)
-        httpd.socket = self.ssl_config.get_ssl_context().wrap_socket(httpd.socket, server_side=True)
+        ssl_context = self.ssl_config.get_ssl_context()
+        httpd.socket = ssl_context.wrap_socket(httpd.socket, server_side=True)
         self.logger.info("Servidor corriendo en https://%s:%s", self.address[0], self.address[1])
 
         http_thread = threading.Thread(target=httpd.serve_forever)
