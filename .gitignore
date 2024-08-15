@@ -9,3 +9,4 @@ VisionArtificial.bat
 static/docs/00-Prompt-for-ProjectAnalysis.md
 _server.key
 _server.crt
+src/logs/logs/ssl_events.log
