@@ -10,7 +10,9 @@
         "console": {
             "class": "logging.StreamHandler",
             "level": "DEBUG",
-            "filters": ["exclude_http_logs"],
+            "filters": [
+                "exclude_http_logs"
+            ],
             "formatter": "simpleFormatter"
         },
         "ssl_file_handler": {
@@ -23,11 +25,15 @@
     "loggers": {
         "": {
             "level": "DEBUG",
-            "handlers": ["console"]
+            "handlers": [
+                "console", "ssl_file_handler"
+            ]
         },
         "ssl": {
             "level": "DEBUG",
-            "handlers": ["ssl_file_handler"],
+            "handlers": [
+                "ssl_file_handler"
+            ],
             "propagate": false
         }
     },

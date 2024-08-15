@@ -27,11 +27,11 @@ class SSLService(SSLInterface):
         csrfile = 'server.csr'
         
         self.logger.debug(f"Verificando la validez del certificado en '{certfile}' y la clave en '{keyfile}'.")
+        
         if not self.is_certificate_valid(certfile, keyfile):
             self.logger.debug(f"El certificado o la clave no son válidos. Generando CSR en '{csrfile}'.")
             # Generar CSR y enviar a la CA para obtener un certificado firmado
             self.generate_csr(keyfile, csrfile)
-        
         try:
             # Crear el contexto SSL y cargar el certificado y la clave
             ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
