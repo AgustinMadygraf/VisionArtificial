@@ -4,18 +4,22 @@ Módulo principal del servidor de mensajería.
 Inicializa y ejecuta el servidor HTTP y WebSocket.
 """
 import asyncio
-from src.views.http_server import HTTPServer, MyHTTPRequestHandler
 from src.views.websocket_server import WebSocketServer, WebSocketHandler, HTTPHandler, MessHandler
 from src.utils.server_utility import ServerUtility
 from src.services.http_service import HTTPService
 from src.services.ssl_service import SSLService
+from src.views.server.request_handler import MyHTTPRequestHandler
+from src.views.server.http_server import HTTPServer
 from src.logs.config_logger import LoggerConfigurator
 
+# Configuración del logger al inicio del script
+logger = LoggerConfigurator().configure()
+logger.debug("Logger configurado correctamente al inicio del servidor.")
+
 async def run_server():
-    """Inicializa y ejecuta el servidor HTTP y WebSocket."""    
+    """Inicializa y ejecuta el servidor HTTP y WebSocket."""
     local_ip = ServerUtility.get_local_ip()
-    ssl_service = SSLService()
-    logger = LoggerConfigurator().configure()
+    ssl_service = SSLService()  # Este SSLService ya utilizará el logger configurado
     http_service = HTTPService(logger)
     http_request_handler = HTTPHandler(http_service)
     message_handler = MessHandler(http_request_handler)

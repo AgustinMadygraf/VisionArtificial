@@ -32,10 +32,11 @@ class HTTPService(HTTPInterface):
         self.logger.error(f"Failed to fetch data from {url} after {retries} attempts.")
         return None
 
-    def send_request(self, url, timeout=10):
+    def send_request(self, url):
         """
         Envía una solicitud HTTP GET a la URL especificada y maneja las excepciones
         """
+        timeout=10
         try:
             response = requests.get(url, timeout=timeout)
             response.raise_for_status()

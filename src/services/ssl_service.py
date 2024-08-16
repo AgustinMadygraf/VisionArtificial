@@ -27,6 +27,7 @@ class SSLService(SSLInterface):
         csrfile = 'server.csr'        
         self.logger.debug(f"Verificando la validez del certificado en '{certfile}'
                            y la clave en '{keyfile}'.")
+
         if not self.is_certificate_valid(certfile, keyfile):
             self.logger.debug(f"El certificado o la clave no son válidos. 
                               Generando CSR en '{csrfile}'.")
