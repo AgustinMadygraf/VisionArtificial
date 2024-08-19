@@ -27,6 +27,8 @@ class HTTPServer:
         ssl_context = self.ssl_config.get_ssl_context()
         httpd.socket = ssl_context.wrap_socket(httpd.socket, server_side=True)
         self.logger.info("Servidor corriendo en https://%s:%s", self.address[0], self.address[1])
+        self.logger.info("Modo Test en https://%s:%s?test=True",
+                         self.address[0], self.address[1])
 
         http_thread = threading.Thread(target=httpd.serve_forever)
         http_thread.daemon = True
