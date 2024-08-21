@@ -24,9 +24,9 @@ class RootHandler(RouteHandler):
         """
         camara = query_params.get('test', [None])[0]
         if camara:
-            handler.path = '/static/test.html'
+            handler.path = '/static/photo.html'
         else:
-            handler.path = '/static/index.html'
+            handler.path = '/static/camara.html'
         return super(handler.__class__, handler).do_GET()
 
 
