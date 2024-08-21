@@ -1,4 +1,4 @@
-// static/js/main.js
+// static/js/main_camara.js
 import ImageProcessor from './imageProcessor/ImageProcessor.js';
 import VerticalLineStrategy from './imageProcessor/strategies/VerticalLineStrategy.js';
 import CanvasUtilsImpl from './implementations/CanvasUtilsImpl.js';

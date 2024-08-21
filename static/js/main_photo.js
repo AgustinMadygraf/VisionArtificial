@@ -1,4 +1,4 @@
-// static/js/main_test.js
+// static/js/main_photo.js
 import DOMUpdater from './domUpdater.js';
 import ImageProcessor from './imageProcessor/ImageProcessor.js';
 
