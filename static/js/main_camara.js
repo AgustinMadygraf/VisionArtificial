@@ -9,7 +9,6 @@ import VerticalLineStrategy from './imageProcessor/strategies/VerticalLineStrate
 import CanvasUtilsImpl from './implementations/CanvasUtilsImpl.js';
 import WebSocketUtilsImpl from './implementations/WebSocketUtilsImpl.js';
 import VideoManager from './videoManager.js';
-import { getQueryParam } from './utils/urlUtils.js'; // Import the function
 import { adjustLayoutForOrientation } from './uiManager.js'; // Import the function
 import DOMUpdater from './domUpdater.js'; // Import the class
 
@@ -41,21 +40,16 @@ function setupEventListeners() {
 function initializeApp() {
     console.log("DOM fully loaded and parsed");
 
-    const testValue = getQueryParam('test'); // Use the imported function
+    //const testValue = getQueryParam('test'); // Use the imported function
+    const testValue = null;
     console.log("Query parameter 'test':", testValue);
 
     const videoManager = initializeVideoManager(testValue);
     console.log("VideoManager initialized:", videoManager);
-
-
-    if (testValue !== 'True') {
-        console.log("Test value is not True, starting image processing interval");
-        setInterval(() => {
-            const img = imageProcessor.pickImage(videoManager.video);
-            domUpdater.updateCanvas(img); // Use the instance method
-        }, refreshInterval);
-    }
-
+    setInterval(() => {
+        const img = imageProcessor.pickImage(videoManager.video);
+        domUpdater.updateCanvas(img); // Use the instance method
+    }, refreshInterval);
     setupEventListeners();
     console.log("Event listeners set up");
 }
