@@ -1,4 +1,9 @@
-// static/js/main_camara.js
+/* 
+static/js/main_camara.js
+Este archivo contiene el código principal de la aplicación. Se encarga de inicializar las clases 
+y objetos necesarios, y de configurar los listeners de eventos para la interacción con el usuario.
+*/
+
 import ImageProcessor from './imageProcessor/ImageProcessor.js';
 import VerticalLineStrategy from './imageProcessor/strategies/VerticalLineStrategy.js';
 import CanvasUtilsImpl from './implementations/CanvasUtilsImpl.js';
