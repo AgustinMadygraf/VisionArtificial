@@ -1,6 +1,7 @@
 /*
 static/js/imageProcessor/ImageProcessor.js
-Este archivo contiene la clase ImageProcessor, que se encarga de procesar las imágenes capturadas desde la webcam.
+Este archivo contiene la clase ImageProcessor, que se encarga de 
+procesar las imágenes capturadas desde la webcam.
 */
 
 export default class ImageProcessor {
