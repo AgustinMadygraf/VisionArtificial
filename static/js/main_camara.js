@@ -22,7 +22,10 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 // Define refreshInterval
 const refreshInterval = 20;
 
-// Función principal de inicialización
+/**
+ * Función principal de inicialización.
+ * Inicializa el VideoManager, configura el procesamiento de imágenes y los listeners de eventos.
+ */
 function initializeApp() {
     console.log("DOM fully loaded and parsed");
     const videoManager = initializeVideoManager();
