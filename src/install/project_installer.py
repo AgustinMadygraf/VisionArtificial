@@ -112,9 +112,9 @@ class BatFileCreator:
             return
 
         try:
-            with open(_ruta_archivo_bat, 'w') as bat_file:
-                bat_file.write(f"@echo off\n")
+            with open(_ruta_archivo_bat, 'w', encoding='utf-8') as bat_file:
+                bat_file.write("@echo off\n")
                 bat_file.write(f"pipenv run python {_ruta_app_py}\n")
             self.logger.info(f"Archivo BAT creado exitosamente en: {_ruta_archivo_bat}")
-        except Exception as e:
+        except FileNotFoundError as e:
             self.logger.error(f"Error al crear el archivo BAT: {e}", exc_info=True)

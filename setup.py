@@ -30,12 +30,12 @@ def iniciar():
     print("Intérpretes de Python encontrados:")
     for i, interpreter in enumerate(python_interpreters):
         print(f"[{i}] {interpreter}")
-
+    selected_index = 0
     # Solicitar selección de intérprete de Python
-    selected_index = input(
-        "Selecciona el número del intérprete de Python a utilizar "
-        "(o deja en blanco para usar el actual): "
-    )
+    #selected_index = input(
+    #    "Selecciona el número del intérprete de Python a utilizar "
+    #    "(o deja en blanco para usar el actual): "
+    #)
     if selected_index:
         python_executable = python_interpreters[int(selected_index)]
     else:
