@@ -11,3 +11,8 @@ server.key
 _server.key
 _server.crt
 server.csr
+node_modules/
+package-lock.json
+package.json
+eslint.config.mjs
+.eslintrc.json
