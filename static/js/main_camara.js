@@ -8,9 +8,9 @@ import ImageProcessor from './imageProcessor/ImageProcessor.js';
 import VerticalLineStrategy from './imageProcessor/strategies/VerticalLineStrategy.js';
 import CanvasUtilsImpl from './implementations/CanvasUtilsImpl.js';
 import WebSocketUtilsImpl from './implementations/WebSocketUtilsImpl.js';
-import { adjustLayoutForOrientation } from './uiManager.js';
 import DOMUpdater from './domUpdater.js';
-import { initializeVideoManager } from './videoManagerInitializer.js'; // Import the function
+import { initializeVideoManager } from './videoManagerInitializer.js';
+import { setupEventListeners } from './eventListeners.js'; // Import the function
 
 // Implementaciones de interfaces
 const canvasUtils       = new CanvasUtilsImpl();
@@ -21,14 +21,6 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 
 // Define refreshInterval
 const refreshInterval = 20;
-
-/*
-Función para configurar los listeners de eventos
-*/
-function setupEventListeners() {
-    adjustLayoutForOrientation();
-    window.addEventListener('resize', adjustLayoutForOrientation);
-}
 
 // Función principal de inicialización
 function initializeApp() {
