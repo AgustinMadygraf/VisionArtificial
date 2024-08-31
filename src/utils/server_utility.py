@@ -20,7 +20,12 @@ class ServerUtility:
     @staticmethod
     def get_ip():
         """Obtiene la dirección IP"""
-        ip = ServerUtility.get_local_ip()
+        ip_local = ServerUtility.get_local_ip()
+        ip_env = ServerUtility.get_ip_from_env()
+        if ip_env is None:
+            ip = ip_local
+        else:
+            ip = ip_env
         return ip
 
     @staticmethod
