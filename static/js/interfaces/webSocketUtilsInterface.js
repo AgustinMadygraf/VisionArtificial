@@ -3,7 +3,7 @@ export default class WebSocketUtilsInterface {
     initializeWebSocket() {
         throw new Error('You have to implement the method initializeWebSocket!');
     }
-    sendWebSocketMessage(message) {
+    sendWebSocketMessage() {
         throw new Error('You have to implement the method sendWebSocketMessage!');
     }
 }

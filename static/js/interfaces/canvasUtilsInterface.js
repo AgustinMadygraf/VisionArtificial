@@ -1,12 +1,12 @@
 // static/js/interfaces/canvasUtilsInterface.js
 export default class CanvasUtilsInterface {
-    drawVerticalLine(_context, _pos, _color) {
+    drawVerticalLine(context, pos, color) {
         throw new Error('You have to implement the method drawVerticalLine!');
     }
-    drawHorizontalLine(_context, _pos, _color) {
+    drawHorizontalLine(context, pos, color) {
         throw new Error('You have to implement the method drawHorizontalLine!');
     }
-    drawCenterRuler(_context, _color, _lineLength, _spacing) {
+    drawCenterRuler(context, color, lineLength, spacing) {
         throw new Error('You have to implement the method drawCenterRuler!');
     }
 }
