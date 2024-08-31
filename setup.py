@@ -10,6 +10,7 @@ from src.install.dependency_manager import (
     PipUpdater, PipDependencyInstaller, DependencyInstallerManager
 )
 from src.install.python_interpreter_utils import list_python_interpreters, is_pipenv_updated
+from src.install.project_installer import ProjectInstaller
 
 def iniciar():
     """
@@ -62,6 +63,11 @@ def iniciar():
     if not is_pipenv_updated(python_executable):
         print("Actualizando dependencias con pipenv...")
         subprocess.check_call([python_executable, '-m', 'pipenv', 'install'])
+
+    # Crear una instancia de ProjectInstaller y llamar a su método main
+    project_installer = ProjectInstaller()  # Crear instancia de ProjectInstaller
+    project_installer.main()  # Llamar al método main de ProjectInstaller
+
 
 if __name__ == "__main__":
     iniciar()

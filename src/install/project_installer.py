@@ -39,7 +39,7 @@ class ProjectInstaller:
         if not ruta_archivo_bat.is_file():
             print(f"Creando archivo '{self.name_proj}.bat'")
             bat_creator = BatFileCreator(self.project_dir, self.name_proj, self.logger)
-            bat_creator.crear_archivo_bat_con_pipenv()
+            bat_creator.crear_archivo_bat()
 
         shortcut_strategy = DefaultShortcutCreationStrategy()
         ShortcutManager(
@@ -92,15 +92,29 @@ class BatFileCreator:
     """
     Clase encargada de crear archivos BAT para la ejecución del proyecto.
     """
-    # pylint: disable=too-few-public-methods
     def __init__(self, project_dir, name_proj, logger):
         self.project_dir = project_dir
         self.name_proj = name_proj
         self.logger = logger
 
-    def crear_archivo_bat_con_pipenv(self):
+    def crear_archivo_bat(self):
         """
         Crea un archivo BAT que ejecuta el proyecto utilizando pipenv.
         """
         _ruta_app_py = self.project_dir / 'run.py'
         _ruta_archivo_bat = self.project_dir / f"{self.name_proj}.bat"
+
+        self.logger.debug(f"Ruta del archivo run.py: {_ruta_app_py}")
+        self.logger.debug(f"Ruta del archivo BAT: {_ruta_archivo_bat}")
+
+        if not _ruta_app_py.is_file():
+            self.logger.error(f"El archivo run.py no existe en la ruta: {_ruta_app_py}")
+            return
+
+        try:
+            with open(_ruta_archivo_bat, 'w') as bat_file:
+                bat_file.write(f"@echo off\n")
+                bat_file.write(f"pipenv run python {_ruta_app_py}\n")
+            self.logger.info(f"Archivo BAT creado exitosamente en: {_ruta_archivo_bat}")
+        except Exception as e:
+            self.logger.error(f"Error al crear el archivo BAT: {e}", exc_info=True)
