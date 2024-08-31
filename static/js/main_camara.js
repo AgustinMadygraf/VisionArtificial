@@ -8,9 +8,9 @@ import ImageProcessor from './imageProcessor/ImageProcessor.js';
 import VerticalLineStrategy from './imageProcessor/strategies/VerticalLineStrategy.js';
 import CanvasUtilsImpl from './implementations/CanvasUtilsImpl.js';
 import WebSocketUtilsImpl from './implementations/WebSocketUtilsImpl.js';
-import VideoManager from './videoManager.js';
-import { adjustLayoutForOrientation } from './uiManager.js'; // Import the function
-import DOMUpdater from './domUpdater.js'; // Import the class
+import { adjustLayoutForOrientation } from './uiManager.js';
+import DOMUpdater from './domUpdater.js';
+import { initializeVideoManager } from './videoManagerInitializer.js'; // Import the function
 
 // Implementaciones de interfaces
 const canvasUtils       = new CanvasUtilsImpl();
@@ -21,18 +21,6 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 
 // Define refreshInterval
 const refreshInterval = 20;
-
-
-/*
-Función para inicializar VideoManager
-*/
-function initializeVideoManager() {
-    const videoManager = new VideoManager();
-    videoManager.initialize();
-    videoManager.startVideoStream();
-    return videoManager;
-}
-
 
 /*
 Función para configurar los listeners de eventos
@@ -47,16 +35,15 @@ function initializeApp() {
     console.log("DOM fully loaded and parsed");
     const videoManager = initializeVideoManager();
     console.log("VideoManager initialized:", videoManager);
-    setInterval(() => { // acá se ejecuta la función cada 20ms que es el valor de refreshInterval
+    setInterval(() => {
         const img = imageProcessor.pickImage(videoManager.video);
-        domUpdater.updateCanvas(img); // Use the instance method
+        domUpdater.updateCanvas(img);
     }, refreshInterval);
     setupEventListeners();
     console.log("Event listeners set up");
 }
 
 // Evento DOMContentLoaded
-
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
