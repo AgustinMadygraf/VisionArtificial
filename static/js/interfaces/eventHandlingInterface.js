@@ -1,6 +1,7 @@
 // static/js/interfaces/filterApplicationInterface.js
 export default class FilterApplicationInterface {
     applyFilter(image, filter) {
-        throw new Error('You have to implement the method applyFilter!');
+        // Implementación de la aplicación de filtros
+        console.log(image, filter); // Ejemplo de uso de las variables 'image' y 'filter'
     }
 }
