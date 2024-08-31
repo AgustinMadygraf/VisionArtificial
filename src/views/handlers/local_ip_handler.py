@@ -14,7 +14,7 @@ class LocalIPHandler(RouteHandler):
         """
         Handle the local IP route request.
         """
-        local_ip = ServerUtility.get_local_ip()
+        local_ip = ServerUtility.get_ip()
         response = {'ip': local_ip}
         handler.send_response(200)
         handler.send_header('Content-type', 'application/json')
