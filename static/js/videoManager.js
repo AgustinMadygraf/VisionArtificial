@@ -19,6 +19,7 @@ export default class VideoManager {
 
     initialize() {
         this.buttonManager.initialize();
+        console.log("VideoManager inicializado.");
     }
 
     startVideoStream() {
@@ -27,6 +28,7 @@ export default class VideoManager {
                     document.getElementById("but").classList.add("hidden");
                 })
                 .catch(alert);
+                console.log("Stream de video iniciado.");
         }
     }
 
