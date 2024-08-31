@@ -3,7 +3,6 @@
 import { getLocalIp } from '../utils/networkUtils.js';
 
 let ws;
-let isWebSocketOpen = false;
 let messageCount = 0;
 
 export async function initializeWebSocket() {
@@ -21,7 +20,6 @@ export async function initializeWebSocket() {
 
     ws.onopen = function() {
         console.log("WebSocket connection established");
-        isWebSocketOpen = true;
     };
 
     ws.onerror = function(error) {
@@ -30,7 +28,7 @@ export async function initializeWebSocket() {
 
     ws.onclose = function() {
         console.log("WebSocket connection closed");
-        isWebSocketOpen = false;
+        // Reintentar conexión después de 5 segundos
         setTimeout(initializeWebSocket, 5000);
     };
 }
@@ -47,4 +45,3 @@ export function sendWebSocketMessage(message) {
         }
     }
 }
-
