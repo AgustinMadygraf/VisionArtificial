@@ -19,13 +19,16 @@ class ServerUtility:
     """
     @staticmethod
     def get_ip():
-        """Obtiene la dirección IP"""
+        """Obtiene la dirección IP más idónea."""
         ip_local = ServerUtility.get_local_ip()
         ip_env = ServerUtility.get_ip_from_env()
-        if ip_env is None:
-            ip = ip_local
-        else:
+
+        if ServerUtility.is_ip_valid(ip_env):
             ip = ip_env
+        else:
+            ip = ip_local
+
+        logger.info("Selected IP: %s", ip)
         return ip
 
     @staticmethod
@@ -49,3 +52,15 @@ class ServerUtility:
             s.close()
         logger.info("Local IP obtained: %s", ip_local)
         return ip_local
+
+    @staticmethod
+    def is_ip_valid(ip):
+        """Verifica si la IP es válida y accesible."""
+        try:
+            socket.inet_aton(ip)
+            # Intentar conectarse a la IP para verificar si es accesible
+            with socket.create_connection((ip, 80), timeout=2):
+                return True
+        except (socket.error, OSError):
+            logger.error("Invalid or inaccessible IP: %s", ip)
+            return False
