@@ -4,6 +4,7 @@ Este módulo implementa un servidor HTTP con soporte SSL y manejo de rutas perso
 """
 import threading
 import http.server
+import ssl
 from src.logs.config_logger import LoggerConfigurator
 from src.utils.ssl_config import SSLConfig
 
@@ -23,8 +24,7 @@ class HTTPServer:
         """
         Start the server.
         """
-        self.logger.debug("Initializing HTTP server with address: %s and handler: %s",
-                          self.address, self.handler_class)
+        self.logger.debug("Initializing HTTP server with address: %s and handler: %s", self.address, self.handler_class)
         try:
             self.logger.debug("Creating HTTPServer instance")
             httpd = http.server.HTTPServer(self.address, self.handler_class)
@@ -38,10 +38,8 @@ class HTTPServer:
             httpd.socket = ssl_context.wrap_socket(httpd.socket, server_side=True)
             self.logger.debug("Socket wrapped with SSL context successfully")
 
-            self.logger.info("Servidor corriendo en https://%s:%s",
-                             self.address[0], self.address[1])
-            self.logger.info("Modo Test en https://%s:%s?test=True",
-                             self.address[0], self.address[1])
+            self.logger.info("Servidor corriendo en https://%s:%s", self.address[0], self.address[1])
+            self.logger.info("Modo Test en https://%s:%s?test=True", self.address[0], self.address[1])
 
             self.logger.debug("Starting HTTP server thread")
             http_thread = threading.Thread(target=httpd.serve_forever)
@@ -51,6 +49,11 @@ class HTTPServer:
 
         except OSError as e:
             self.logger.error("OSError occurred: %s", e)
+            if e.errno == 10049:
+                self.logger.error("Invalid address: %s", self.address)
+            raise
+        except ssl.SSLError as e:
+            self.logger.error("SSLError occurred: %s", e)
             raise
         except Exception as e:
             self.logger.error("Unexpected error occurred: %s", e)
