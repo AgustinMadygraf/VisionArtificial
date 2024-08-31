@@ -23,13 +23,22 @@ class HTTPServer:
         """
         Start the server.
         """
-        httpd = http.server.HTTPServer(self.address, self.handler_class)
-        ssl_context = self.ssl_config.get_ssl_context()
-        httpd.socket = ssl_context.wrap_socket(httpd.socket, server_side=True)
-        self.logger.info("Servidor corriendo en https://%s:%s", self.address[0], self.address[1])
-        self.logger.info("Modo Test en https://%s:%s?test=True",
-                         self.address[0], self.address[1])
-
-        http_thread = threading.Thread(target=httpd.serve_forever)
-        http_thread.daemon = True
-        http_thread.start()
+        try:
+            self.logger.debug("Starting HTTP server with address: %s and handler: %s", self.address,
+                              self.handler_class)
+            httpd = http.server.HTTPServer(self.address, self.handler_class)
+            ssl_context = self.ssl_config.get_ssl_context()
+            httpd.socket = ssl_context.wrap_socket(httpd.socket, server_side=True)
+            self.logger.info("Servidor corriendo en https://%s:%s", self.address[0],
+                             self.address[1])
+            self.logger.info("Modo Test en https://%s:%s?test=True", self.address[0],
+                             self.address[1])
+            http_thread = threading.Thread(target=httpd.serve_forever)
+            http_thread.daemon = True
+            http_thread.start()
+        except OSError as e:
+            self.logger.error("OSError occurred: %s", e)
+            raise
+        except Exception as e:
+            self.logger.error("Unexpected error occurred: %s", e)
+            raise
