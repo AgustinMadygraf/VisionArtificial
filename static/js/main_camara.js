@@ -23,8 +23,8 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 const refreshInterval = 20;
 
 // Función para inicializar VideoManager
-function initializeVideoManager(testValue) {
-    const videoManager = new VideoManager(testValue);
+function initializeVideoManager() {
+    const videoManager = new VideoManager();
     videoManager.initialize();
     videoManager.startVideoStream();
     return videoManager;
@@ -39,12 +39,7 @@ function setupEventListeners() {
 // Función principal de inicialización
 function initializeApp() {
     console.log("DOM fully loaded and parsed");
-
-    //const testValue = getQueryParam('test'); // Use the imported function
-    const testValue = null;
-    console.log("Query parameter 'test':", testValue);
-
-    const videoManager = initializeVideoManager(testValue);
+    const videoManager = initializeVideoManager();
     console.log("VideoManager initialized:", videoManager);
     setInterval(() => {
         const img = imageProcessor.pickImage(videoManager.video);
