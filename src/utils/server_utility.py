@@ -17,7 +17,6 @@ class ServerUtility:
     """
     Utility class for server-related operations.
     """
-    # pylint: disable=too-few-public-methods
     @staticmethod
     def get_ip():
         """Obtiene la dirección IP"""
@@ -37,11 +36,11 @@ class ServerUtility:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             s.connect(("8.8.8.8", 80))
-            ip = s.getsockname()[0]
+            ip_local = s.getsockname()[0]
         except socket.error as e:
-            ip = '127.0.0.1'
+            ip_local = '127.0.0.1'
             logger.error("Error obtaining local IP: %s", e)
         finally:
             s.close()
-        logger.info("Local IP obtained: %s", ip)
-        return ip
+        logger.info("Local IP obtained: %s", ip_local)
+        return ip_local
