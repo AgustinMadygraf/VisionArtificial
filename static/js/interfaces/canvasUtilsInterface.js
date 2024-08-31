@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // static/js/interfaces/canvasUtilsInterface.js
 export default class CanvasUtilsInterface {
     drawVerticalLine(context, pos, color) {
