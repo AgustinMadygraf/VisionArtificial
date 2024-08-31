@@ -1,4 +1,5 @@
 // static/js/imageProcessor/ImageProcessor.js
+
 export default class ImageProcessor {
     constructor(secs, halfEvalHeight, halfEvalWidth, canvasUtils, webSocketUtils, strategy) {
         this.secs = secs;
@@ -34,20 +35,19 @@ export default class ImageProcessor {
             }
             video.currentTime = Math.min(Math.max(0, (secs < 0 ? video.duration : 0) + secs), video.duration);
             const vid = this.videoToImg(video);
-            const img = vid.image;
             callback(vid, video.currentTime, undefined);
         };
 
-        video.onseeked = (e) => {
-            callback(undefined, video.currentTime, e);
+        video.onseeked = () => {
+            callback(undefined, video.currentTime, undefined);
         };
 
-        video.onerror = (e) => {
-            callback(undefined, undefined, e);
+        video.onerror = () => {
+            callback(undefined, undefined, undefined);
         };
     }
 
-    printImageDetails(vid, currentTime, e) {
+    printImageDetails(vid, currentTime) {
         this.webSocketUtils.sendWebSocketMessage(`Image details: width=${vid.image.width}, height=${vid.image.height}, time=${currentTime}`);
     }
 }

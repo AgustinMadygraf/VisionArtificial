@@ -56,6 +56,7 @@ function initializeApp() {
 }
 
 // Evento DOMContentLoaded
-document.addEventListener('DOMContentLoaded', (event) => {
+
+document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
