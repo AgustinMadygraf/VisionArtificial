@@ -1,5 +1,11 @@
-// static/js/videoStreamManager.js
+/*
+ static/js/videoStreamManager.js
+Este archivo contiene la clase VideoStreamManager, que se encarga de gestionar el stream de video.
+ */
 
+/**
+ * Clase que gestiona el stream de video.
+ */
 export default class VideoStreamManager {
     constructor(videoElement) {
         this.videoElement = videoElement;

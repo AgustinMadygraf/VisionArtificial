@@ -1,7 +1,10 @@
+/*
+static/js/videoManager.js
+Este archivo contiene la clase VideoManager, que se encarga de gestionar el video desde la webcam.
+*/
+
 import ButtonManager from './buttonManager.js';
 import VideoStreamManager from './videoStreamManager.js';
-
-// static/js/videoManager.js
 
 /**
  * Clase que gestiona el video desde la webcam.
@@ -10,7 +13,7 @@ export default class VideoManager {
     constructor() {
         this.video = document.getElementById("vid");
         this.video.muted = true;
-        this.buttonManager = new ButtonManager(this); // Inyección de dependencia
+        this.buttonManager = new ButtonManager(this);
         this.videoStreamManager = new VideoStreamManager(this.video);
     }
 
@@ -19,8 +22,6 @@ export default class VideoManager {
     }
 
     startVideoStream() {
-
-            console.log("Test value is not True, starting video stream from device");
             this.videoStreamManager.startStream()
                 .then(() => {
                     document.getElementById("but").classList.add("hidden");

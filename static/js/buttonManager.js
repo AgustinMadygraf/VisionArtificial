@@ -1,4 +1,7 @@
-// js/buttonManager.js
+/*
+js/buttonManager.js
+Este archivo contiene la clase ButtonManager, que se encarga de gestionar los eventos de botones.
+*/
 
 /**
  * Clase que gestiona los eventos de botones.

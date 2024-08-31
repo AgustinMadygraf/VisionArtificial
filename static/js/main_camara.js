@@ -41,7 +41,7 @@ function initializeApp() {
     console.log("DOM fully loaded and parsed");
     const videoManager = initializeVideoManager();
     console.log("VideoManager initialized:", videoManager);
-    setInterval(() => {
+    setInterval(() => { // acá se ejecuta la función cada 20ms que es el valor de refreshInterval
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img); // Use the instance method
     }, refreshInterval);
