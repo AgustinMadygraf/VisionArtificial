@@ -3,8 +3,8 @@ src/views/server/http_server.py
 Este módulo implementa un servidor HTTP con soporte SSL y manejo de rutas personalizado.
 """
 import threading
-from src.logs.config_logger import LoggerConfigurator
 import http.server
+from src.logs.config_logger import LoggerConfigurator
 from src.utils.ssl_config import SSLConfig
 
 logger = LoggerConfigurator().configure()
