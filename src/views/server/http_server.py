@@ -24,7 +24,8 @@ class HTTPServer:
         """
         Start the server.
         """
-        self.logger.debug("Initializing HTTP server with address: %s and handler: %s", self.address, self.handler_class)
+        self.logger.debug("Initializing HTTP server with address: %s and handler: %s",
+                          self.address, self.handler_class)
         try:
             self.logger.debug("Creating HTTPServer instance")
             httpd = http.server.HTTPServer(self.address, self.handler_class)
@@ -33,14 +34,13 @@ class HTTPServer:
             self.logger.debug("Getting SSL context")
             ssl_context = self.ssl_config.get_ssl_context()
             self.logger.debug("SSL context obtained successfully")
-
             self.logger.debug("Wrapping socket with SSL context")
             httpd.socket = ssl_context.wrap_socket(httpd.socket, server_side=True)
             self.logger.debug("Socket wrapped with SSL context successfully")
-
-            self.logger.info("Servidor corriendo en https://%s:%s", self.address[0], self.address[1])
-            self.logger.info("Modo Test en https://%s:%s?test=True", self.address[0], self.address[1])
-
+            self.logger.info("Servidor corriendo en https://%s:%s",
+                             self.address[0], self.address[1])
+            self.logger.info("Modo Test en https://%s:%s?test=True",
+                             self.address[0], self.address[1])
             self.logger.debug("Starting HTTP server thread")
             http_thread = threading.Thread(target=httpd.serve_forever)
             http_thread.daemon = True
