@@ -22,7 +22,10 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 // Define refreshInterval
 const refreshInterval = 20;
 
-// Función para inicializar VideoManager
+
+/*
+Función para inicializar VideoManager
+*/
 function initializeVideoManager() {
     const videoManager = new VideoManager();
     videoManager.initialize();
@@ -30,7 +33,10 @@ function initializeVideoManager() {
     return videoManager;
 }
 
-// Función para configurar los listeners de eventos
+
+/*
+Función para configurar los listeners de eventos
+*/
 function setupEventListeners() {
     adjustLayoutForOrientation();
     window.addEventListener('resize', adjustLayoutForOrientation);
