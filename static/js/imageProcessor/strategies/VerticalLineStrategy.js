@@ -1,4 +1,5 @@
 /**
+ * static/js/imageProcessor/strategies/VerticalLineStrategy.js
  * Clase VerticalLineStrategy.
  * Estrategia de procesamiento de imágenes que dibuja una línea vertical en el canvas.
  */
