@@ -1,6 +1,15 @@
-// static/js/imageProcessor/strategies/VerticalLineStrategy.js
+/*
+static/js/imageProcessor/strategies/VerticalLineStrategy.js
+Este archivo contiene la clase VerticalLineStrategy.
+*/
+
 import ImageProcessingStrategy from './ImageProcessingStrategy.js';
 
+/**
+ * Clase VerticalLineStrategy.
+ * Estrategia de procesamiento de imágenes que dibuja una línea vertical en el canvas.
+ * Extiende la clase ImageProcessingStrategy.
+ */
 export default class VerticalLineStrategy extends ImageProcessingStrategy {
     constructor(canvasUtils, webSocketUtils) {
         super();
@@ -8,11 +17,24 @@ export default class VerticalLineStrategy extends ImageProcessingStrategy {
         this.webSocketUtils = webSocketUtils;
     }
 
+    /**
+     * Process the given canvas by finding the maximum vertical jump pixel position 
+     * and drawing a vertical line on the canvas.
+     * 
+     * @param {Canvas} canvas - The canvas to be processed.
+     * @returns {void}
+     */
     process(canvas) {
         const pos = this.maxVerticalJumpPixelPos(canvas);
         this.vertLineInCanvas(canvas, pos.pos);
     }
 
+    /**
+     * Calculates the maximum vertical jump pixel position within the given canvas.
+     * 
+     * @param {HTMLCanvasElement} canvas - The canvas element to process.
+     * @returns {{ diff: number, pos: number }} - An object containing the maximum difference and its corresponding position.
+     */
     maxVerticalJumpPixelPos(canvas) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
@@ -44,6 +66,13 @@ export default class VerticalLineStrategy extends ImageProcessingStrategy {
         return maxDiff;
     }
 
+    /**
+     * Draws a vertical line on the canvas at the specified position.
+     * 
+     * @param {HTMLCanvasElement} canvas - The canvas element on which to draw the line.
+     * @param {number} pos - The x-coordinate of the position where the line should be drawn.
+     * @returns {void}
+     */
     vertLineInCanvas(canvas, pos) {
         const context = canvas.getContext('2d');
 
