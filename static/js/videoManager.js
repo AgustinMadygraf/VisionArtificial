@@ -17,11 +17,19 @@ export default class VideoManager {
         this.videoStreamManager = new VideoStreamManager(this.video);
     }
 
+    /**
+     * Initializes the video manager.
+     */
     initialize() {
         this.buttonManager.initialize();
         console.log("VideoManager inicializado.");
     }
 
+    /**
+     * Starts the video stream.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the video stream is started successfully.
+     */
     startVideoStream() {
             this.videoStreamManager.startStream()
                 .then(() => {
