@@ -3,16 +3,13 @@ static/js/imageProcessor/strategies/VerticalLineStrategy.js
 Este archivo contiene la clase VerticalLineStrategy.
 */
 
-import ImageProcessingStrategy from './ImageProcessingStrategy.js';
 
 /**
  * Clase VerticalLineStrategy.
  * Estrategia de procesamiento de imágenes que dibuja una línea vertical en el canvas.
- * Extiende la clase ImageProcessingStrategy.
  */
-export default class VerticalLineStrategy extends ImageProcessingStrategy {
+export default class VerticalLineStrategy {
     constructor(canvasUtils, webSocketUtils) {
-        super();
         this.canvasUtils = canvasUtils;
         this.webSocketUtils = webSocketUtils;
     }
