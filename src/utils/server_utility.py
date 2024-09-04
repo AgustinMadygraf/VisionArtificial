@@ -34,7 +34,7 @@ class ServerUtility:
     @staticmethod
     def get_ip_from_env():
         """Obtiene la IP del entorno (DB_HOST) del archivo .env."""
-        ip_env = os.getenv('DB_HOST', '127.0.0.1')
+        ip_env = os.getenv('DB_HOST')
         logger.info("IP from environment (DB_HOST): %s", ip_env)
         return ip_env
 
@@ -56,6 +56,8 @@ class ServerUtility:
     @staticmethod
     def is_ip_valid(ip):
         """Verifica si la IP es válida y accesible."""
+        if ip is None:
+            return False
         try:
             socket.inet_aton(ip)
             # Intentar conectarse a la IP para verificar si es accesible
