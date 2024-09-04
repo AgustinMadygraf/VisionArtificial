@@ -43,8 +43,20 @@ function initializeApp() {
             sum += arrayTimeProccessor[i];
         }
         let average = sum / arrayTimeProccessor.length;
-        // quiero que average sea entero
         average = Math.round(average);
+
+        // quiero que diff tenga 3 digitos, si tiene menos, le agrego 0 al principio
+        diff = diff.toString();
+        while(diff.length < 3){
+            diff = "0" + diff;
+        }
+        
+        average = average.toString();
+        while(average.length < 3){
+            average = "0" + average;
+        }
+        
+
         console.log("T1: ", diff, " ms - T2: ", average, " ms");
         refreshInterval = average * 1.2;
     }, refreshInterval);
