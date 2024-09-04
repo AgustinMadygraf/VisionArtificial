@@ -23,6 +23,33 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 // Define refreshInterval
 let refreshInterval = 20;
 
+function promedio(dateInicio, arrayTimeProccessor){
+    let dateFin = new Date();
+    let diff = dateFin - dateInicio;
+    arrayTimeProccessor.push(diff);
+    let sum = 0;
+    for(let i = 0; i < arrayTimeProccessor.length; i++){
+        sum += arrayTimeProccessor[i];
+    }
+    let average = sum / arrayTimeProccessor.length;
+    average = Math.round(average);
+
+    // quiero que diff tenga 3 digitos, si tiene menos, le agrego 0 al principio
+    diff = diff.toString();
+    while(diff.length < 3){
+        diff = "0" + diff;
+    }
+    
+    average = average.toString();
+    while(average.length < 3){
+        average = "0" + average;
+    }
+    console.log("T1: ", diff, " ms - T2: ", average, " ms");
+    refreshInterval = average * 1.2;
+}
+
+
+
 /**
  * Función principal de inicialización.
  * Inicializa el VideoManager, configura el procesamiento de imágenes y los listeners de eventos.
@@ -35,30 +62,8 @@ function initializeApp() {
         let dateInicio = new Date();
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img);
-        let dateFin = new Date();
-        let diff = dateFin - dateInicio;
-        arrayTimeProccessor.push(diff);
-        let sum = 0;
-        for(let i = 0; i < arrayTimeProccessor.length; i++){
-            sum += arrayTimeProccessor[i];
-        }
-        let average = sum / arrayTimeProccessor.length;
-        average = Math.round(average);
-
-        // quiero que diff tenga 3 digitos, si tiene menos, le agrego 0 al principio
-        diff = diff.toString();
-        while(diff.length < 3){
-            diff = "0" + diff;
-        }
-        
-        average = average.toString();
-        while(average.length < 3){
-            average = "0" + average;
-        }
-        
-
-        console.log("T1: ", diff, " ms - T2: ", average, " ms");
-        refreshInterval = average * 1.2;
+        refreshInterval = promedio(dateInicio, arrayTimeProccessor);
+        refreshInterval = 20;
     }, refreshInterval);
     setupEventListeners();
     console.log("Event listeners set up");
