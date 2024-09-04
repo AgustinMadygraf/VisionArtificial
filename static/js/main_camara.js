@@ -17,10 +17,11 @@ const canvasUtils       = new CanvasUtilsImpl();
 const webSocketUtils    = new WebSocketUtilsImpl();
 const strategy          = new VerticalLineStrategy(canvasUtils, webSocketUtils);
 const imageProcessor    = new ImageProcessor(5, 100, 50, canvasUtils, webSocketUtils, strategy);
+const videoManager = initializeVideoManager();
 const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 
 // Define refreshInterval
-const refreshInterval = 20;
+let refreshInterval = 20;
 
 /**
  * Función principal de inicialización.
@@ -28,11 +29,24 @@ const refreshInterval = 20;
  */
 function initializeApp() {
     console.log("DOM fully loaded and parsed");
-    const videoManager = initializeVideoManager();
     console.log("VideoManager initialized:", videoManager);
+    let arrayTimeProccessor = [];
     setInterval(() => {
+        let dateInicio = new Date();
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img);
+        let dateFin = new Date();
+        let diff = dateFin - dateInicio;
+        arrayTimeProccessor.push(diff);
+        let sum = 0;
+        for(let i = 0; i < arrayTimeProccessor.length; i++){
+            sum += arrayTimeProccessor[i];
+        }
+        let average = sum / arrayTimeProccessor.length;
+        // quiero que average sea entero
+        average = Math.round(average);
+        console.log("T1: ", diff, " ms - T2: ", average, " ms");
+        refreshInterval = average * 1.2;
     }, refreshInterval);
     setupEventListeners();
     console.log("Event listeners set up");
