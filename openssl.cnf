@@ -336,7 +336,7 @@ ess_cert_id_alg		= sha256	# algorithm to compute certificate
 [insta] # CMP using Insta Demo CA
 # Message transfer
 server = pki.certificate.fi:8700
-# proxy = # set this as far as needed, e.g., http://192.168.1.1:8080
+# proxy = # set this as far as needed, e.g., http://192.168.1.1:4443
 # tls_use = 0
 path = pkix/
 
