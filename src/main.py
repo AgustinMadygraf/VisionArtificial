@@ -18,6 +18,7 @@ logger.debug("Logger configurado correctamente al inicio del servidor.")
 
 async def run_server():
     """Inicializa y ejecuta el servidor HTTP y WebSocket."""
+    puerto = 8080
     local_ip = ServerUtility.get_ip()
     ssl_service = SSLService()
     http_service = HTTPService(logger)
@@ -25,7 +26,7 @@ async def run_server():
     message_handler = MessHandler(http_request_handler)
     websocket_handler = WebSocketHandler(message_handler)
 
-    http_server = HTTPServer((local_ip, 4443), MyHTTPRequestHandler, ssl_service)
+    http_server = HTTPServer((local_ip, puerto), MyHTTPRequestHandler, ssl_service)
     http_server.start()
 
     websocket_server = WebSocketServer(ssl_service, websocket_handler)
