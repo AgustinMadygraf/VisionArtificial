@@ -21,7 +21,7 @@ const videoManager = initializeVideoManager();
 const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 
 // Define refreshInterval
-let refreshInterval = 20;
+let refreshInterval = 2000;
 
 function promedio(dateInicio, arrayTimeProccessor){
     let dateFin = new Date();
@@ -46,6 +46,7 @@ function promedio(dateInicio, arrayTimeProccessor){
     }
     console.log("T1: ", diff, " ms - T2: ", average, " ms");
     refreshInterval = average * 1.2;
+    return refreshInterval;
 }
 
 
@@ -63,7 +64,10 @@ function initializeApp() {
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img);
         refreshInterval = promedio(dateInicio, arrayTimeProccessor);
-        refreshInterval = 20;
+        //if(arrayTimeProccessor.length % 100 == 0){
+        //    console.log("Hola Mundo");
+        //}
+        return refreshInterval;
     }, refreshInterval);
     setupEventListeners();
     console.log("Event listeners set up");
