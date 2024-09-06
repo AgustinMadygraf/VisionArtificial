@@ -59,16 +59,19 @@ function initializeApp() {
     console.log("DOM fully loaded and parsed");
     console.log("VideoManager initialized:", videoManager);
     let arrayTimeProccessor = [];
-    setInterval(() => {
+    
+    function update() {
         let dateInicio = new Date();
         const img = imageProcessor.pickImage(videoManager.video);
         domUpdater.updateCanvas(img);
         refreshInterval = promedio(dateInicio, arrayTimeProccessor);
-        //if(arrayTimeProccessor.length % 100 == 0){
-        //    console.log("Hola Mundo");
-        //}
-        return refreshInterval;
-    }, refreshInterval);
+        
+        // Reiniciar el intervalo con el nuevo valor de refreshInterval
+        clearInterval(intervalId);
+        intervalId = setInterval(update, refreshInterval);
+    }
+    
+    let intervalId = setInterval(update, refreshInterval);
     setupEventListeners();
     console.log("Event listeners set up");
 }
