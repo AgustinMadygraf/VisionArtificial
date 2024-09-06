@@ -24,6 +24,7 @@ const domUpdater        = new DOMUpdater(); // Create an instance of DOMUpdater
 let refreshInterval = 2000;
 
 function promedio(dateInicio, arrayTimeProccessor){
+    let margen = 2; // margen para no sobre exigir el procesador
     let dateFin = new Date();
     let diff = dateFin - dateInicio;
     arrayTimeProccessor.push(diff);
@@ -45,7 +46,7 @@ function promedio(dateInicio, arrayTimeProccessor){
         average = "0" + average;
     }
     console.log("T1: ", diff, " ms - T2: ", average, " ms");
-    refreshInterval = average * 1.2;
+    refreshInterval = average * margen;
     return refreshInterval;
 }
 
