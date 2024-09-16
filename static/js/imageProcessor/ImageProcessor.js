@@ -73,27 +73,29 @@ export default class ImageProcessor {
     applyBlackAndWhiteFilter(ctx, width, height) {
         const imageData = ctx.getImageData(0, 0, width, height);
         const data = imageData.data;
-        const r_set = 140;
-        const g_set = 90;
-        const b_set = 90;
-        const tolerancia = 64;
+        const r_set = 190;
+        const g_set = 144;
+        const b_set = 144;
+        const tolerancia_r = 128;
+        const tolerancia_g = 128;
+        const tolerancia_b = 128;
         for (let i = 0; i < data.length; i += 4) {
             const r = data[i];
             const g = data[i + 1];
             const b = data[i + 2];
 
             // Verificar si el color es marrón
-            if (    r >= r_set -tolerancia   && r <= r_set + tolerancia 
-                &&  g >= g_set -tolerancia   && g <= g_set + tolerancia 
-                &&  b >= b_set -tolerancia   && b <= b_set + tolerancia ) {
+            if (    r >= r_set -tolerancia_r   && r <= r_set + tolerancia_r 
+                &&  g >= g_set -tolerancia_g   && g <= g_set + tolerancia_g 
+                &&  b >= b_set -tolerancia_b   && b <= b_set + tolerancia_b ) {
                 const avg = (r + g + b) / 3;
-                data[i] = avg; // Red
-                data[i + 1] = avg; // Green
-                data[i + 2] = avg; // Blue
+                data[i] = r; // Red
+                data[i + 1] = g; // Green
+                data[i + 2] = b; // Blue
             } else {
-                data[i] = 255; // Red
+                data[i] = 0; // Red
                 data[i + 1] = 255; // Green
-                data[i + 2] = 255; // Blue
+                data[i + 2] = 0; // Blue
             }
         }
         ctx.putImageData(imageData, 0, 0);
