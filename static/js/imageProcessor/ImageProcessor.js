@@ -5,6 +5,7 @@ procesar las imágenes capturadas desde la webcam.
 */
 
 import KernelProcessor from './KernelProcessor.js';
+import ColorFilter from './ColorFilter.js';
 
 export default class ImageProcessor {
     /**
@@ -24,6 +25,7 @@ export default class ImageProcessor {
         this.webSocketUtils = webSocketUtils;
         this.strategy = strategy;
         this.kernelProcessor = new KernelProcessor();
+        this.colorFilter = new ColorFilter(); 
     }
 
     /**
@@ -113,8 +115,8 @@ export default class ImageProcessor {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         
-        // Aplica el filtro de blanco y negro
-        this.applyBlackAndWhiteFilter(ctx, canvas.width, canvas.height);
+        // Aplica el filtro de color utilizando la clase ColorFilter
+        this.colorFilter.applyColorFilter(ctx, canvas.width, canvas.height);
 
         // Aplica el filtro basado en el núcleo
         this.kernelProcessor.applyKernelFilter(ctx, canvas.width, canvas.height);
