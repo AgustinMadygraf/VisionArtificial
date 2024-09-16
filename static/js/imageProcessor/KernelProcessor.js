@@ -34,7 +34,7 @@ export default class KernelProcessor {
                 [-1, 0, 1]
             ],
         };
-        this.currentFilter = 'eje_vertical';
+        this.currentFilter = 'default';
         console.log('KernelProcessor initialized');
         console.log('Filtro:', this.currentFilter);
     }
