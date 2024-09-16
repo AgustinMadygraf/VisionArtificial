@@ -39,8 +39,8 @@ export default class ColorFilter {
                 data[i + 2] = b; 
             } else {
                 // Transformar a verde
-                data[i] = 0;     
-                data[i + 1] = 255; 
+                data[i]     = 255;     
+                data[i + 1] = 0; 
                 data[i + 2] = 0;   
             }
         }

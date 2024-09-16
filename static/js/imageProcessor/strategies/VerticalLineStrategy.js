@@ -61,12 +61,12 @@ export default class VerticalLineStrategy {
     }
 
     /**
-     * Calcula las sumas verticales de los valores RGB de los píxeles en cada columna dentro de las cotas especificadas.
+     * Calcula las sumas verticales solo para los píxeles de color marrón.
      * 
      * @param {CanvasRenderingContext2D} ctx - El contexto 2D del canvas.
      * @param {{ lo: number, hi: number }} widthCotas - Las cotas horizontales (límites) para el procesamiento.
      * @param {{ lo: number, hi: number }} heightCotas - Las cotas verticales (límites) para el procesamiento.
-     * @returns {number[]} - Un arreglo que contiene las sumas verticales de los valores RGB de los píxeles para cada columna.
+     * @returns {number[]} - Un arreglo que contiene las sumas verticales de los valores RGB de los píxeles marrones para cada columna.
      */
     calculateVerticalSums(ctx, widthCotas, heightCotas) {
         const vertAdd = [];
@@ -75,10 +75,26 @@ export default class VerticalLineStrategy {
             vertAdd.push(0);
             for (let y = heightCotas.lo; y < heightCotas.hi; y++) {
                 const point = ctx.getImageData(x, y, 1, 1).data;
-                vertAdd[arr_x] += (point[0] + point[1] + point[2]);
+                // Verificar si el píxel es marrón antes de sumarlo
+                if (this.isBrown(point)) {
+                    vertAdd[arr_x] += (point[0] + point[1] + point[2]);
+                }
             }
         }
         return vertAdd;
+    }
+
+    /**
+     * Verifica si un píxel es de color marrón basado en los valores RGB.
+     * 
+     * @param {Uint8ClampedArray} point - Un arreglo de valores RGB de un píxel.
+     * @returns {boolean} - Verdadero si el píxel es marrón, falso en caso contrario.
+     */
+    isBrown(point) {
+        const [r, g, b] = point;
+        // Lógica para determinar si el color es marrón
+        // Ajustar los valores según las características de marrón deseadas
+        return r > 100 && r < 200 && g > 50 && g < 150 && b < 100 && r > g && r > b;
     }
 
     /**
@@ -96,21 +112,39 @@ export default class VerticalLineStrategy {
     }
 
     /**
-     * Encuentra la diferencia máxima y su posición correspondiente dentro de las diferencias horizontales calculadas.
+     * Encuentra la diferencia máxima específica para bordes de color marrón y su posición correspondiente.
      * 
      * @param {number[]} horizDiff - Un arreglo que contiene las diferencias horizontales entre las sumas verticales de columnas adyacentes.
      * @param {{ lo: number, hi: number }} widthCotas - Las cotas horizontales (límites) para el procesamiento.
-     * @returns {{ diff: number, pos: number }} - Un objeto que contiene la diferencia máxima y su posición correspondiente.
+     * @returns {{ diff: number, pos: number }} - Un objeto que contiene la diferencia máxima para bordes marrones y su posición correspondiente.
      */
     findMaxDifference(horizDiff, widthCotas) {
-        let maxDiff = { diff: -256 * 3 * 2 * 100, pos: 0 };
-        for (let i = 1; i < horizDiff.length; i++) {
-            if (horizDiff[i - 1] > maxDiff.diff) {
-                maxDiff.pos = widthCotas.lo + i;
-                maxDiff.diff = horizDiff[i - 1];
+        let maxDiff = -Infinity;
+        let maxPos = widthCotas.lo;
+
+        horizDiff.forEach((diff, i) => {
+            // Ajuste para identificar cambios asociados al color marrón
+            // Por ejemplo, considerar solo diferencias significativas que podrían indicar la presencia de un borde marrón
+            if (this.isSignificantBrownEdge(diff) && diff > maxDiff) {
+                maxDiff = diff;
+                maxPos = widthCotas.lo + i + 1; // Ajuste del índice para reflejar la posición correcta
             }
-        }
-        return maxDiff;
+        });
+
+        return { diff: maxDiff, pos: maxPos };
+    }
+
+    /**
+     * Verifica si una diferencia es significativa para detectar un borde marrón.
+     * 
+     * @param {number} diff - Diferencia entre las sumas verticales de columnas adyacentes.
+     * @returns {boolean} - Verdadero si la diferencia es significativa para detectar un borde marrón, falso en caso contrario.
+     */
+    isSignificantBrownEdge(diff) {
+        // Umbrales específicos para la detección de bordes marrones
+        // Puedes ajustar estos valores según los requerimientos específicos
+        const brownThreshold = 50; // Ajustar este valor según los tonos de marrón esperados
+        return diff >= brownThreshold;
     }
 
     /**
