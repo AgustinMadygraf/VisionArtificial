@@ -64,6 +64,8 @@ export default class ImageProcessor {
 
     /**
      * Aplica un filtro de blanco y negro en el canvas.
+     * Si el color es marrón, se convierte a escala de grises.
+     * Si no es marrón, se convierte a blanco.
      * @param {CanvasRenderingContext2D} ctx - Contexto del canvas.
      * @param {number} width - Ancho del canvas.
      * @param {number} height - Altura del canvas.
@@ -71,11 +73,28 @@ export default class ImageProcessor {
     applyBlackAndWhiteFilter(ctx, width, height) {
         const imageData = ctx.getImageData(0, 0, width, height);
         const data = imageData.data;
+        const r_set = 120;
+        const g_set = 55;
+        const b_set = 21;
+        const tolerancia = 64;
         for (let i = 0; i < data.length; i += 4) {
-            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            data[i] = avg; // Red
-            data[i + 1] = avg; // Green
-            data[i + 2] = avg; // Blue
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+
+            // Verificar si el color es marrón
+            if (r >= r_set -tolerancia      && r <= r_set + tolerancia 
+                && g >= g_set -tolerancia   && g <= g_set + tolerancia 
+                && b >= b_set -tolerancia   && b <= b_set + tolerancia ) {
+                const avg = (r + g + b) / 3;
+                data[i] = avg; // Red
+                data[i + 1] = avg; // Green
+                data[i + 2] = avg; // Blue
+            } else {
+                data[i] = 255; // Red
+                data[i + 1] = 255; // Green
+                data[i + 2] = 255; // Blue
+            }
         }
         ctx.putImageData(imageData, 0, 0);
     }
