@@ -15,11 +15,11 @@ export default class ColorFilter {
 
         // Ajuste de los valores RGB típicos del marrón y las tolerancias
         const r_set = 150; // Ajustar valor base de rojo para marrón
-        const g_set = 75;  // Ajustar valor base de verde para marrón
-        const b_set = 50;  // Ajustar valor base de azul para marrón
-        const tolerancia_r = 60; // Aumentar tolerancia para mayor rango de marrones
-        const tolerancia_g = 40;
-        const tolerancia_b = 30;
+        const g_set = 150;  // Ajustar valor base de verde para marrón
+        const b_set = 150;  // Ajustar valor base de azul para marrón
+        const tolerancia_r = 120; // Aumentar tolerancia para mayor rango de marrones
+        const tolerancia_g = 120;
+        const tolerancia_b = 120;
 
         for (let i = 0; i < data.length; i += 4) {
             const r = data[i];
