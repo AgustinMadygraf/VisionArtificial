@@ -73,9 +73,9 @@ export default class ImageProcessor {
     applyBlackAndWhiteFilter(ctx, width, height) {
         const imageData = ctx.getImageData(0, 0, width, height);
         const data = imageData.data;
-        const r_set = 120;
-        const g_set = 55;
-        const b_set = 21;
+        const r_set = 140;
+        const g_set = 90;
+        const b_set = 90;
         const tolerancia = 64;
         for (let i = 0; i < data.length; i += 4) {
             const r = data[i];
@@ -83,9 +83,9 @@ export default class ImageProcessor {
             const b = data[i + 2];
 
             // Verificar si el color es marrón
-            if (r >= r_set -tolerancia      && r <= r_set + tolerancia 
-                && g >= g_set -tolerancia   && g <= g_set + tolerancia 
-                && b >= b_set -tolerancia   && b <= b_set + tolerancia ) {
+            if (    r >= r_set -tolerancia   && r <= r_set + tolerancia 
+                &&  g >= g_set -tolerancia   && g <= g_set + tolerancia 
+                &&  b >= b_set -tolerancia   && b <= b_set + tolerancia ) {
                 const avg = (r + g + b) / 3;
                 data[i] = avg; // Red
                 data[i + 1] = avg; // Green
