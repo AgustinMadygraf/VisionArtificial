@@ -9,34 +9,33 @@ export default class ColorFilter {
      * @param {number} width - Ancho del canvas.
      * @param {number} height - Altura del canvas.
      */
-    applyColorFilter(ctx, width, height) {
-        const imageData = ctx.getImageData(0, 0, width, height);
-        const data = imageData.data;
+    applyColorFilter(ctx, canvasWidth, canvasHeight) {
+        const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+        const pixelData = imageData.data;
 
-        for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-        // Verificar si el color es amarillo o naranja
-        const r_g = 5
-        const g_b = 4
-        const bm = 40
-        const isBrown = r > (g  + r_g )&& g > ( b + g_b ) ;
-        const isYellow = r > (b + bm) && g > (b + bm);
-        const inNotYellow = !isYellow;
+        for (let i = 0; i < pixelData.length; i += 4) {
+            const red = pixelData[i];
+            const green = pixelData[i + 1];
+            const blue = pixelData[i + 2];
 
-            // Verificar si el color es marrón usando umbrales y relaciones
-            if (isBrown && inNotYellow
-            ) {
+            const redGreenThreshold = 5;
+            const greenBlueThreshold = 4;
+            const blueMargin = 40;
+
+            const isBrown = red > (green + redGreenThreshold) && green > (blue + greenBlueThreshold);
+            const isYellow = red > (blue + blueMargin) && green > (blue + blueMargin);
+            const isNotYellow = !isYellow;
+
+            if (isBrown && isNotYellow) {
                 // Mantener el color original
-                data[i] = r; 
-                data[i + 1] = g; 
-                data[i + 2] = b; 
+                pixelData[i] = red; 
+                pixelData[i + 1] = green; 
+                pixelData[i + 2] = blue; 
             } else {
-                // Transformar
-                data[i]     = 255;    // Rojo
-                data[i + 1] = 0;    // Verde
-                data[i + 2] = 0;    // Azul
+                // Transformar a rojo
+                pixelData[i] = 255;    // Rojo
+                pixelData[i + 1] = 0;  // Verde
+                pixelData[i + 2] = 0;  // Azul
             }
         }
         ctx.putImageData(imageData, 0, 0);
