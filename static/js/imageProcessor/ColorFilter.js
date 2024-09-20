@@ -20,10 +20,13 @@ export default class ColorFilter {
         // Verificar si el color es amarillo o naranja
         const r_g = 5
         const g_b = 4
+        const bm = 40
         const isBrown = r > (g  + r_g )&& g > ( b + g_b ) ;
+        const isYellow = r > (b + bm) && g > (b + bm);
+        const inNotYellow = !isYellow;
 
             // Verificar si el color es marrón usando umbrales y relaciones
-            if ( isBrown
+            if (isBrown && inNotYellow
             ) {
                 // Mantener el color original
                 data[i] = r; 
