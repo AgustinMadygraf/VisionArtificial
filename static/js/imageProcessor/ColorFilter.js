@@ -38,10 +38,10 @@ export default class ColorFilter {
                 data[i + 1] = g; 
                 data[i + 2] = b; 
             } else {
-                // Transformar a verde
-                data[i]     = 255;     
-                data[i + 1] = 0; 
-                data[i + 2] = 0;   
+                // Transformar
+                data[i]     = 255;    // Rojo
+                data[i + 1] = 0;    // Verde
+                data[i + 2] = 0;    // Azul
             }
         }
         ctx.putImageData(imageData, 0, 0);

@@ -65,45 +65,6 @@ export default class ImageProcessor {
     }
 
     /**
-     * Aplica un filtro de blanco y negro en el canvas.
-     * Si el color es marrón, se convierte a escala de grises.
-     * Si no es marrón, se convierte a blanco.
-     * @param {CanvasRenderingContext2D} ctx - Contexto del canvas.
-     * @param {number} width - Ancho del canvas.
-     * @param {number} height - Altura del canvas.
-     */
-    applyBlackAndWhiteFilter(ctx, width, height) {
-        const imageData = ctx.getImageData(0, 0, width, height);
-        const data = imageData.data;
-        const r_set = 190;
-        const g_set = 144;
-        const b_set = 144;
-        const tolerancia_r = 128;
-        const tolerancia_g = 128;
-        const tolerancia_b = 128;
-        for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-
-            // Verificar si el color es marrón
-            if (    r >= r_set -tolerancia_r   && r <= r_set + tolerancia_r 
-                &&  g >= g_set -tolerancia_g   && g <= g_set + tolerancia_g 
-                &&  b >= b_set -tolerancia_b   && b <= b_set + tolerancia_b ) {
-                const avg = (r + g + b) / 3;
-                data[i] = r; // Red
-                data[i + 1] = g; // Green
-                data[i + 2] = b; // Blue
-            } else {
-                data[i] = 0; // Red
-                data[i + 1] = 255; // Green
-                data[i + 2] = 0; // Blue
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    /**
      * Convierte un elemento de video en una imagen.
      * @param {HTMLVideoElement} video - Elemento de video a convertir.
      * @returns {Object} - Objeto que contiene la imagen capturada.
