@@ -1,5 +1,16 @@
+"""
+tests/test_install.py
+Archivo de pruebas unitarias para la instalación del proyecto.
+"""
+
+import sys
+import os
 import unittest
 from unittest.mock import MagicMock, patch
+
+# Add the src directory to the sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
 from src.install.project_installer import ProjectInstaller
 
 class TestProjectInstaller(unittest.TestCase):
@@ -7,14 +18,14 @@ class TestProjectInstaller(unittest.TestCase):
     Clase para probar la instalación del proyecto.
     """
 
-    @patch('src.logs.config_logger.LoggerConfigurator.configure')  # Parchear el método configure directamente
+    @patch('src.install.project_installer.logging.getLogger')
     @patch('src.install.project_installer.ProjectNameRetriever')
-    def setUp(self, MockProjectNameRetriever, MockLoggerConfigure):  # pylint: disable=arguments-differ
+    def setUp(self, MockProjectNameRetriever, MockGetLogger):
         """
         Configuración inicial para las pruebas.
         """
         self.mock_logger = MagicMock()
-        MockLoggerConfigure.return_value = self.mock_logger
+        MockGetLogger.return_value = self.mock_logger
 
         self.mock_project_name_retriever = MagicMock()
         MockProjectNameRetriever.return_value = self.mock_project_name_retriever
@@ -40,9 +51,5 @@ class TestProjectInstaller(unittest.TestCase):
         mock_print.assert_any_call(f"Directorio del script: {self.installer.project_dir}")
         mock_print.assert_any_call(f"Nombre del proyecto: {self.installer.name_proj}")
 
-    # Elimina la prueba de 'new_function' si no existe
-    def test_new_function(self):
-        """
-        Esta prueba se eliminó ya que 'new_function' no existe en 'ProjectInstaller'.
-        """
-        pass
+if __name__ == '__main__':
+    unittest.main()
