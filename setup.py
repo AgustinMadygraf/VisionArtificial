@@ -12,62 +12,69 @@ from src.install.dependency_manager import (
 from src.install.python_interpreter_utils import list_python_interpreters, is_pipenv_updated
 from src.install.project_installer import ProjectInstaller
 
-def iniciar():
-    """
-    Inicia el proceso de instalación, configurando el entorno y las dependencias necesarias.
-    """
-    # Limpiar pantalla
+def limpiar_pantalla():
+    """Limpia la pantalla según el sistema operativo."""
     os.system("cls" if os.name == "nt" else "clear")
 
-    # Imprimir mensaje de inicio
+def mostrar_mensaje_inicio():
+    """Muestra un mensaje inicial indicando el inicio del proceso."""
     print("Iniciando instalador...")
 
-    # Mostrar versión de Python
+def mostrar_version_python():
+    """Imprime la versión actual de Python."""
     print(f"Versión de Python: {sys.version}")
 
-    # Listar intérpretes de Python disponibles
+def listar_interpretes_python():
+    """Lista los intérpretes de Python disponibles y selecciona uno."""
     python_interpreters = list_python_interpreters()
     print("Intérpretes de Python encontrados:")
     for i, interpreter in enumerate(python_interpreters):
         print(f"[{i}] {interpreter}")
     selected_index = 0
-    # Solicitar selección de intérprete de Python
-    #selected_index = input(
-    #    "Selecciona el número del intérprete de Python a utilizar "
-    #    "(o deja en blanco para usar el actual): "
-    #)
     if selected_index:
-        python_executable = python_interpreters[int(selected_index)]
-    else:
-        python_executable = sys.executable
+        return python_interpreters[int(selected_index)]
+    return sys.executable
 
-    # Crear instancias de las clases necesarias
+def actualizar_pip(pip_updater):
+    """Actualiza pip utilizando PipUpdater."""
+    pip_updater.update_pip()
+
+def verificar_dependencias(installer_manager, requirements_file):
+    """Verifica e instala dependencias faltantes desde un archivo requirements."""
+    if os.path.exists(requirements_file):
+        print(f"Verificando dependencias desde {requirements_file}...")
+        installer_manager.install_missing_dependencies(requirements_file)
+    else:
+        print(f"El archivo {requirements_file} no fue encontrado. ")
+
+def actualizar_pipenv(python_executable):
+    """Verifica si pipenv está actualizado y lo actualiza si es necesario."""
+    if not is_pipenv_updated(python_executable):
+        print("Actualizando dependencias con pipenv...")
+        subprocess.check_call([python_executable, '-m', 'pipenv', 'install'])
+
+def instalar_proyecto():
+    """Instala el proyecto utilizando ProjectInstaller."""
+    project_installer = ProjectInstaller()
+    project_installer.main()
+
+def iniciar():
+    """Función principal que coordina el proceso de instalación."""
+    limpiar_pantalla()
+    mostrar_mensaje_inicio()
+    mostrar_version_python()
+
+    python_executable = listar_interpretes_python()
+
     pip_updater = PipUpdater()
     installer_manager = DependencyInstallerManager(
         PipDependencyInstaller(), pip_updater, max_retries=3
     )
 
-    # Actualizar pip antes de continuar
-    pip_updater.update_pip()
-
-    # Verificar e instalar las dependencias faltantes
-    requirements_file = 'requirements.txt'
-    if os.path.exists(requirements_file):
-        print(f"Verificando dependencias desde {requirements_file}...")
-        installer_manager.install_missing_dependencies(requirements_file)
-    else:
-        print(f"El archivo {requirements_file} no fue encontrado. "
-              "No se pueden verificar las dependencias.")
-
-    # Verifica si pipenv está actualizado
-    if not is_pipenv_updated(python_executable):
-        print("Actualizando dependencias con pipenv...")
-        subprocess.check_call([python_executable, '-m', 'pipenv', 'install'])
-
-    # Crear una instancia de ProjectInstaller y llamar a su método main
-    project_installer = ProjectInstaller()  # Crear instancia de ProjectInstaller
-    project_installer.main()  # Llamar al método main de ProjectInstaller
-
+    actualizar_pip(pip_updater)
+    verificar_dependencias(installer_manager, 'requirements.txt')
+    actualizar_pipenv(python_executable)
+    instalar_proyecto()
 
 if __name__ == "__main__":
     iniciar()
