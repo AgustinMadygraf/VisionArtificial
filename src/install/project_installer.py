@@ -3,6 +3,7 @@ src/install/project_installer.py
 Este módulo proporciona utilidades para la instalación del proyecto.
 """
 
+from abc import ABC, abstractmethod
 from pathlib import Path
 import winshell
 from src.install.project_name_utils import ProjectNameRetriever
@@ -11,12 +12,20 @@ from src.install.shortcut_creation_strategy import (
 )
 from src.logs.config_logger import LoggerConfigurator
 
+class BaseInstaller(ABC):
+    """
+    Clase base abstracta que define el comportamiento de un instalador de proyectos.
+    """
+    @abstractmethod
+    def main(self):
+        """Método principal que inicia el proceso de instalación del proyecto."""
+        print ("Iniciando instalador...")
 
-class ProjectInstaller:
+class ProjectInstaller(BaseInstaller):
     """
     Clase principal encargada de la instalación del proyecto.
+    Implementa la interfaz BaseInstaller.
     """
-    # pylint: disable=too-few-public-methods
     def __init__(self):
         """
         Inicializa el instalador del proyecto.
@@ -29,6 +38,7 @@ class ProjectInstaller:
     def main(self):
         """
         Método principal que inicia el proceso de instalación del proyecto.
+        Implementa el método `main` de la clase base.
         """
         print("Iniciando instalador")
         print(f"Directorio del script: {self.project_dir}")
