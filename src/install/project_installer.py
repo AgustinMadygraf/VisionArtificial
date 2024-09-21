@@ -10,7 +10,7 @@ from src.install.project_name_utils import ProjectNameRetriever
 from src.install.shortcut_creation_strategy import (
     ShortcutCreationStrategy, DefaultShortcutCreationStrategy
 )
-from src.logs.config_logger import LoggerConfigurator
+from src.logs.config_logger import logger
 
 class BaseInstaller(ABC):
     """
@@ -19,7 +19,8 @@ class BaseInstaller(ABC):
     @abstractmethod
     def main(self):
         """Método principal que inicia el proceso de instalación del proyecto."""
-        print ("Iniciando instalador...")
+        print("Iniciando instalador...")
+
 
 class ProjectInstaller(BaseInstaller):
     """
@@ -30,7 +31,7 @@ class ProjectInstaller(BaseInstaller):
         """
         Inicializa el instalador del proyecto.
         """
-        self.logger = LoggerConfigurator().configure()
+        self.logger = logger  # Utiliza el logger ya configurado
         self.logger.info("Logger configurado correctamente.")
         self.project_dir = Path(__file__).parent.parent.parent.resolve()
         self.name_proj = ProjectNameRetriever(self.project_dir).get_project_name()
@@ -61,10 +62,10 @@ class ShortcutManager:
     """
     Clase responsable de gestionar la creación de accesos directos.
     """
-    def __init__(self, project_dir, name_proj, logger, strategy: ShortcutCreationStrategy):
+    def __init__(self, project_dir, name_proj, log, strategy: ShortcutCreationStrategy):
         self.project_dir = project_dir
         self.name_proj = name_proj
-        self.logger = logger
+        self.logger = log
         self.strategy = strategy
 
     def verificar_icono(self, ruta_icono):
@@ -102,10 +103,10 @@ class BatFileCreator:
     """
     Clase encargada de crear archivos BAT para la ejecución del proyecto.
     """
-    def __init__(self, project_dir, name_proj, logger):
+    def __init__(self, project_dir, name_proj, log):
         self.project_dir = project_dir
         self.name_proj = name_proj
-        self.logger = logger
+        self.logger = log
 
     def crear_archivo_bat(self):
         """
