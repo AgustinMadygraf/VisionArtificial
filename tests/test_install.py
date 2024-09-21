@@ -7,16 +7,14 @@ class TestProjectInstaller(unittest.TestCase):
     Clase para probar la instalación del proyecto.
     """
 
-    @patch('src.logs.config_logger.LoggerConfigurator')  # Ruta correcta para LoggerConfigurator
+    @patch('src.logs.config_logger.LoggerConfigurator.configure')  # Parchear el método configure directamente
     @patch('src.install.project_installer.ProjectNameRetriever')
-    @patch('logging.getLogger')  # Parchear directamente el logger desde logging
-    def setUp(self, MockGetLogger, MockProjectNameRetriever, MockLoggerConfigurator):  # pylint: disable=arguments-differ
+    def setUp(self, MockProjectNameRetriever, MockLoggerConfigure):  # pylint: disable=arguments-differ
         """
         Configuración inicial para las pruebas.
         """
         self.mock_logger = MagicMock()
-        MockGetLogger.return_value = self.mock_logger
-        MockLoggerConfigurator.return_value.configure.return_value = self.mock_logger
+        MockLoggerConfigure.return_value = self.mock_logger
 
         self.mock_project_name_retriever = MagicMock()
         MockProjectNameRetriever.return_value = self.mock_project_name_retriever
