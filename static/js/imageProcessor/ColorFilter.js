@@ -18,15 +18,17 @@ export default class ColorFilter {
             const green = pixelData[i + 1];
             const blue = pixelData[i + 2];
 
-            const redGreenThreshold = 5;
+            const blueMargin = 40;            
             const greenBlueThreshold = 4;
-            const blueMargin = 40;
+            const redGreenThreshold = greenBlueThreshold * 2;
 
             const isBrown = red > (green + redGreenThreshold) && green > (blue + greenBlueThreshold);
             const isYellow = red > (blue + blueMargin) && green > (blue + blueMargin);
             const isNotYellow = !isYellow;
 
-            if (isBrown && isNotYellow) {
+            if (isBrown 
+                && isNotYellow
+            ) {
                 // Mantener el color original
                 pixelData[i] = red; 
                 pixelData[i + 1] = green; 
