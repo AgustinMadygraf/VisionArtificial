@@ -1,43 +1,25 @@
-# To Do List
-1. **Tarea:** Crear pruebas unitarias para `main.py`.
-   - **Archivo a Crear:** `tests/test_main.py`
-   - **Descripción Detallada:** Desarrollar pruebas unitarias que validen la correcta inicialización y ejecución del servidor HTTP y WebSocket, asegurándose de que los servicios `SSLService`, `HTTPService`, y `WebSocketServer` se configuren y se inicien correctamente. Incluir pruebas para los posibles errores que podrían ocurrir durante la inicialización del servidor.
+### To Do List
 
-2. **Tarea:** Desarrollar pruebas unitarias para `http_service.py`.
-   - **Archivo a Crear:** `tests/test_http_service.py`
-   - **Descripción Detallada:** Crear pruebas unitarias que verifiquen los métodos `fetch_data` y `send_request` de la clase `HTTPService`. Asegurarse de que las solicitudes HTTP manejen correctamente los reintentos y los tiempos de espera, y que los errores se registren adecuadamente.
+1. **Refactorizar la función `iniciar`**
+   - **Archivo a modificar**: [`setup.py`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FAppServ%2Fwww%2FVisionArtificial%2Fsetup.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22c279cdb3-27fa-478d-8698-378db6895387%22%5D "c:\AppServ\www\VisionArtificial\setup.py")
+   - **Descripción detallada**: La función `iniciar` debe dividirse en varias funciones más pequeñas, cada una con una única responsabilidad. Esto ayudará a cumplir con el Principio de Responsabilidad Única (SRP) y hará que el código sea más fácil de mantener y entender.
 
-3. **Tarea:** Implementar pruebas unitarias para `websocket_server.py`.
-   - **Archivo a Crear:** `tests/test_websocket_server.py`
-   - **Descripción Detallada:** Desarrollar pruebas que cubran la inicialización y manejo de conexiones en `WebSocketServer`. Incluir pruebas para validar que las conexiones se manejen correctamente y que los mensajes se procesen de manera adecuada, así como para verificar la correcta integración con `SSLService`.
+2. **Reducir el acoplamiento en `DependencyInstallerManager`**
+   - **Archivo a modificar**: [`src/install/dependency_manager.py`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FAppServ%2Fwww%2FVisionArtificial%2Fsrc%2Finstall%2Fdependency_manager.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22c279cdb3-27fa-478d-8698-378db6895387%22%5D "c:\AppServ\www\VisionArtificial\src\install\dependency_manager.py")
+   - **Descripción detallada**: La clase `DependencyInstallerManager` debe ser refactorizada para depender de interfaces o clases abstractas en lugar de clases concretas como `PipDependencyInstaller` y `PipUpdater`. Esto permitirá una mayor flexibilidad y facilidad de extensión en el futuro.
 
-4. **Tarea:** Agregar pruebas de integración para validar la interacción de `WebSocketServer` con `SSLService` y `WebSocketHandler`.
-   - **Archivo a Crear:** `tests/test_integration_websocket.py`
-   - **Descripción Detallada:** Crear pruebas de integración que simulen el flujo completo de inicio del servidor WebSocket, manejo de conexiones SSL, y el procesamiento de mensajes a través del `WebSocketHandler`. Validar la correcta colaboración entre estos componentes y su manejo de errores.
+3. **Convertir funciones globales en métodos de clase**
+   - **Archivo a modificar**: [`src/install/python_interpreter_utils.py`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FAppServ%2Fwww%2FVisionArtificial%2Fsrc%2Finstall%2Fpython_interpreter_utils.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22c279cdb3-27fa-478d-8698-378db6895387%22%5D "c:\AppServ\www\VisionArtificial\src\install\python_interpreter_utils.py")
+   - **Descripción detallada**: Las funciones `list_python_interpreters` e `is_pipenv_updated` deben ser convertidas en métodos de una clase. Esto permitirá el uso de herencia y polimorfismo, mejorando la extensibilidad y mantenibilidad del código.
 
-5. **Tarea:** Reestructurar los archivos de prueba actuales para separar pruebas unitarias y de integración.
-   - **Archivo a Modificar:** `tests/`
-   - **Descripción Detallada:** Reorganizar los archivos de prueba existentes para diferenciar claramente entre pruebas unitarias y de integración. Crear subcarpetas si es necesario (`unit` y `integration`), y mover los archivos de prueba a las carpetas correspondientes. Asegurarse de que las pruebas se ejecuten correctamente en esta nueva estructura.
+4. **Implementar interfaces para `ProjectInstaller`**
+   - **Archivo a modificar**: [`src/install/project_installer.py`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FAppServ%2Fwww%2FVisionArtificial%2Fsrc%2Finstall%2Fproject_installer.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22c279cdb3-27fa-478d-8698-378db6895387%22%5D "c:\AppServ\www\VisionArtificial\src\install\project_installer.py")
+   - **Descripción detallada**: La clase `ProjectInstaller` debe ser refactorizada para implementar interfaces o clases base que definan comportamientos comunes. Esto mejorará la reutilización y extensión del código, alineándose con los principios SOLID.
 
-6. **Tarea:** Revisar y optimizar el uso de mocks en las pruebas actuales, especialmente en `test_install.py`.
-   - **Archivo a Modificar:** `tests/test_install.py`
-   - **Descripción Detallada:** Evaluar el uso actual de mocks dentro de `test_install.py` para asegurarse de que no se están omitiendo comportamientos críticos del código real. Optimizar los mocks para reflejar mejor los casos de uso reales y, cuando sea necesario, sustituir mocks con pruebas más cercanas a la integración.
+5. **Separar la configuración del logger**
+   - **Archivo a modificar**: [`src/install/project_installer.py`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FAppServ%2Fwww%2FVisionArtificial%2Fsrc%2Finstall%2Fproject_installer.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22c279cdb3-27fa-478d-8698-378db6895387%22%5D "c:\AppServ\www\VisionArtificial\src\install\project_installer.py")
+   - **Descripción detallada**: La configuración del logger debe ser movida a una clase o módulo separado. Esto ayudará a cumplir con el Principio de Responsabilidad Única (SRP) y hará que la clase `ProjectInstaller` sea más cohesiva.
 
-7. **Tarea:** Agregar pruebas unitarias para todos los módulos en `services`, `utils`, y `views` que no tienen cobertura actual.
-   - **Archivos a Crear:** 
-     - `tests/test_ssl_service.py`
-     - `tests/test_server_utility.py`
-     - `tests/test_http_server.py`
-   - **Descripción Detallada:** Desarrollar pruebas unitarias para los módulos en `services`, `utils`, y `views` que actualmente carecen de cobertura. Asegurarse de que cada método crítico esté cubierto, incluyendo la gestión de errores y validaciones dentro de estos módulos.
-
-8. **Tarea:** Implementar un script de cobertura que identifique áreas de código sin pruebas y optimice la cobertura total.
-   - **Archivo a Crear:** `scripts/check_coverage.sh`
-   - **Descripción Detallada:** Crear un script de shell (`check_coverage.sh`) que ejecute `pytest` con la opción de cobertura (`--cov`). El script debería generar un reporte de cobertura indicando qué áreas del código no están cubiertas por las pruebas y sugerir mejoras. Incluir instrucciones para ejecutar el script en el archivo `README.md`.
-
-9. **Tarea:** Verificar que las pruebas de registro de logs en `test_logs.py` cubran todos los niveles y filtros de logs.
-   - **Archivo a Modificar:** `tests/test_logs.py`
-   - **Descripción Detallada:** Revisar y extender las pruebas existentes en `test_logs.py` para asegurar que todos los niveles de logs (DEBUG, INFO, WARNING, ERROR) y todos los filtros (como `ExcludeHTTPLogsFilter` y `InfoErrorFilter`) estén correctamente probados. Añadir casos de prueba adicionales si es necesario.
-
-10. **Tarea:** Documentar la estructura y el flujo de las pruebas para facilitar la contribución y mantenimiento futuro.
-    - **Archivo a Modificar:** `README.md` o `tests/README.md`
-    - **Descripción Detallada:** Redactar documentación que describa la estructura de las pruebas, la metodología utilizada (pruebas unitarias, de integración), cómo ejecutar las pruebas, y cómo contribuir con nuevas pruebas. Incluir ejemplos prácticos para ayudar a futuros desarrolladores a entender y ampliar el conjunto de pruebas.
+6. **Crear pruebas unitarias para nuevas funciones**
+   - **Archivo a modificar**: [`tests/test_install.py`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FAppServ%2Fwww%2FVisionArtificial%2Ftests%2Ftest_install.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22c279cdb3-27fa-478d-8698-378db6895387%22%5D "c:\AppServ\www\VisionArtificial\tests\test_install.py")
+   - **Descripción detallada**: Después de refactorizar las funciones y clases, se deben crear pruebas unitarias para asegurar que el nuevo código funcione correctamente y que no se introduzcan errores.
