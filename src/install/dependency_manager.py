@@ -6,44 +6,53 @@ la instalación de dependencias y la verificación de dependencias faltantes.
 
 import subprocess
 import sys
+from abc import ABC, abstractmethod
+
+class Updater(ABC):
+    """
+    Interfaz para actualizadores. Define el método `update` que debe ser implementado
+    por las subclases.
+    """
+    @abstractmethod
+    def update(self) -> None:
+        """Actualiza alguna herramienta o dependencia."""
+        print("Actualizando...")
 
 
-class PipUpdater:
+
+class PipUpdater(Updater):
     """
     Clase responsable de actualizar pip a la última versión disponible.
+    Implementa la interfaz `Updater`.
     """
-    # pylint: disable=too-few-public-methods
-    def update_pip(self) -> None:
+    def update(self) -> None:
         """
         Actualiza pip utilizando el comando `pip install --upgrade pip`.
         """
         print("Actualizando pip...")
         try:
-            # Ejecuta el comando para actualizar pip
             subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
             print("pip actualizado correctamente.")
         except subprocess.CalledProcessError as e:
             print(f"No se pudo actualizar pip. Error: {e}")
 
 
-class DependencyInstaller:
+class DependencyInstaller(ABC):
     """
     Interfaz para la instalación de dependencias.
     Las clases que hereden de esta deberán implementar el método `install`.
     """
-    # pylint: disable=too-few-public-methods
-    def install(self, dependency: str) -> None:
-        """
-        Método para instalar una dependencia. Debe ser implementado por una subclase.
-        """
-        raise NotImplementedError("Este método debe ser implementado por una subclase")
+    @abstractmethod
+    def install(self, dependency: str) -> bool:
+        """Instala una dependencia."""
+        print(f"Instalando {dependency}...")
 
 
 class PipDependencyInstaller(DependencyInstaller):
     """
     Clase concreta que implementa la instalación de dependencias usando pip.
+    Implementa la interfaz `DependencyInstaller`.
     """
-    # pylint: disable=too-few-public-methods
     def install(self, dependency: str) -> bool:
         """
         Instala una dependencia usando pip.
@@ -64,25 +73,18 @@ class PipDependencyInstaller(DependencyInstaller):
 class DependencyInstallerManager:
     """
     Clase responsable de instalar las dependencias faltantes.
+    Ahora depende de interfaces en lugar de clases concretas.
     """
-    # pylint: disable=too-few-public-methods
-    def __init__(
-        self,
-        installer: DependencyInstaller,
-        pip_updater: PipUpdater,
-        max_retries: int = 3
-    ):
+    def __init__(self, installer: DependencyInstaller, updater: Updater, max_retries: int = 3):
         """
-        Inicializa la clase DependencyInstallerManager con un instalador, un actualizador de pip 
-        y un número máximo de reintentos.
+        Inicializa la clase DependencyInstallerManager con un instalador y un actualizador.
 
-        :param installer: Instancia de una clase que hereda de DependencyInstaller.
-        :param pip_updater: Instancia de PipUpdater para actualizar pip antes de 
-        instalar dependencias.
+        :param installer: Instancia de una clase que implementa la interfaz DependencyInstaller.
+        :param updater: Instancia de una clase que implementa la interfaz Updater.
         :param max_retries: Número máximo de intentos para instalar cada dependencia.
         """
         self.installer = installer
-        self.pip_updater = pip_updater
+        self.updater = updater
         self.max_retries = max_retries
 
     def install_missing_dependencies(self, requirements_file: str = 'requirements.txt') -> None:
