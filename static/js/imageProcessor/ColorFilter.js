@@ -1,6 +1,17 @@
 // static/js/imageProcessor/ColorFilter.js
-
 export default class ColorFilter {
+    constructor() {
+        this.cameraCoefficient = 4; // Valor por defecto
+    }
+
+    /**
+     * Establece el coeficiente de la cámara.
+     * @param {number} coefficient - Nuevo coeficiente de la cámara.
+     */
+    setCameraCoefficient(coefficient) {
+        this.cameraCoefficient = coefficient;
+    }
+
     /**
      * Aplica un filtro en el canvas.
      * Si el color es marrón, se mantiene.
@@ -18,17 +29,15 @@ export default class ColorFilter {
             const green = pixelData[i + 1];
             const blue = pixelData[i + 2];
 
-            const blueMargin = 40;            
-            const greenBlueThreshold = 4;
-            const redGreenThreshold = greenBlueThreshold * 2;
+            const blueMargin = 40;
+            const greenBlueThreshold = this.cameraCoefficient;
+            const redGreenThreshold = this.cameraCoefficient * 2;
 
             const isBrown = red > (green + redGreenThreshold) && green > (blue + greenBlueThreshold);
             const isYellow = red > (blue + blueMargin) && green > (blue + blueMargin);
             const isNotYellow = !isYellow;
 
-            if (isBrown 
-                && isNotYellow
-            ) {
+            if (isBrown && isNotYellow) {
                 // Mantener el color original
                 pixelData[i] = red; 
                 pixelData[i + 1] = green; 
